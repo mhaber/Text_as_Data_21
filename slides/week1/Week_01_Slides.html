@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-09-08" />
+  <title>Text as Data: Week 1</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_01_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_01_Slides_files/reveal.js-3.3.0.1/css/theme/black.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_01_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_01_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_01_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 1</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">8 September 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li>General introduction</li>
+<li>Text as data in the social sciences</li>
+<li>Getting you setup</li>
+</ul>
+</section></section>
+<section>
+<section id="introduction" class="title-slide slide level1">
+<h1>Introduction</h1>
+
+</section>
+<section id="about-myself" class="slide level2">
+<h2>About myself</h2>
+<ul>
+<li>Partner &amp; Senior Director for Data &amp; Analytics at Looping Group since 2018</li>
+<li>Postdoc at Hertie 2015-2017 (Governance Report)</li>
+<li>PhD in PolSci (University of Mannheim)</li>
+<li>Research on parties, legislative politics, electoral behavior</li>
+<li>First started programming in 2011</li>
+</ul>
+<p><strong>Contact</strong>:</p>
+<p><a href="mailto:haber.matthias@gmail.com"><i class="fa fa-envelope"></i> haber.matthias@gmail.com</a></p>
+</section>
+<section id="about-yourself" class="slide level2">
+<h2>About yourself</h2>
+<ul>
+<li>Who are you?</li>
+<li>Why did you take this class?</li>
+<li>What kind of textual data are you interested in and which methods/techniques would make your life easier?</li>
+</ul>
+</section></section>
+<section>
+<section id="text-as-data" class="title-slide slide level1">
+<h1>Text as Data</h1>
+
+</section>
+<section id="text-in-the-social-sciences" class="slide level2">
+<h2>Text in the Social Sciences</h2>
+<blockquote>
+<p>Text is the most pervasive — and certainly the most persistent — artifact of political behavior (Monroe and Schrodt 2009)</p>
+</blockquote>
+<p>Never before has so much text been so readily available in the social sciences: Legislative debates, party manifestos, political speeches, committee transcripts, lobbying documents, court opinions, laws, …</p>
+</section>
+<section id="unstructured-data" class="slide level2">
+<h2>Unstructured Data</h2>
+<p><img src="img/unstructured.png" width="700px" style="display: block; margin: auto;" /></p>
+<p>There is no better time to start learning how to turn text into data than now!</p>
+</section>
+<section id="text-as-data-example-scaling" class="slide level2">
+<h2>Text as Data Example: Scaling</h2>
+<p><img src="img/guardian.png" width="900px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="text-as-data-example-personality" class="slide level2">
+<h2>Text as Data Example: Personality</h2>
+<p><img src="img/personality.png" width="600px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="text-as-data-example-sentiment" class="slide level2">
+<h2>Text as Data Example: Sentiment</h2>
+<p><img src="img/sentiment.png" width="700px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="from-text-to-data" class="slide level2">
+<h2>From Text to Data</h2>
+<p><img src="img/text_to_data.png" width="700px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="there-are-basically-three-varieties-of-text-analysis" class="slide level2">
+<h2>There are basically three varieties of text analysis</h2>
+<ol type="1">
+<li>Literary (Discourse) analysis -&gt; text as text</li>
+<li>Qualitative text analysis -&gt; human generated textual data</li>
+<li>Quantitative text analysis -&gt; machine generated textual data</li>
+</ol>
+</section>
+<section id="text-as-data-methods" class="slide level2">
+<h2>Text as Data Methods</h2>
+<p><img src="img/text_methods.png" width="700px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="stages-in-analyzing-text-as-data-benoit-2019" class="slide level2">
+<h2>Stages in Analyzing Text as Data (Benoit 2019)</h2>
+<ol type="1">
+<li>Selecting texts and defining the corpus.</li>
+<li>Converting of texts into a common electronic format.</li>
+<li>Defining documents and choosing the unit of analysis.</li>
+<li>Defining and refining features.</li>
+<li>Converting of textual features into a quantitative matrix.</li>
+<li>Analyzing the (matrix) data using an appropriate statistical procedure.</li>
+<li>Interpreting and reporting the results</li>
+</ol>
+</section>
+<section id="from-text-to-matrix" class="slide level2">
+<h2>From Text to Matrix</h2>
+<p><img src="img/text_to_matrix.png" width="700px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="principles-of-automated-text-analysis" class="slide level2">
+<h2>4 Principles of Automated Text Analysis</h2>
+<ol type="1">
+<li>All quantitative models of language are wrong—but some are useful.</li>
+<li>Quantitative methods for text amplify resources and augment humans.</li>
+<li>There is no globally best method for automated text analysis.</li>
+<li>Validate, Validate, Validate</li>
+</ol>
+</section></section>
+<section>
+<section id="text-as-data-course" class="title-slide slide level1">
+<h1>Text as Data Course</h1>
+
+</section>
+<section id="this-course" class="slide level2">
+<h2>This Course</h2>
+<ul>
+<li>Introduction to automated text analysis methods using R</li>
+<li>We focus on application, not on theory</li>
+<li>This course should give you a skill set that you can use in your own projects and research</li>
+<li>Ask questions - and help each other out!</li>
+</ul>
+</section>
+<section id="first-half---data-wrangling-fundamentals" class="slide level2">
+<h2>First Half - Data Wrangling Fundamentals</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Session</th>
+<th>Session Date</th>
+<th>Session Title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>08.09.2021</td>
+<td>Text as data (Room 2.32)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>15.09.2021</td>
+<td>Importing Textual Data (Room 2.32)</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>22.09.2021</td>
+<td>Cleaning and Transforming Text</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>29.09.2021</td>
+<td>String Manipulation</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>06.10.2021</td>
+<td>Preparing text for analysis</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>13.10.2021</td>
+<td>Descriptive analysis and visualization of text</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mid-term Exam Week</strong></p>
+</section>
+<section id="second-half---supervised-and-unsupervised-learning" class="slide level2">
+<h2>Second Half - Supervised and Unsupervised Learning</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Session</th>
+<th>Session Date</th>
+<th>Session Title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7</td>
+<td>27.10.2021</td>
+<td>Dictionary Approaches</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>03.11.2021</td>
+<td>Sentiment Analysis</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>10.11.2021</td>
+<td>Topic Models</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>17.11.2021</td>
+<td>Scaling Models</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>24.11.2021</td>
+<td>spaCy - An Introduction to Industry NLP (Room 2.32)</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>01.12.2021</td>
+<td>Transformers and the State of the Art of NLP (Room 2.32)</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="assignments" class="slide level2">
+<h2>Assignments</h2>
+<p>Over the course of the semester, you will have to complete three assignments.</p>
+</section>
+<section id="assignment-1" class="slide level2">
+<h2>Assignment 1</h2>
+<p>The first assignment will be a code completion exercise in which you’ll be given a partially complete code. Full points will be awarded if you get the whole script to work.</p>
+</section>
+<section id="assignment-2" class="slide level2">
+<h2>Assignment 2</h2>
+<p>The second assignment will involve the construction of a topic model, including a visualization and brief discussion of the results. Your grade for this assignment will be based on how you approach this task and if you follow the steps discussed in class.</p>
+</section>
+<section id="assignment-3" class="slide level2">
+<h2>Assignment 3</h2>
+<p>Your final assignment is a presentation of a research project, or part thereof, of your own choosing. The only requirement is that the project involves the analysis of text and uses the methods that we cover in the course. Please record your presentation and submit it via Moodle. Grading will be determined by the quality of the presentation and the degree to which you manage to apply the skills what you have learned during the course.</p>
+</section>
+<section id="grading" class="slide level2">
+<h2>Grading</h2>
+<p><strong>Composition of the Final Grade</strong></p>
+<table>
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 31%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Percent of Final Mark</th>
+<th>Due</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Assignment 1: code completion exercise</td>
+<td>30%</td>
+<td>October 22, 8 am</td>
+</tr>
+<tr class="even">
+<td>Assignment 2: data analysis exercise</td>
+<td>30%</td>
+<td>November 20, 8 am</td>
+</tr>
+<tr class="odd">
+<td>Assignment 3: Oral presentation of your own research project</td>
+<td>40%</td>
+<td>December 17, 8am</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="general-readings" class="slide level2">
+<h2>General Readings</h2>
+<ul>
+<li>Wickham, H. and G. Grolemund. 2017. <a href="https://r4ds.had.co.nz/">R for Data Science: Import, Tidy, Transform, Visualize, and Model Data. O’Reilly.</a></li>
+<li>Silge, Julia, and David Robinson. 2017. <a href="https://www.tidytextmining.com/">Text mining with R: A tidy approach. O’Reilly.</a><br />
+</li>
+<li><a href="http://quanteda.io">quanteda R package</a></li>
+</ul>
+</section></section>
+<section>
+<section id="recap-r-rstudio" class="title-slide slide level1">
+<h1>Recap R &amp; RStudio</h1>
+
+</section>
+<section id="r" class="slide level2">
+<h2>R</h2>
+<ul>
+<li>Based on the statistical programming language S (1976)</li>
+<li>R was developed by Ross Ihaka and Robert Gentleman (1995)</li>
+<li>R was intentionally developed to be a data analysis language</li>
+</ul>
+</section>
+<section id="why-r" class="slide level2">
+<h2>Why R</h2>
+<ul>
+<li>Open source: makes it highly customizable and easily extensible</li>
+<li>Over 18,000 packages and counting</li>
+<li>Used by many social scientists interested in data analysis</li>
+<li>Powerful tool to generate elegant and effective plots</li>
+<li>Command-line interface and scripts favors reproducibility</li>
+<li>Excellent documentation and online help resources</li>
+</ul>
+</section>
+<section id="we-will-work-in-rstudio" class="slide level2">
+<h2>We will work in RStudio</h2>
+<ul>
+<li><p>RStudio is an Integrated Developer Environment (IDE) and serves as:</p>
+<ul>
+<li>Code editor</li>
+<li>Project manager</li>
+<li>Workspace viewer</li>
+<li>Data browser</li>
+<li>Enhanced output viewer</li>
+<li>Help browser</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-rstudio-interface" class="slide level2">
+<h2>The RStudio Interface</h2>
+<p><img src="img/rstudio.png" width="700px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="basic-workflow" class="slide level2">
+<h2>Basic workflow</h2>
+<ul>
+<li>Edit in code editor (.r-file)</li>
+<li>Paste to console</li>
+<li>Save Workspace/Datasets (.Rdata-file)</li>
+<li>Save code routinely (no auto-save!)</li>
+<li>Press TAB to use RStudio’s autocompletion feature</li>
+</ul>
+</section>
+<section id="shortcuts" class="slide level2">
+<h2>Shortcuts</h2>
+<ul>
+<li>Run code from editor: Select line and ctrl+Enter</li>
+<li>Switch between source and console: ctrl+1, ctrl+2</li>
+<li>Clear console: ctrl+L</li>
+<li>‘Arrow up’ gives you the last line of code in the console</li>
+<li>Press Alt+Shift+K to see all keyboard shortcuts</li>
+</ul>
+</section></section>
+<section>
+<section id="setup" class="title-slide slide level1">
+<h1>Setup</h1>
+
+</section>
+<section id="software" class="slide level2">
+<h2>Software</h2>
+<ul>
+<li>Download and install latest versions of R (4.1.1) and RStudio (1.4.1717)</li>
+<li>Download and install Git
+<ul>
+<li>for Mac OS: <code>brew install git</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<ul>
+<li><p>Install the following packages:</p>
+<ul>
+<li><em>tidyverse</em></li>
+<li><em>quanteda</em></li>
+</ul></li>
+</ul>
+</section>
+<section id="setup-github" class="slide level2">
+<h2>Setup GitHub</h2>
+<ol type="1">
+<li>Create an account on GitHub</li>
+<li>Open RStudio and go to <em>Tools &gt; Global Options…</em> click on <em>Git/SVN</em></li>
+<li>Check <em>Enable version control interface for RStudio projects</em></li>
+<li>Set the path to the Git executable that you just installed. Open a shell, if you don’t know where Git is installed. Windows: type <code>where git</code> and hit enter. The path should be something like: <code>C:/Program Files (x86)/Git/bin/git.exe</code> Linux/OS X: type <code>which git</code> and hit enter. The path should be something like: <code>/usr/bin/git</code></li>
+<li>Restart RStudio, if it worked out you will find the Git icon on the top toolbar.</li>
+</ol>
+</section>
+<section id="setup-github-cont." class="slide level2">
+<h2>Setup GitHub cont.</h2>
+<ol start="6" type="1">
+<li>Configure Git and set your <em>user name</em> and <em>email</em> (the email address you used to register on GitHub). You can directly open the Git prompt from within RStudio. User name and email needs to be set only once. Go to <em>Tools &gt; Shell</em> to open the Git Shell to tell Git your username and GitHub email.</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>git config <span class="sc">--</span>global user.name <span class="st">&#39;yourGitHubUsername&#39;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>git config <span class="sc">--</span>global user.email <span class="st">&#39;name@provider.com&#39;</span></span></code></pre></div>
+<p><img src="img/gitshell.png" width="400px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="clone-a-github-repo" class="slide level2">
+<h2>Clone a GitHub Repo</h2>
+<ol start="7" type="1">
+<li><p>Copy the repository HTTPS urlfrom the text as data repository located on <a href="https://github.com/mhaber/Text_as_Data_21">https://github.com/mhaber/Text_as_Data_21</a>. Click on <em>Code</em> and copy the HTTPS link of the project by clicking the little icon to the right of the URL.</p></li>
+<li><p>In RStudio Select <em>File &gt; New Project..</em>, select <em>Version Control</em>, Choose <em>Git</em>, then provide the repository HTTPS link, select the R workspace folder and create the project. RStudio now clones the content of the repository to your project folder. The content of the GitHub repository should now appear in the Files pane of RStudio.</p></li>
+</ol>
+</section>
+<section id="create-your-own-github-repo" class="slide level2">
+<h2>Create your own GitHub Repo</h2>
+<p>Task: Create your own GitHub repository for this course with an appropriate <em>README.md</em> file and clone the repository in RStudio. Then create an <em>.R</em> script file with a function to print <em>Hello World!</em> and commit and push the new file to your GitHub repository.</p>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li>Next week we will learn how to import textual data into R</li>
+<li>We will again meet in room 2.32</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_01_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_01_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_01_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_01_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_01_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
