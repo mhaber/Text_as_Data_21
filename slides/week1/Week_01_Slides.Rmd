@@ -4,9 +4,10 @@ author: "Matthias Haber"
 date: "8 September 2021"
 output:
     revealjs::revealjs_presentation:
-      theme: black
+      theme: moon
       reveal_plugins: ["notes", "zoom", "chalkboard"]
-      highlight: pygments
+      highlight: haddock
+      center: false
       self_contained: false
       reveal_options:
         slideNumber: true
@@ -261,18 +262,23 @@ knitr::include_graphics("img/rstudio.png")
 Linux/OS X: type `which git` and hit enter. The path should be something like: `/usr/bin/git`
 5. Restart RStudio, if it worked out you will find the Git icon on the top toolbar.
 
-## Setup GitHub cont.
+## Configure Git with RStudio
 
-6.  Configure Git and set your _user name_ and _email_ (the email address you used to register on GitHub). You can directly open the Git prompt from within RStudio. User name and email needs to be set only once. Go to _Tools > Shell_ to open the Git Shell to tell Git your username and GitHub email.
-
-```{r, eval = FALSE}
-git config --global user.name 'yourGitHubUsername'
-git config --global user.email 'name@provider.com'
+**set your user name and email:**
+```{r, eval=FALSE}
+#install.packages("usethis")
+usethis::use_git_config(user.name = "YourName", 
+                        user.email = "your@mail.com")
 ```
 
+**create a personal access token for authentication:**
+```{r, eval=FALSE}
+usethis::create_github_token() 
+```
 
-```{r, out.width = "400px", echo = F, fig.align='center'}
-knitr::include_graphics("img/gitshell.png")
+**set personal access token:**
+```{r}
+credentials::set_github_pat("YourAccessToken")
 ```
 
 ## Clone a GitHub Repo
