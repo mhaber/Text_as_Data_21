@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-09-15" />
+  <title>Text as Data: Week 2</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_02_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_02_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_02_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_02_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_02_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 2</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">15 September 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li>Learn how to read data into R from different sources</li>
+<li>Learn easy ways to read in text data and to create a text corpus</li>
+<li>If we have time: Basic introduction to collecting data from the web</li>
+</ul>
+</section></section>
+<section>
+<section id="importing-data-from-flat-files" class="title-slide slide level1">
+<h1>Importing data from flat files</h1>
+
+</section>
+<section id="read.csv" class="slide level2">
+<h2><code>read.csv</code></h2>
+<p><code>read.csv()</code> sets <em>sep=“,”</em> and <em>header=TRUE</em></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>potatoes <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/potatoes.csv&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(potatoes)</span></code></pre></div>
+<pre><code>##   area temp size storage method texture flavor moistness
+## 1    1    1    1       1      1     2.9    3.2       3.0
+## 2    1    1    1       1      2     2.3    2.5       2.6
+## 3    1    1    1       1      3     2.5    2.8       2.8
+## 4    1    1    1       1      4     2.1    2.9       2.4
+## 5    1    1    1       1      5     1.9    2.8       2.2
+## 6    1    1    1       2      1     1.8    3.0       1.7</code></pre>
+</section>
+<section id="some-more-important-parameters" class="slide level2">
+<h2>Some more important parameters</h2>
+<ul>
+<li><em>quote</em>: tell R whether there are any quoted values, quote="" means no quotes.</li>
+<li><em>na.strings</em>: set the character that represents a missing value.</li>
+<li><em>nrows</em>: how many rows to read of the file.</li>
+<li><em>skip</em>: number of lines to skip before starting to read</li>
+</ul>
+</section>
+<section id="reasons-to-use-readr-instead" class="slide level2">
+<h2>Reasons to use <code>readr</code> instead</h2>
+<ul>
+<li><p>~10x faster than base <code>read.table()</code> functions</p></li>
+<li><p>Long running jobs have a progress bar</p></li>
+<li><p>leave strings as is by default, and automatically parse common date/time formats.</p></li>
+<li><p>all functions work exactly the same way regardless of the current locale.</p></li>
+</ul>
+</section>
+<section id="readr" class="slide level2">
+<h2><code>readr</code></h2>
+<ul>
+<li><p><code>read_csv()</code>: comma delimited files</p></li>
+<li><p><code>read_csv2()</code>: semicolon separated files</p></li>
+<li><p><code>read_tsv()</code>: tab delimited files</p></li>
+<li><p><code>read_delim()</code>: files with any delimiter</p></li>
+<li><p><code>read_fwf()</code>: fixed width files (<code>fwf_widths()</code> or <code>fwf_positions()</code></p></li>
+<li><p><code>read_table()</code>: files where columns are separated by white space</p></li>
+<li><p><code>read_log()</code> reads Apache style log files</p></li>
+</ul>
+</section>
+<section id="read_csv" class="slide level2">
+<h2><code>read_csv()</code></h2>
+<p><code>read_csv()</code> uses the first line of the data for the column names</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>potatoes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/potatoes.csv&quot;</span>)</span></code></pre></div>
+</section>
+<section id="read_csv-1" class="slide level2">
+<h2><code>read_csv()</code></h2>
+<p>You can use <code>skip = n</code> to skip the first n lines; or use <code>comment = "#"</code> to drop all lines that start with (e.g.) <code>#</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>potatoes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">&quot;data/potatoes.csv&quot;</span>, <span class="at">skip =</span> <span class="dv">2</span>)</span></code></pre></div>
+</section>
+<section id="read_csv-2" class="slide level2">
+<h2><code>read_csv()</code></h2>
+<p>You can use <code>col_names = FALSE</code> to not treat the first row as headings, and instead label them sequentially from <code>X1</code> to `Xn:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;1,2,3</span><span class="sc">\n</span><span class="st">4,5,6&quot;</span>, <span class="at">col_names =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##      X1    X2    X3
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     2     3
+## 2     4     5     6</code></pre>
+</section>
+<section id="read_csv-3" class="slide level2">
+<h2><code>read_csv()</code></h2>
+<p>Alternatively you can supply your own column names with <code>col_names</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">read_csv</span>(<span class="st">&quot;1,2,3</span><span class="sc">\n</span><span class="st">4,5,6&quot;</span>, <span class="at">col_names =</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;z&quot;</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 2 × 3
+##       x     y     z
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1     2     3
+## 2     4     5     6</code></pre>
+</section>
+<section id="read_csv-4" class="slide level2">
+<h2><code>read_csv()</code></h2>
+<p>Other arguments to <code>read_csv()</code>:</p>
+<ul>
+<li><code>locale</code>: determine encoding and decimal mark.</li>
+<li><code>na</code>, <code>quoted_na</code>: control which strings are treated as missing values</li>
+<li><code>trim_ws</code>: trims whitespace before and after cells</li>
+<li><code>n_max</code>: sets how many rows to read</li>
+<li><code>guess_max</code>: sets how many rows to use when guessing the column type</li>
+<li><code>progress</code>: determines whether a progress bar is shown.</li>
+</ul>
+</section>
+<section id="read_delim" class="slide level2">
+<h2><code>read_delim</code></h2>
+<p><code>read_delim</code> is the main readr function and takes two mandatory arguments, <em>file</em> and <em>delim</em>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>properties <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;area&quot;</span>, <span class="st">&quot;temp&quot;</span>, <span class="st">&quot;size&quot;</span>, <span class="st">&quot;storage&quot;</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;method&quot;</span>, <span class="st">&quot;texture&quot;</span>, <span class="st">&quot;flavor&quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;moistness&quot;</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>potatoes <span class="ot">&lt;-</span> <span class="fu">read_delim</span>(<span class="st">&quot;data/potatoes.txt&quot;</span>, <span class="at">delim =</span> <span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">col_names =</span> properties)</span></code></pre></div>
+</section>
+<section id="readr-parser" class="slide level2">
+<h2><code>readr</code> parser</h2>
+<p>To figure out the type of each column <code>readr</code> reads the first 1000 rows and uses some heuristics to figure out the type of each column. You can try it out with <code>guess_parser()</code>, which returns <code>readr</code>’s best guess:</p>
+</section>
+<section id="readr-parser-1" class="slide level2">
+<h2><code>readr</code> parser</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">guess_parser</span>(<span class="st">&quot;2010-10-01&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;date&quot;</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">guess_parser</span>(<span class="st">&quot;15:01&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;time&quot;</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">guess_parser</span>(<span class="fu">c</span>(<span class="st">&quot;TRUE&quot;</span>, <span class="st">&quot;FALSE&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;logical&quot;</code></pre>
+</section>
+<section id="readr-col_types" class="slide level2">
+<h2><code>readr()</code> col_types</h2>
+<p>You can use <code>col_types</code> to specify which types the columns in your imported data frame should have. You can manually set the types with a string, where each character denotes the class of the column: <code>c</code>haracter, <code>d</code>ouble, <code>i</code>nteger and <code>l</code>ogical. <code>_</code> skips the column as a whole.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>potatoes <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">&quot;data/potatoes.txt&quot;</span>, </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col_types =</span> <span class="st">&quot;cccccccc&quot;</span>,</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">col_names =</span> properties)</span></code></pre></div>
+</section></section>
+<section>
+<section id="import-excel-files" class="title-slide slide level1">
+<h1>Import Excel files</h1>
+
+</section>
+<section id="readxl" class="slide level2">
+<h2><code>readxl</code></h2>
+<p>The <code>readxl</code> package makes it easy to get data out of Excel and into R. <code>readxl</code> supports both .xls format and the modern xml-based .xlsx format.</p>
+<p>You can use the <code>excel_sheets()</code> function to find out which sheets are available in the workbook.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">excel_sheets</span>(<span class="at">path =</span> <span class="st">&quot;data/urbanpop.xlsx&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;1960-1966&quot; &quot;1967-1974&quot; &quot;1975-2011&quot;</code></pre>
+</section>
+<section id="readxl-1" class="slide level2">
+<h2><code>readxl</code></h2>
+<p>Use <code>read_excel()</code> to read in Excel files. You can pass a number (or string) to the <code>sheet</code> argument to import a specific sheet..</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pop1 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/urbanpop.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="dv">1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>pop2 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/urbanpop.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="dv">2</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>pop3 <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/urbanpop.xlsx&quot;</span>, <span class="at">sheet =</span> <span class="dv">3</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">excel_sheets</span>(<span class="at">path =</span> <span class="st">&quot;data/urbanpop.xlsx&quot;</span>),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>              read_excel, <span class="at">path =</span> <span class="st">&quot;data/urbanpop.xlsx&quot;</span>)</span></code></pre></div>
+</section>
+<section id="readxl-2" class="slide level2">
+<h2><code>readxl</code></h2>
+<p>You can use <code>skip</code> to control which cells are read and <code>col_names</code> to set the column names.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>pop <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="at">path =</span> <span class="st">&quot;data/urbanpop.xlsx&quot;</span>, <span class="at">sheet=</span><span class="dv">2</span>,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">skip=</span><span class="dv">21</span>, <span class="at">col_names=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+</section></section>
+<section>
+<section id="importing-data-from-databases" class="title-slide slide level1">
+<h1>Importing data from databases</h1>
+
+</section>
+<section id="dbi" class="slide level2">
+<h2><code>DBI</code></h2>
+<p>To import data from a database you first have to create a connection to it. You need different packages depending on the database you want to connect. <code>dbConnect()</code> creates a connection between your R session and a SQL database. The first argument has to be a <code>DBIdriver</code> object, that specifies how connections are made and how data is mapped between R and the database. If the SQL database is a remote database hosted on a server, you’ll also have to specify the following arguments in dbConnect(): <code>dbname</code>, <code>host</code>, <code>port</code>, <code>user</code> and <code>password</code>.</p>
+</section>
+<section id="establish-a-connection" class="slide level2">
+<h2>Establish a connection</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>host <span class="ot">&lt;-</span> <span class="st">&quot;courses.csrrinzqubik.us-east-1.rds.amazonaws.com&quot;</span> </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">dbConnect</span>(RMySQL<span class="sc">::</span><span class="fu">MySQL</span>(),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">dbname =</span> <span class="st">&quot;tweater&quot;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">host =</span> host, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">port =</span> <span class="dv">3306</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">user =</span> <span class="st">&quot;student&quot;</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">password =</span> <span class="st">&quot;datacamp&quot;</span>)</span></code></pre></div>
+</section>
+<section id="list-the-database-tables" class="slide level2">
+<h2>List the database tables</h2>
+<p>After you’ve successfully connected to a remote database. you can use <code>dbListTables()</code> to see what tables the database contains:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">dbListTables</span>(con)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tables</span></code></pre></div>
+<pre><code>## [1] &quot;comments&quot; &quot;tweats&quot;   &quot;users&quot;</code></pre>
+</section>
+<section id="import-data-from-tables" class="slide level2">
+<h2>Import data from tables</h2>
+<p>You can use the <code>dbReadTable()</code> function to import data from the database tables.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>users <span class="ot">&lt;-</span> <span class="fu">dbReadTable</span>(con, <span class="st">&quot;users&quot;</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>users</span></code></pre></div>
+<pre><code>##   id      name     login
+## 1  1 elisabeth  elismith
+## 2  2      mike     mikey
+## 3  3      thea   teatime
+## 4  4    thomas tomatotom
+## 5  5    oliver olivander
+## 6  6      kate  katebenn
+## 7  7    anjali    lianja</code></pre>
+</section>
+<section id="import-data-from-tables-1" class="slide level2">
+<h2>Import data from tables</h2>
+<p>Again, you can use lapply to import all tables:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>tableNames <span class="ot">&lt;-</span> <span class="fu">dbListTables</span>(con)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>tables <span class="ot">&lt;-</span> <span class="fu">lapply</span>(tableNames, dbReadTable, <span class="at">conn =</span> con)</span></code></pre></div>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<p>The <code>tweats</code> table contains a column <code>user_id</code>, which refer to the users that have posted the tweat. The <code>comments</code> table contain both a <code>user_id</code> and a <code>tweat_id</code> column. Who posted the tweat on which somebody commented “awesome! thanks!” (comment 1012)? Be polite and disconnect from the database afterwards. You do this with the <code>dbDisconnect()</code> function.</p>
+</section>
+<section id="exercise-solution" class="slide level2">
+<h2>Exercise solution</h2>
+<!-- The user with `user_id` 5: Oliver. -->
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con)</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+</section></section>
+<section>
+<section id="importing-data-from-the-web" class="title-slide slide level1">
+<h1>Importing data from the web</h1>
+
+</section>
+<section id="import-files-directly-from-the-web" class="slide level2">
+<h2>Import files directly from the web</h2>
+<p>You can use <code>read_csv</code> to directly import csv files from the web.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://raw.githubusercontent.com/&quot;</span>,</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;mhaber/AppliedDataScience/master/&quot;</span>,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;slides/week2/data/potatoes.csv&quot;</span>)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>potatoes <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(url)</span></code></pre></div>
+</section>
+<section id="download-files" class="slide level2">
+<h2>Download files</h2>
+<p><code>read_excel()</code> does not yet support importing excel files directly from the web so you have to download the file first with <code>download.file()</code>:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;https://github.com/&quot;</span>,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;mhaber/AppliedDataScience/blob/master/&quot;</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;slides/week2/data/urbanpop.xlsx?raw=true&quot;</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, <span class="st">&quot;data/urbanpop.xlsx&quot;</span>, <span class="at">mode =</span> <span class="st">&quot;wb&quot;</span>)</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>urbanpop <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">&quot;data/urbanpop.xlsx&quot;</span>)</span></code></pre></div>
+</section>
+<section id="httr" class="slide level2">
+<h2><code>httr</code></h2>
+<p>The <code>httr</code> package provides a convenient function <code>GET()</code> to download files. The result is a response object, that provides easy access to the content-type and the actual content. You can extract the content from the request using the <code>content()</code> function</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;http://www.example.com/&quot;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">&lt;-</span> <span class="fu">GET</span>(url)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>content <span class="ot">&lt;-</span> <span class="fu">content</span>(resp, <span class="at">as =</span> <span class="st">&quot;raw&quot;</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(content)</span></code></pre></div>
+<pre><code>## [1] 3c 21 64 6f 63 74</code></pre>
+</section>
+<section id="json" class="slide level2">
+<h2>JSON</h2>
+<ul>
+<li>Javascript Object Notation</li>
+<li>Lightweight data storage</li>
+<li>Common format for data from application programming interfaces (APIs)</li>
+<li>Similar structure to XML but different syntax</li>
+<li>Data stored as
+<ul>
+<li>Numbers (double)</li>
+<li>Strings (double quoted)</li>
+<li>Boolean (<em>true</em> or <em>false</em>)</li>
+<li>Array (ordered, comma separated enclosed in square brackets <em>[]</em>)</li>
+<li>Object (unorderd, comma separated collection of key:value pairs in curley brackets <em>{}</em>)</li>
+</ul></li>
+</ul>
+</section>
+<section id="example-json-file" class="slide level2">
+<h2>Example JSON file</h2>
+<p><img src="img/json.png" width="450px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="reading-data-from-json-with-jsonlite" class="slide level2">
+<h2>Reading data from JSON (with <code>jsonlite</code>)</h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;http://mysafeinfo.com/api/&quot;</span>,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;data?list=englishmonarchs&amp;format=json&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>jsonData <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(url)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(jsonData)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    5 obs. of  5 variables:
+##  $ ID     : int  1 2 3 4 5
+##  $ Name   : chr  &quot;Edward the Elder&quot; &quot;Athelstan&quot; &quot;Edmund&quot; &quot;Edred&quot; ...
+##  $ Country: chr  &quot;United Kingdom&quot; &quot;United Kingdom&quot; &quot;United Kingdom&quot; &quot;United Kingdom&quot; ...
+##  $ House  : chr  &quot;House of Wessex&quot; &quot;House of Wessex&quot; &quot;House of Wessex&quot; &quot;House of Wessex&quot; ...
+##  $ Reign  : chr  &quot;899-925&quot; &quot;925-940&quot; &quot;940-946&quot; &quot;946-955&quot; ...</code></pre>
+</section></section>
+<section>
+<section id="reading-txt-pdf-html-docx" class="title-slide slide level1">
+<h1>Reading txt, pdf, html, docx, …</h1>
+
+</section>
+<section id="readtext-package" class="slide level2">
+<h2>readtext package</h2>
+<p>A convenient way to read in document files into R is with the <code>readtext</code> package. It reads files containing text, along with any associated document-level metadata from forms such as .csv, .tab, .xml, and .json files.</p>
+<p><code>readtext</code> allows file masking, so you can specify patterns to load multiple texts at once. <code>readtext</code> returns a data.frame object with all text characters stored in a “text” field, as well as additional columns to store other document-level information.</p>
+</section>
+<section id="installing-readtext" class="slide level2">
+<h2>Installing readtext</h2>
+<p>To install <code>readtext</code>, you will need to use the <code>readtext</code> package, and then issue this command:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># devtools package required to install readtext from Github </span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;kbenoit/readtext&quot;</span>) </span></code></pre></div>
+</section>
+<section id="importing-text-with-readtext" class="slide level2">
+<h2>Importing text with readtext</h2>
+<p>We can use the ‘glob’ operator ‘*’ to indicate that we want to load multiple files from a single directory.</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readtext)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>inaugural <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/inaugural/*.txt&quot;</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>sotu <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/sotu/*.txt&quot;</span>)</span></code></pre></div>
+</section>
+<section id="reading-in-metadata-from-text" class="slide level2">
+<h2>Reading in metadata from text</h2>
+<p>We can use the <code>docvarsfrom</code> argument to read in metadata encoded in the names of the files. For example, the inaugural addresses contain the year and the president’s name:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>inaugural_meta <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/inaugural/*.txt&quot;</span>, </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">docvarsfrom =</span> <span class="st">&quot;filenames&quot;</span>, <span class="at">dvsep =</span> <span class="st">&quot;-&quot;</span>,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">docvarnames =</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;President&quot;</span>))</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(inaugural_meta)</span></code></pre></div>
+<pre><code>## readtext object consisting of 6 documents and 2 docvars.
+## # Description: df [6 × 4]
+##   doc_id              text                 Year President 
+##   &lt;chr&gt;               &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;     
+## 1 1789-Washington.txt &quot;\&quot;Fellow-Cit\&quot;...&quot;  1789 Washington
+## 2 1793-Washington.txt &quot;\&quot;Fellow cit\&quot;...&quot;  1793 Washington
+## 3 1797-Adams.txt      &quot;\&quot;When it wa\&quot;...&quot;  1797 Adams     
+## 4 1801-Jefferson.txt  &quot;\&quot;Friends an\&quot;...&quot;  1801 Jefferson 
+## 5 1805-Jefferson.txt  &quot;\&quot;Proceeding\&quot;...&quot;  1805 Jefferson 
+## 6 1809-Madison.txt    &quot;\&quot;Unwilling \&quot;...&quot;  1809 Madison</code></pre>
+</section>
+<section id="reading-texts-from-structured-files" class="slide level2">
+<h2>Reading texts from structured files</h2>
+<p>We can also read in texts and document variables from structured files such as csv, excel, or json by spefifying the name of the field containing the texts.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>inaug <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/inaugTexts.csv&quot;</span>, <span class="at">textfield =</span> <span class="st">&quot;inaugSpeech&quot;</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(inaug)</span></code></pre></div>
+<pre><code>## readtext object consisting of 6 documents and 2 docvars.
+## # Description: df [6 × 4]
+##   doc_id           text                 Year President 
+##   &lt;chr&gt;            &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;     
+## 1 inaugTexts.csv.1 &quot;\&quot;Fellow-Cit\&quot;...&quot;  1789 Washington
+## 2 inaugTexts.csv.2 &quot;\&quot;Fellow cit\&quot;...&quot;  1793 Washington
+## 3 inaugTexts.csv.3 &quot;\&quot;When it wa\&quot;...&quot;  1797 Adams     
+## 4 inaugTexts.csv.4 &quot;\&quot;Friends an\&quot;...&quot;  1801 Jefferson 
+## 5 inaugTexts.csv.5 &quot;\&quot;Proceeding\&quot;...&quot;  1805 Jefferson 
+## 6 inaugTexts.csv.6 &quot;\&quot;Unwilling \&quot;...&quot;  1809 Madison</code></pre>
+</section>
+<section id="read-in-pdf-data" class="slide level2">
+<h2>Read in pdf data</h2>
+<p>We can also use <code>readtext</code> to read in text from pdf files.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>inaugural_pdf <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/*.pdf&quot;</span>, </span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">docvarsfrom =</span> <span class="st">&quot;filenames&quot;</span>, <span class="at">dvsep =</span> <span class="st">&quot;-&quot;</span>,</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">docvarnames =</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;President&quot;</span>))</span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(inaugural_pdf)</span></code></pre></div>
+<pre><code>## readtext object consisting of 1 document and 2 docvars.
+## # Description: df [1 × 4]
+##   doc_id              text                 Year President 
+## * &lt;chr&gt;               &lt;chr&gt;               &lt;int&gt; &lt;chr&gt;     
+## 1 1789-Washington.pdf &quot;\&quot;Fellow-Cit\&quot;...&quot;  1789 Washington</code></pre>
+</section>
+<section id="creating-a-corpus-object" class="slide level2">
+<h2>Creating a corpus object</h2>
+<p>Instead of loading our texts into a data.frame, we can transfer the text into a corpus object. A corpus is an extension of R list objects so we can use <code>[[]]</code> brackets to access single list elements, i.e. documents, within a corpus. We can also print the text of the first element of the corpus using the <code>as.character()</code> function</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>sotu_corpus <span class="ot">&lt;-</span> <span class="fu">corpus</span>(<span class="fu">readtext</span>(<span class="st">&quot;data/sotu/*.txt&quot;</span>))</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sotu_corpus, <span class="at">n =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Corpus consisting of 229 documents, showing 3 documents:
+## 
+##         Text Types Tokens Sentences
+##   su1790.txt   591   1501        38
+##  su1790b.txt   460   1167        24
+##   su1791.txt   814   2473        58</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#as.character(sotu_corpus[1])</span></span></code></pre></div>
+</section>
+<section id="adding-additional-document-variables-to-a-corpus" class="slide level2">
+<h2>Adding additional document variables to a corpus</h2>
+<p>We can easily add additional document variables to our data.frame, as long as the data frame containing them is of the same length as the texts:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>sotu_docvars <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;data/SOTU_metadata.csv&quot;</span>, <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>sotu_docvars<span class="sc">$</span>date <span class="ot">&lt;-</span> <span class="fu">as.Date</span>(sotu_docvars<span class="sc">$</span>Date, <span class="st">&quot;%B %d, %Y&quot;</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>sotu_docvars<span class="sc">$</span>delivery <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(sotu_docvars<span class="sc">$</span>delivery)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>sotu_docvars<span class="sc">$</span>type <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(sotu_docvars<span class="sc">$</span>type)</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>sotu_corpus <span class="ot">&lt;-</span> <span class="fu">corpus</span>(<span class="fu">readtext</span>(<span class="st">&quot;data/sotu/*.txt&quot;</span>, <span class="at">encoding =</span> <span class="st">&quot;UTF-8-BOM&quot;</span>))</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="fu">docvars</span>(sotu_corpus) <span class="ot">&lt;-</span> sotu_docvars</span></code></pre></div>
+</section>
+<section id="excercise" class="slide level2">
+<h2>Excercise</h2>
+<p>Take 5 minutes and try importing some text of your own.</p>
+</section></section>
+<section>
+<section id="part-ii-basic-introduction-to-collecting-data-from-the-web" class="title-slide slide level1">
+<h1>Part II: Basic Introduction to collecting data from the web</h1>
+
+</section>
+<section id="browsing-vs.-scraping" class="slide level2">
+<h2>Browsing vs. scraping</h2>
+<ul>
+<li><strong>Browsing</strong>
+<ul>
+<li>you click on something</li>
+<li>browser sends request to server that hosts website</li>
+<li>server returns resource (often an HTML document)</li>
+<li>browser interprets HTML and renders it in a nice fashion</li>
+</ul></li>
+</ul>
+</section>
+<section id="browsing-vs.-scraping-1" class="slide level2">
+<h2>Browsing vs. scraping</h2>
+<ul>
+<li><strong>Scraping with R</strong>
+<ul>
+<li>you manually specify a resource</li>
+<li>R sends request to server that hosts website</li>
+<li>server returns resource</li>
+<li>R parses HTML (i.e., interprets the structure), but does not render it in a nice fashion</li>
+<li>it’s up to you to tell R which parts of the structure to focus on and what content to extract</li>
+</ul></li>
+</ul>
+</section>
+<section id="online-text-data-sources" class="slide level2">
+<h2>Online text data sources</h2>
+<ul>
+<li><strong>web pages</strong> (e.g. <a href="http://example.com" class="uri">http://example.com</a>)</li>
+<li><strong>web formats</strong> (XML, HTML, JSON, …)</li>
+<li><strong>web frameworks</strong> (HTTP, URL, APIs, …)</li>
+<li><strong>social media</strong> (Twitter, Facebook, LinkedIn, Snapchat, Tumbler, …)</li>
+<li><strong>data in the web</strong> (speeches, laws, policy reports, news, … )</li>
+<li><strong>web data</strong> (page views, page ranks, IP-addresses, …)</li>
+</ul>
+</section>
+<section id="before-scraping-do-some-googling" class="slide level2">
+<h2>Before scraping, do some googling!</h2>
+<ul>
+<li>If the resource is well-known, someone else has probably built a tool which solves the problem for you.</li>
+<li><a href="https://ropensci.org/">ropensci</a> has a <a href="https://ropensci.org/packages/">ton of R packages</a> providing easy-to-use interfaces to open data.</li>
+<li>The <a href="http://cran.r-project.org/web/views/WebTechnologies.html">Web Technologies and Services CRAN Task View</a> is a great overview of various tools for working with data that lives on the web in R.</li>
+</ul>
+</section>
+<section id="extracting-data-from-html" class="slide level2">
+<h2>Extracting data from HTML</h2>
+<p>For web scraping, we need to:</p>
+<ol type="1">
+<li>identify the elements of a website which contain our information of interest;</li>
+<li>extract the information from these elements;</li>
+</ol>
+<p><strong>Both steps require some basic understanding of HTML and CSS.</strong> More advanced scraping techniques require an understanding of <em>XPath</em> and <em>regular expressions</em>.</p>
+</section>
+<section id="whats-html" class="slide level2">
+<h2>What’s HTML?</h2>
+<p><strong>HyperText Markup Language</strong></p>
+<ul>
+<li>markup language = plain text + markups</li>
+<li>standard for the construction of websites</li>
+<li>relevance for web scraping: web architecture is important because it determines where and how information is stored</li>
+</ul>
+</section>
+<section id="inspect-the-source-code-in-your-browser" class="slide level2">
+<h2>Inspect the source code in your browser</h2>
+<p><strong>Firefox</strong> 1. right click on page 2. select “View Page Source”</p>
+<p><strong>Chrome</strong> 1. right click on page 2. select “View page source”</p>
+<p><strong>Safari</strong> 1. click on “Safari” 2. select “Preferences” 3. go to “Advanced” 4. check “Show Develop menu in menu bar” 5. click on “Develop” 6. select “Show Page Source.”</p>
+</section>
+<section id="css" class="slide level2">
+<h2>CSS?</h2>
+<p><strong>Cascading Style Sheets</strong></p>
+<ul>
+<li>style sheet language to give browsers information of how to render HTML documents</li>
+<li>CSS code can be stored within an HTML document or in an external CSS file</li>
+<li>selectors, i.e. patterns used to specify which elements to format in a certain way, can be used to address the elements we want to extract information from</li>
+<li>works via tag name (e.g.,<code>&lt;h2&gt;</code>,<code>&lt;p&gt;</code>) or element attributes <code>id</code> and <code>class</code></li>
+</ul>
+</section>
+<section id="exercise-1" class="slide level2">
+<h2>Exercise</h2>
+<ol type="1">
+<li>Complete the first 5 levels on <a href="%22http://flukeout.github.io/%22">CSS Diner</a></li>
+</ol>
+</section>
+<section id="xpath" class="slide level2">
+<h2>XPath</h2>
+<ul>
+<li>XPath is a query language for selecting nodes from an XML-style document (including HTML)</li>
+<li>provides just another way of extracting data from static webpages</li>
+<li>you can also use XPath with R, it can be more powerful than CSS selectors</li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p><img src="img/wikiTable.png" width="600px" /></p>
+</section>
+<section id="inspecting-elements" class="slide level2">
+<h2>Inspecting elements</h2>
+<p><img src="img/inspect-element.png" width="500px" /></p>
+</section>
+<section id="hover-to-find-desired-elements" class="slide level2">
+<h2>Hover to find desired elements</h2>
+<p><img src="img/inspector.png" width="600px" /></p>
+</section>
+<section id="rvest" class="slide level2">
+<h2><code>Rvest</code></h2>
+<p><a href="https://github.com/hadley/rvest">rvest</a> is a nice R package for web-scraping by (you guessed it) Hadley Wickham.</p>
+<ul>
+<li>see also: <a href="https://github.com/hadley/rvest" class="uri">https://github.com/hadley/rvest</a></li>
+<li>convenient package to scrape information from web pages</li>
+<li>builds on other packages, such as xml2 and httr</li>
+<li>provides very intuitive functions to import and process webpages</li>
+</ul>
+</section>
+<section id="basic-workflow-of-scraping-with-rvest" class="slide level2">
+<h2>Basic workflow of scraping with rvest</h2>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. specify URL</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;http://en.wikipedia.org/wiki/Table_(information)&quot;</span> <span class="sc">%&gt;%</span> </span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. download static HTML behind the URL and parse it into an XML file</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. extract specific nodes with CSS (or XPath)</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="fu">html_node</span>(<span class="st">&quot;.wikitable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. extract content from nodes</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 9 × 3
+##   `First name` `Last name`   Age
+##   &lt;chr&gt;        &lt;chr&gt;       &lt;int&gt;
+## 1 Tinu         Elejogun       14
+## 2 Javier       Zapata         28
+## 3 Lily         McGarrett      18
+## 4 Olatunkbo    Chijiaku       22
+## 5 Adrienne     Anthoula       22
+## 6 Axelia       Athanasios     22
+## 7 Jon-Kabat    Zinn           22
+## 8 Thabang      Mosoa          15
+## 9 Kgaogelo     Mosoa          11</code></pre>
+</section>
+<section id="selectorgadget" class="slide level2">
+<h2>Selectorgadget</h2>
+<ul>
+<li><p><a href="http://selectorgadget.com/">Selectorgadget</a> is a <a href="https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en">Chrome browser extension</a> for quickly extracting desired parts of an HTML page.</p></li>
+<li><p>to learn about it, use vignette(“selectorgadget”)</p></li>
+<li><p>to install it, visit <a href="http://selectorgadget.com/" class="uri">http://selectorgadget.com/</a></p></li>
+</ul>
+</section>
+<section id="selectorgadget-1" class="slide level2">
+<h2>Selectorgadget</h2>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;http://spiegel.de/schlagzeilen&quot;</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>css <span class="ot">&lt;-</span> <span class="st">&quot;.schlagzeilen-headline&quot;</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>url_parsed <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">html_nodes</span>(url_parsed, <span class="at">css =</span> css) <span class="sc">%&gt;%</span> html_text</span></code></pre></div>
+</section>
+<section id="apis" class="slide level2">
+<h2>APIs</h2>
+<ul>
+<li>API stands for <em>Application Programming Interface</em></li>
+<li>defined interface for communication between software components</li>
+<li><em>Web</em> API: provides an interface to structured data from a web service</li>
+<li>APIs should be used whenever you need to automatically collect mass data from the web</li>
+<li>it should definitely be preferred over web scraping</li>
+</ul>
+</section>
+<section id="functionality-of-apis" class="slide level2">
+<h2>Functionality of APIs</h2>
+<p>Web APIs usually employ a <strong>client-server model</strong>. The client – that is you. The server provides the <em>API endpoints</em> as URLs.</p>
+<p><img src="img/api.png" width="500px" /></p>
+</section>
+<section id="functionality-of-apis-1" class="slide level2">
+<h2>Functionality of APIs</h2>
+<p>Communication is done with request and response messages over <em>Hypertext transfer protocol (HTTP)</em>.</p>
+<p>Each HTTP message contains a <em>header</em> (message meta data) and a <em>message body</em> (the actual content). The three-digit <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP status code</a> plays an important role:</p>
+<ul>
+<li>2xx: Success</li>
+<li>4xx: Client error (incl. the popular <em>404: Not found</em> or <em>403: Forbidden</em>)</li>
+<li>5xx: Server error</li>
+</ul>
+<p>The message body contains the requested data in a specific format, often JSON or XML.</p>
+</section>
+<section id="examples-of-popular-apis" class="slide level2">
+<h2>Examples of popular APIs</h2>
+<p>Social media:</p>
+<ul>
+<li><a href="https://developer.twitter.com/">Twitter</a></li>
+<li><a href="https://developers.facebook.com/docs/graph-api/">Facebook Graph API</a> (restricted to own account and public pages)</li>
+<li><a href="https://developers.google.com/youtube/">YouTube (Google)</a></li>
+<li><a href="https://www.linkedin.com/developers/">LinkedIn</a></li>
+</ul>
+<p>For more, see <a href="http://www.programmableweb.com/">programmableweb.com</a>.</p>
+</section>
+<section id="api-wrapper-packages" class="slide level2">
+<h2>API wrapper packages</h2>
+<ul>
+<li>Working with a web API involves:
+<ul>
+<li>constructing request messages</li>
+<li>parsing result messages</li>
+<li>handling errors</li>
+</ul></li>
+<li>For popular web services there are already “API wrapper packages” in R:
+<ul>
+<li>implement communication with the server</li>
+<li>provide direct access to the data via R functions</li>
+<li>examples: <em>rtweet</em>, <em>ggmap</em> (geocoding via Google Maps), <em>wikipediR</em>, <em>genderizeR</em></li>
+</ul></li>
+</ul>
+</section>
+<section id="twitter" class="slide level2">
+<h2>Twitter</h2>
+<p><strong>Twitter has two types of APIs</strong></p>
+<ul>
+<li><p>REST APIs –&gt; reading/writing/following/etc.</p></li>
+<li><p>Streaming APIs –&gt; low latency access to 1% of global stream - public, user and site streams</p></li>
+<li><p>authentication via OAuth</p></li>
+<li><p>documentation at <a href="https://dev.twitter.com/overview/documentation" class="uri">https://dev.twitter.com/overview/documentation</a></p></li>
+</ul>
+</section>
+<section id="accessing-the-twitter-apis" class="slide level2">
+<h2>Accessing the Twitter APIs</h2>
+<ul>
+<li><p>To access the REST and streaming APIs, all you need is a Twitter account and you can be up in running in minutes!</p></li>
+<li><p>Simply send a request to Twitter’s API (with a function like <code>search_tweets()</code>) during an interactive session of R, authorize the embedded <code>rstats2twitter</code> app (approve the browser popup), and your token will be created and saved/stored (for future sessions) for you!</p></li>
+<li><p>You can obtain a developer account to get more stability and permissions.</p></li>
+</ul>
+</section>
+<section id="twitter-api-subscriptions" class="slide level2">
+<h2>Twitter API subscriptions</h2>
+<p>Twitter provides <a href="https://developer.twitter.com/en/pricing">three subscription levels</a>:</p>
+<ul>
+<li>Standard (free)
+<ul>
+<li>search historical data for up to 7 days</li>
+<li>get sampled live tweets</li>
+</ul></li>
+<li>Premium ($150 to $2500 / month)
+<ul>
+<li>search historical data for up to 30 days</li>
+<li>get full historical data per user</li>
+</ul></li>
+<li>Enterprise (special contract with Twitter)
+<ul>
+<li>full live tweets</li>
+</ul></li>
+</ul>
+<p>The <em>rate limiting</em> also differs per subscription level (number of requests per month).</p>
+</section>
+<section id="use-twitter-in-r" class="slide level2">
+<h2>Use twitter in R</h2>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtweet)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="do">## search for 1000 tweets using the #niewiedercdu hashtag</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>tweets <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;#iacaucus&quot;</span>, <span class="at">n =</span> <span class="dv">1000</span>, <span class="at">include_rts =</span> <span class="cn">FALSE</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Find out what else you can do with the <code>rtweet</code> package: <a href="https://github.com/mkearney/rtweet" class="uri">https://github.com/mkearney/rtweet</a></p>
+</section>
+<section id="exercise-2" class="slide level2">
+<h2>Exercise</h2>
+<ol type="1">
+<li><p>We want to get data from <a href="https://www.abgeordnetenwatch.de/">abgeordnetenwatch.de</a>. The site has an API, so technically there is no need to scrape anything. Load the package <code>jsonlite</code> into library.</p></li>
+<li><p>Go to <a href="https://www.abgeordnetenwatch.de/api" class="uri">https://www.abgeordnetenwatch.de/api</a> and figure our the syntax of their APIs.</p></li>
+<li><p>Use the <code>fromJSON</code> function in <code>jsonlite</code> to load a JSON file via the API into R. Save the input as <code>aw_data</code>.</p></li>
+</ol>
+</section>
+<section id="exercise-solution-1" class="slide level2">
+<h2>Exercise solution</h2>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li>Next week we will learn how to clean and transform text</li>
+<li>We will meet online on MS Teams for the next eight sessions</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_02_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_02_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_02_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_02_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_02_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

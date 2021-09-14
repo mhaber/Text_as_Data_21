@@ -1,0 +1,661 @@
+---
+title: "Text as Data: Week 2"
+author: "Matthias Haber"
+date: "15 September 2021"
+output:
+    revealjs::revealjs_presentation:
+      theme: moon
+      reveal_plugins: ["notes", "zoom", "chalkboard"]
+      highlight: haddock
+      center: false
+      self_contained: false
+      reveal_options:
+        slideNumber: true
+        progress: true
+        previewLinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+library(tidyverse)
+library(readtext)
+library(quanteda)
+library(readxl)
+library(DBI)
+library(httr)
+library(rvest)
+library(jsonlite)
+```
+
+# Goals for Today
+
+## Goals
+
+- Learn how to read data into R from different sources
+- Learn easy ways to read in text data and to create a text corpus
+- If we have time: Basic introduction to collecting data from the web
+
+# Importing data from flat files
+
+## `read.csv`
+
+`read.csv()` sets _sep=","_ and _header=TRUE_
+
+```{r}
+potatoes <- read.csv("data/potatoes.csv")
+head(potatoes)
+```
+
+## Some more important parameters
+
+* _quote_: tell R whether there are any quoted values, quote="" means no quotes.
+* _na.strings_: set the character that represents a missing value. 
+* _nrows_: how many rows to read of the file.
+* _skip_: number of lines to skip before starting to read
+
+## Reasons to use `readr` instead
+* ~10x faster than base `read.table()` functions
+
+* Long running jobs have a progress bar
+  
+* leave strings as is by default, and automatically parse common date/time formats.
+
+* all functions work exactly the same way regardless of the current locale.
+
+## `readr` 
+
+* `read_csv()`: comma delimited files
+* `read_csv2()`: semicolon separated files
+* `read_tsv()`: tab delimited files
+* `read_delim()`: files with any delimiter
+
+* `read_fwf()`: fixed width files (`fwf_widths()` or `fwf_positions()` 
+* `read_table()`: files where columns are separated by white space
+
+* `read_log()` reads Apache style log files
+
+## `read_csv()`
+`read_csv()` uses the first line of the data for the column names
+
+```{r}
+potatoes <- read_csv("data/potatoes.csv")
+```
+
+## `read_csv()`
+You can use `skip = n` to skip the first n lines; or use `comment = "#"` to drop all lines that start with (e.g.) `#`:
+
+```{r, warning=FALSE}
+potatoes <- read_csv("data/potatoes.csv", skip = 2)
+```
+
+## `read_csv()`
+
+You can use `col_names = FALSE` to not treat the first row as headings, and instead label them sequentially from `X1` to `Xn:
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+```
+
+## `read_csv()`
+
+Alternatively you can supply your own column names with `col_names`:
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+```
+
+## `read_csv()`
+Other arguments to `read_csv()`:
+
+* `locale`: determine encoding and decimal mark.
+* `na`, `quoted_na`: control which strings are treated as missing values
+* `trim_ws`: trims whitespace before and after cells
+* `n_max`: sets how many rows to read
+* `guess_max`: sets how many rows to use when guessing the column type
+* `progress`: determines whether a progress bar is shown.
+
+## `read_delim`
+`read_delim` is the main readr function and takes two mandatory arguments, _file_ and _delim_.
+
+```{r, message=FALSE}
+properties <- c("area", "temp", "size", "storage",
+                "method", "texture", "flavor",
+                "moistness")
+potatoes <- read_delim("data/potatoes.txt", delim = "\t",
+                       col_names = properties)
+```
+
+## `readr` parser
+To figure out the type of each column `readr` reads the first 1000 rows and uses some heuristics to figure out the type of each column. You can try it out with `guess_parser()`, which returns `readr`'s best guess:
+
+## `readr` parser
+
+```{r}
+guess_parser("2010-10-01")
+guess_parser("15:01")
+guess_parser(c("TRUE", "FALSE"))
+```
+
+## `readr()` col_types
+
+You can use `col_types` to specify which types the columns in your imported data frame should have. You can manually set the types with a string, where each character denotes the class of the column: `c`haracter, `d`ouble, `i`nteger and `l`ogical. `_` skips the column as a whole.
+
+```{r}
+potatoes <- read_tsv("data/potatoes.txt", 
+                     col_types = "cccccccc",
+                     col_names = properties)
+```
+
+# Import Excel files
+
+## `readxl`
+The `readxl` package makes it easy to get data out of Excel and into R.
+`readxl` supports both .xls format and the modern xml-based .xlsx format.
+
+You can use the `excel_sheets()` function to find out which sheets are available in the workbook. 
+
+```{r}
+excel_sheets(path = "data/urbanpop.xlsx")
+```
+
+## `readxl`
+Use `read_excel()` to read in Excel files. You can pass a number (or string) to the `sheet` argument  to import a specific sheet.. 
+
+
+```{r}
+pop1 <- read_excel("data/urbanpop.xlsx", sheet = 1)
+pop2 <- read_excel("data/urbanpop.xlsx", sheet = 2)
+pop3 <- read_excel("data/urbanpop.xlsx", sheet = 3)
+
+pop <- lapply(excel_sheets(path = "data/urbanpop.xlsx"),
+              read_excel, path = "data/urbanpop.xlsx")
+
+```
+
+## `readxl`
+
+You can use `skip` to control which cells are read and `col_names` to set the column names.
+
+```{r}
+pop <- read_excel(path = "data/urbanpop.xlsx", sheet=2,
+                  skip=21, col_names=FALSE)
+```
+
+
+# Importing data from databases
+
+## `DBI`
+To import data from a database you first have to create a connection to it. You need different packages depending on the database you want to connect. `dbConnect()` creates a connection between your R session and a SQL database. The first argument has to be a `DBIdriver` object, that specifies how connections are made and how data is mapped between R and the database. If the SQL database is a remote database hosted on a server, you'll also have to specify the following arguments in dbConnect(): `dbname`, `host`, `port`, `user` and `password`.
+
+## Establish a connection
+
+```{r}
+host <- "courses.csrrinzqubik.us-east-1.rds.amazonaws.com" 
+con <- dbConnect(RMySQL::MySQL(),
+                 dbname = "tweater",
+                 host = host, 
+                 port = 3306,
+                 user = "student",
+                 password = "datacamp")
+```
+
+## List the database tables
+After you've successfully connected to a remote database. you can use `dbListTables()` to see what tables the database contains:
+
+```{r}
+tables <- dbListTables(con)
+tables
+```
+
+## Import data from tables
+
+You can use the `dbReadTable()` function to import data from the database tables. 
+
+```{r}
+users <- dbReadTable(con, "users")
+users
+```
+
+## Import data from tables
+Again, you can use lapply to import all tables:
+
+```{r}
+tableNames <- dbListTables(con)
+tables <- lapply(tableNames, dbReadTable, conn = con)
+```
+
+## Exercise
+The `tweats` table contains a column `user_id`, which refer to the users that have posted the tweat. The `comments` table contain both a `user_id` and a `tweat_id` column. Who posted the tweat on which somebody commented "awesome! thanks!" (comment 1012)? Be polite and disconnect from the database afterwards. You do this with the `dbDisconnect()` function.
+
+## Exercise solution
+<!-- The user with `user_id` 5: Oliver. -->
+
+```{r}
+dbDisconnect(con)
+```
+
+# Importing data from the web
+
+## Import files directly from the web
+You can use `read_csv` to directly import csv files from the web.
+
+```{r, message=FALSE}
+url <- paste0("https://raw.githubusercontent.com/",
+"mhaber/AppliedDataScience/master/",
+"slides/week2/data/potatoes.csv")
+potatoes <- read_csv(url)
+```
+
+## Download files
+`read_excel()` does not yet support importing excel files directly from the web so you have to download the file first with `download.file()`:
+
+```{r}
+url <- paste0("https://github.com/",
+"mhaber/AppliedDataScience/blob/master/",
+"slides/week2/data/urbanpop.xlsx?raw=true")
+download.file(url, "data/urbanpop.xlsx", mode = "wb")
+urbanpop <- read_excel("data/urbanpop.xlsx")
+```
+
+## `httr`
+The `httr` package provides a convenient function `GET()` to download files. The result is a response object, that provides easy access to the content-type and the actual content. You can extract the content from the request using the `content()` function
+
+```{r}
+url <- "http://www.example.com/"
+resp <- GET(url)
+content <- content(resp, as = "raw")
+head(content)
+```
+
+## JSON
+
+* Javascript Object Notation
+* Lightweight data storage
+* Common format for data from application programming interfaces (APIs)
+* Similar structure to XML but different syntax
+* Data stored as
+  * Numbers (double)
+  * Strings (double quoted)
+  * Boolean (_true_ or _false_)
+  * Array (ordered, comma separated enclosed in square brackets _[]_)
+  * Object (unorderd, comma separated collection of key:value pairs in curley brackets _{}_)
+
+## Example JSON file
+
+```{r, out.width = "450px", echo = F, fig.align='center'}
+knitr::include_graphics("img/json.png")
+```
+
+## Reading data from JSON (with `jsonlite`)
+
+```{r}
+url <- paste0("http://mysafeinfo.com/api/",
+"data?list=englishmonarchs&format=json")
+jsonData <- fromJSON(url)
+str(jsonData)
+```
+
+# Reading txt, pdf, html, docx, ...
+
+## readtext package
+
+A convenient way to read in document files into R is with the `readtext` package. It reads files containing text, along with any associated document-level metadata from forms such as .csv, .tab, .xml, and .json files.
+
+`readtext` allows file masking, so you can specify patterns to load multiple texts at once. `readtext` returns a data.frame object with all text characters stored in a "text" field, as well as additional columns to store other document-level information.
+
+## Installing readtext
+
+To install `readtext`, you will need to use the `readtext` package, and then issue this command:
+
+```{r, eval= FALSE, echo = TRUE}
+# devtools package required to install readtext from Github 
+devtools::install_github("kbenoit/readtext") 
+```
+
+## Importing text with readtext
+
+We can use the 'glob' operator '\*' to indicate that we want to load multiple files from a single directory.
+
+```{r, echo = TRUE}
+library(readtext)
+inaugural <- readtext("data/inaugural/*.txt")
+sotu <- readtext("data/sotu/*.txt")
+```
+
+## Reading in metadata from text
+
+We can use the `docvarsfrom` argument to read in metadata encoded in the names of the files. For example, the inaugural addresses contain the year and the president's name:
+
+```{r, echo = TRUE}
+inaugural_meta <- readtext("data/inaugural/*.txt", 
+                           docvarsfrom = "filenames", dvsep = "-",
+                           docvarnames = c("Year", "President"))
+head(inaugural_meta)
+```
+
+## Reading texts from structured files
+
+We can also read in texts and document variables from structured files such as csv, excel, or json by spefifying the name of the field containing the texts.
+
+```{r}
+inaug <- readtext("data/inaugTexts.csv", textfield = "inaugSpeech")
+head(inaug)
+```
+
+## Read in pdf data
+
+We can also use `readtext` to read in text from pdf files.  
+
+```{r, echo = TRUE}
+inaugural_pdf <- readtext("data/*.pdf", 
+                           docvarsfrom = "filenames", dvsep = "-",
+                           docvarnames = c("Year", "President"))
+head(inaugural_pdf)
+```
+
+## Creating a corpus object
+
+Instead of loading our texts into a data.frame, we can transfer the text into a corpus object. A corpus is an extension of R list objects so we can use `[[]]` brackets to access single list elements, i.e. documents, within a corpus. We can also print the text of the first element of the corpus using the `as.character()` function 
+
+```{r}
+sotu_corpus <- corpus(readtext("data/sotu/*.txt"))
+summary(sotu_corpus, n = 3)
+#as.character(sotu_corpus[1])
+```
+
+## Adding additional document variables to a corpus
+
+We can easily add additional document variables to our data.frame, as long as the data frame containing them is of the same length as the texts:
+
+```{r}
+sotu_docvars <- read.csv("data/SOTU_metadata.csv", stringsAsFactors = FALSE)
+sotu_docvars$date <- as.Date(sotu_docvars$Date, "%B %d, %Y")
+sotu_docvars$delivery <- as.factor(sotu_docvars$delivery)
+sotu_docvars$type <- as.factor(sotu_docvars$type)
+
+sotu_corpus <- corpus(readtext("data/sotu/*.txt", encoding = "UTF-8-BOM"))
+docvars(sotu_corpus) <- sotu_docvars
+```
+
+## Excercise
+
+Take 5 minutes and try importing some text of your own.
+
+# Part II: Basic Introduction to collecting data from the web
+
+## Browsing vs. scraping
+
+- **Browsing**
+  * you click on something
+  * browser sends request to server that hosts website
+  * server returns resource (often an HTML document)
+  * browser interprets HTML and renders it in a nice fashion
+
+## Browsing vs. scraping
+
+- **Scraping with R**
+  * you manually specify a resource
+  * R sends request to server that hosts website
+  * server returns resource
+  * R parses HTML (i.e., interprets the structure), but does not render it in a nice fashion
+  * it's up to you to tell R which parts of the structure to focus on and what content to extract
+
+## Online text data sources
+
+- **web pages** (e.g. http://example.com)
+- **web formats** (XML, HTML, JSON, ...)
+- **web frameworks** (HTTP, URL, APIs, ...)
+- **social media** (Twitter, Facebook, LinkedIn, Snapchat, Tumbler, ...)
+- **data in the web** (speeches, laws, policy reports, news, ... )
+- **web data** (page views, page ranks, IP-addresses, ...)
+
+
+## Before scraping, do some googling!
+
+- If the resource is well-known, someone else has probably built a tool which solves the problem for you.
+- [ropensci](https://ropensci.org/) has a [ton of R packages](https://ropensci.org/packages/) providing easy-to-use interfaces to open data.
+- The [Web Technologies and Services CRAN Task View](http://cran.r-project.org/web/views/WebTechnologies.html) is a great overview of various tools for working with data that lives on the web in R.
+
+## Extracting data from HTML
+
+For web scraping, we need to:
+
+1. identify the elements of a website which contain our information of interest;
+2. extract the information from these elements;
+
+**Both steps require some basic understanding of HTML and CSS.** More advanced scraping techniques require an understanding of *XPath* and *regular expressions*.
+
+## What's HTML?
+
+**HyperText Markup Language**
+
+* markup language = plain text + markups
+* standard for the construction of websites
+* relevance for web scraping: web architecture is important because it determines where and how information is stored
+
+## Inspect the source code in your browser
+
+**Firefox**
+1. right click on page
+2. select "View Page Source"
+
+**Chrome**
+1. right click on page
+2. select "View page source"
+
+**Safari**
+1. click on "Safari"
+2. select "Preferences"
+3. go to "Advanced"
+4. check "Show Develop menu in menu bar"
+5. click on "Develop"
+6. select "Show Page Source."
+
+## CSS?
+
+**Cascading Style Sheets**
+
+* style sheet language to give browsers information of how to render HTML documents
+* CSS code can be stored within an HTML document or in an external CSS file
+* selectors, i.e. patterns used to specify which elements to format in a certain way, can be used to address the elements we want to extract information from
+* works via tag name (e.g.,`<h2>`,`<p>`) or element attributes `id` and `class`
+
+## Exercise
+
+1. Complete the first 5 levels on [CSS Diner]("http://flukeout.github.io/")
+
+## XPath
+
+* XPath is a query language for selecting nodes from an XML-style document (including HTML)
+* provides just another way of extracting data from static webpages
+* you can also use XPath with R, it can be more powerful than CSS selectors
+
+## Example
+
+```{r, out.width = "600px", echo = F}
+knitr::include_graphics("img/wikiTable.png")
+```  
+
+## Inspecting elements
+
+```{r, out.width = "500px", echo = F}
+knitr::include_graphics("img/inspect-element.png")
+```  
+
+## Hover to find desired elements
+
+```{r, out.width = "600px", echo = F}
+knitr::include_graphics("img/inspector.png")
+```  
+
+## `Rvest`
+
+[rvest](https://github.com/hadley/rvest) is a nice R package for web-scraping by (you guessed it) Hadley Wickham.
+
+- see also: https://github.com/hadley/rvest
+- convenient package to scrape information from web pages
+- builds on other packages, such as xml2 and httr
+- provides very intuitive functions to import and process webpages
+
+
+## Basic workflow of scraping with rvest
+
+```{r}
+# 1. specify URL
+"http://en.wikipedia.org/wiki/Table_(information)" %>% 
+
+# 2. download static HTML behind the URL and parse it into an XML file
+read_html() %>% 
+
+# 3. extract specific nodes with CSS (or XPath)
+html_node(".wikitable") %>%
+
+# 4. extract content from nodes
+html_table(fill = TRUE)
+```
+
+## Selectorgadget
+
+- [Selectorgadget](http://selectorgadget.com/) is a [Chrome browser extension](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en) for quickly extracting desired parts of an HTML page.
+
+* to learn about it, use vignette("selectorgadget")
+
+* to install it, visit http://selectorgadget.com/
+
+## Selectorgadget
+
+```{r, eval = FALSE}
+url <- "http://spiegel.de/schlagzeilen"
+css <- ".schlagzeilen-headline"
+url_parsed <- read_html(url)
+html_nodes(url_parsed, css = css) %>% html_text
+```
+
+## APIs
+
+- API stands for *Application Programming Interface*
+- defined interface for communication between software components
+- *Web* API: provides an interface to structured data from a web service
+- APIs should be used whenever you need to automatically collect mass data from the web
+- it should definitely be preferred over web scraping
+
+## Functionality of APIs
+
+Web APIs usually employ a **client-server model**. The client – that is you. The server provides the *API endpoints* as URLs.
+
+```{r, out.width = "500px", echo = F}
+knitr::include_graphics("img/api.png")
+```  
+
+## Functionality of APIs
+
+Communication is done with request and response messages over *Hypertext transfer protocol (HTTP)*.
+
+Each HTTP message contains a *header* (message meta data) and a *message body* (the actual content). The three-digit [HTTP status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) plays an important role:
+
+- 2xx: Success
+- 4xx: Client error (incl. the popular *404: Not found* or *403: Forbidden*)
+- 5xx: Server error
+
+The message body contains the requested data in a specific format, often JSON or XML.
+
+## Examples of popular APIs
+
+Social media:
+
+- [Twitter](https://developer.twitter.com/)
+- [Facebook Graph API](https://developers.facebook.com/docs/graph-api/) (restricted to own account and public pages)
+- [YouTube (Google)](https://developers.google.com/youtube/)
+- [LinkedIn](https://www.linkedin.com/developers/)
+
+For more, see [programmableweb.com](http://www.programmableweb.com/).
+
+## API wrapper packages
+
+- Working with a web API involves:
+  - constructing request messages
+  - parsing result messages
+  - handling errors
+
+- For popular web services there are already "API wrapper packages" in R:
+  - implement communication with the server
+  - provide direct access to the data via R functions
+  - examples: *rtweet*, *ggmap* (geocoding via Google Maps), *wikipediR*, *genderizeR*
+
+## Twitter
+
+**Twitter has two types of APIs**
+
+- REST APIs --> reading/writing/following/etc.
+
+- Streaming APIs --> low latency access to 1% of global stream - public, user and site streams
+
+- authentication via OAuth
+
+- documentation at https://dev.twitter.com/overview/documentation
+
+## Accessing the Twitter APIs
+
+- To access the REST and streaming APIs, all you need is a Twitter account and you can be up in running in minutes!
+
+- Simply send a request to Twitter’s API (with a function like `search_tweets()`) during an interactive session of R, authorize the embedded `rstats2twitter` app (approve the browser popup), and your token will be created and saved/stored (for future sessions) for you!
+
+- You can obtain a developer account to get more stability and permissions.
+
+## Twitter API subscriptions
+
+Twitter provides [three subscription levels](https://developer.twitter.com/en/pricing):
+
+- Standard (free)
+    - search historical data for up to 7 days
+    - get sampled live tweets
+- Premium ($150 to $2500 / month)
+    - search historical data for up to 30 days
+    - get full historical data per user
+- Enterprise (special contract with Twitter)
+    - full live tweets
+
+The *rate limiting* also differs per subscription level (number of requests per month).
+
+## Use twitter in R
+
+```{r, eval = FALSE}
+library(rtweet)
+
+## search for 1000 tweets using the #niewiedercdu hashtag
+tweets <- search_tweets(
+  "#iacaucus", n = 1000, include_rts = FALSE
+)
+```
+
+Find out what else you can do with the `rtweet` package:
+<https://github.com/mkearney/rtweet>
+
+## Exercise
+
+1. We want to get data from [abgeordnetenwatch.de](https://www.abgeordnetenwatch.de/). The site has an API, so technically there is no need to scrape anything. Load the package `jsonlite` into library.
+
+2. Go to https://www.abgeordnetenwatch.de/api and figure our the syntax of their APIs.
+
+3. Use the `fromJSON` function in `jsonlite` to load a JSON file via the API into R. Save the input as `aw_data`.
+
+## Exercise solution
+
+```{r, echo = FALSE, eval = FALSE}
+library(jsonlite)
+aw_data <- jsonlite::fromJSON("https://www.abgeordnetenwatch.de/api/parliament/bundestag/deputies.json")
+```
+
+# Wrapping up
+
+## Questions?
+
+## Outlook for our next session
+
+- Next week we will learn how to clean and transform text
+- We will meet online on MS Teams for the next eight sessions
+
+## That's it for today
+
+Thanks for your attention!
