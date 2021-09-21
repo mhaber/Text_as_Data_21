@@ -1,0 +1,618 @@
+---
+title: "Text as Data: Week 3"
+author: "Matthias Haber"
+date: "22 September 2021"
+output:
+    revealjs::revealjs_presentation:
+      theme: moon
+      reveal_plugins: ["notes", "zoom", "chalkboard"]
+      highlight: haddock
+      center: false
+      self_contained: false
+      incremental: true
+      reveal_options:
+        slideNumber: true
+        progress: true
+        previewLinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+library(tidyverse)
+library(readtext)
+library(quanteda)
+library(readxl)
+library(DBI)
+library(httr)
+library(rvest)
+library(jsonlite)
+library(nycflights13)
+```
+
+# Goals for Today
+
+## Goals
+
+- Introduction to data transformation with dplyr
+- Learn how to collect your own (text) data from the web
+
+
+# Part I: Data transformation with dplyr
+
+
+## Dataset for today
+
+336,776 flights that departed from New York City in 2013
+
+```{r, message=FALSE}
+# install.packages("nycflights13")
+library(nycflights13)
+```
+
+```{r echo = FALSE}
+knitr::kable(flights[1:4, 1:6])
+```
+
+## `dplyr` core functions
+
+- `filter()`: select rows by their values
+- `arrange()`: order rows
+- `select()`: select columns by their names
+- `mutate()`: create new variables
+- `summarize()`: collapse many values down to a single summary
+
+- `group_by()`: operate on it group-by-group
+- `rename()`: rename columns
+- `distinct()`: find distinct rows
+
+## `dplyr` command structure
+
+- first argument is a data frame
+- return value is a data frame
+- nothing is modified in place
+
+## `filter()`
+
+`filter()` allows to subset observations based on their values. The function takes logical expressions and returns the rows for which all are `TRUE`. 
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/filter.png")
+```  
+
+## `filter()`
+
+Let's select all flights on January 1st:
+
+```{r, eval = FALSE}
+filter(flights, month == 1, day == 1)
+```
+```{r echo = FALSE}
+knitr::kable(filter(flights, month == 1, day == 1)[1:6, 1:6])
+```
+
+## `filter()`
+
+`filter()` revolves around using comparison operators: 
+`>`, `>=`, `<`, `<=`, `!=` (not equal), and `==` (equal).
+
+`dplyr` functions like `filter()` never modify inputs but instead return a new data frame that needs to be assigned to an object if you want to save the result.   
+```{r}
+jan1 <- filter(flights, month == 1, day == 1)
+```
+
+## Boolean operators
+
+`filter()` also supports the Boolean operators `&` ("and"), `|` ("or"), `!` (is "not"), and `xor` (exclusive "or".
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/operators.png")
+``` 
+
+## Boolean operators
+
+Why does this not work?
+
+```{r, eval = FALSE}
+filter(flights, month == 11 | 12)
+```
+
+Generally a good idea to use `x %in% y`, which will select every row where `x` is part of the values of `y`.
+
+```{r, eval = FALSE}
+filter(flights, month %in% c(11, 12))
+```
+
+## `between` condition
+
+Another useful dplyr filtering helper is `between()`. `between(x, left, right)` is equivalent to `x >= left & x <= right`.
+
+To `filter()` all flights that departed between midnight and 6am (inclusive): 
+
+```{r, eval = FALSE}
+filter(flights, between(dep_time, 0, 600))
+```
+
+## `filter()` exercise
+
+First, find all flights that had an arrival delay of two or more hours. Then find all flights that flew to Houston (`IAH` or `HOU`).
+
+<!-- ## `filter()` exercises solutions -->
+<!-- Arrival delay of two or more hours -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>%  -->
+<!--   filter(arr_delay > 120) -->
+<!-- ``` -->
+
+<!-- Flew to Houston (`IAH` or `HOU`) -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>% -->
+<!--   filter(dest %in% c("IAH", "HOU")) -->
+<!-- ``` -->
+
+## `arrange()`
+
+`arrange()` takes a data frame and a set of column names to order the rows by. Multiple column names are evaluated subsequently.    
+
+```{r, eval = FALSE}
+arrange(flights, year, month, day)
+```
+
+```{r, echo = FALSE}
+knitr::kable(arrange(flights, year, month, day)[1:6, 1:6])
+```
+
+## `arrange()` in descending order
+By dafault `arrange()` sorts values in ascending order. Use `desc()` to re-order by a column in descending order.
+
+```{r, eval = FALSE}
+arrange(flights, desc(arr_delay))
+```
+
+```{r, echo = FALSE}
+knitr::kable(arrange(flights, desc(arr_delay))[1:6, 1:6])
+```
+
+## `select()`
+
+`select()` is used to select a subset of variables from a dataset. 
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/select.png")
+```  
+
+```{r, eval = FALSE}
+select(flights, year, month, day)
+```
+
+```{r, echo = FALSE}
+knitr::kable(select(flights, year, month, day)[1:4,])
+```
+
+## `select()`
+
+`select()` has various helper functions:
+
+* `everything()`: selects all variables.
+
+* `starts_with("abc")`: matches names that begin with "abc".
+
+* `ends_with("xyz")`: matches names that end with "xyz".
+
+* `contains("ijk")`: matches names that contain "ijk".
+
+* `matches("(.)\\1")`: selects variables that match a regular expression.
+
+*  `num_range("x", 1:3)` matches `x1`, `x2` and `x3`.
+   
+## `select()`
+
+You can use `select()` to rename variables
+
+```{r, eval = FALSE}
+select(flights, tail_num = tailnum)
+```
+
+which will drop all of the variables not explicitly mentioned. Therefore it's better to use `rename()` instead:
+
+```{r, eval = FALSE}
+rename(flights, tail_num = tailnum)
+```
+
+## `mutate()`
+
+`mutate()` allows to add new columns to the end of your dataset that are functions of existing columns.
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/mutate.png")
+```  
+
+## `mutate()`
+
+```{r, eval = FALSE}
+flights %>% 
+  select(ends_with("delay"), distance, air_time) %>% 
+  mutate(gain = arr_delay - dep_delay,
+         speed = distance / air_time * 60
+)
+```
+
+```{r, echo = FALSE}
+test <- flights %>% 
+  select(ends_with("delay"), distance, air_time) %>% 
+  mutate(gain = arr_delay - dep_delay,
+         speed = distance / air_time * 60
+)
+knitr::kable(test[1:6,])
+```
+
+## Functions to use with `mutate()`
+There are many functions for creating new variables with `mutate()`:
+
+* Arithmetic operators: `+`, `-`, `*`, `/`, `^` (e.g. `air_time / 60`).
+* Aggregate functions: `sum(x)` `mean(y)` (e.g. `mean(dep_delay)`).
+* Logical comparisons, `<`, `<=`, `>`, `>=`, `!=`.
+* ...
+
+## `mutate()` exercises
+
+Use `mutate()` to find the 10 most delayed flights using a ranking function (`?mutate`).
+
+<!-- ## `mutate()` exercise solutions -->
+
+<!-- 10 most delayed flights -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>% -->
+<!--   mutate(dep_delay_rank = min_rank(-dep_delay)) %>% -->
+<!--   arrange(dep_delay_rank) %>% -->
+<!--   filter(dep_delay_rank <= 10) -->
+<!-- ``` -->
+
+## `summarize()`
+
+`summarize()` collapses a data frame to a single row.
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/summarise.png")
+```  
+
+```{r}
+summarise(flights, delay = mean(dep_delay, na.rm = TRUE))
+```
+
+## `summarize()` with `group_by()`
+`summarize()` is most effectively used with `group_by()`, which changes the unit of analysis from the complete dataset to individual groups. 
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/group.png")
+```  
+
+Grouping is most useful in conjunction with `summarise()`, but you can also do convenient operations with `mutate()` and `filter()`.
+
+## `summarize()` with `group_by()`
+For example, to get the average delay per date
+
+```{r, eval = FALSE}
+flights %>% 
+  group_by(year, month, day) %>% 
+  summarise(delay = mean(dep_delay, na.rm = TRUE))
+```
+
+## `summarize()` count
+For aggregations it is generally a good idea to include a count `n()`. For example, let’s look at the (not cancelled) planes that have the highest average delays:
+
+```{r, eval = FALSE}
+flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+  group_by(tailnum) %>% 
+  summarise(delay = mean(arr_delay)) %>% 
+  arrange(delay)
+```
+
+## `summarize()` useful functions
+
+There are a number of useful summary functions:
+
+* Measures of location: `mean(x)`, `sum(x)`, `median(x)`.
+* Measures of spread: `sd(x)`, `IQR(x)`, `mad(x)`.
+* Measures of rank: `min(x)`, `quantile(x, 0.25)`, `max(x)`.
+* Measures of position: `first(x)`, `nth(x, 2)`, `last(x)`.
+* Counts: `n()`, `sum(!is.na(x))`, `n_distinct(x)`.
+* Counts and proportions of logical values: `sum(x > 10)`, `mean(y == 0)`.
+
+## `summarize()` exercises
+
+Use `summarize()` to find the carrier with the worst delays.
+
+<!-- ## `summarize()` exercises solutions -->
+<!-- Frontier Airlines (FL) has the worst delays. -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>% -->
+<!--   group_by(carrier) %>% -->
+<!--   summarise(arr_delay = mean(arr_delay, na.rm = TRUE)) %>% -->
+<!--   arrange(desc(arr_delay)) -->
+<!-- ``` -->
+
+# Let's take a 10 minute break!
+
+# Part II: Basic Introduction to collecting data from the web
+
+## Browsing vs. scraping
+
+- **Browsing**
+  * you click on something
+  * browser sends request to server that hosts website
+  * server returns resource (often an HTML document)
+  * browser interprets HTML and renders it in a nice fashion
+
+## Browsing vs. scraping
+
+- **Scraping with R**
+  * you manually specify a resource
+  * R sends request to server that hosts website
+  * server returns resource
+  * R parses HTML (i.e., interprets the structure), but does not render it in a nice fashion
+  * it's up to you to tell R which parts of the structure to focus on and what content to extract
+
+## Online text data sources
+
+- **web pages** (e.g. http://example.com)
+- **web formats** (XML, HTML, JSON, ...)
+- **web frameworks** (HTTP, URL, APIs, ...)
+- **social media** (Twitter, Facebook, LinkedIn, Snapchat, Tumbler, ...)
+- **data in the web** (speeches, laws, policy reports, news, ... )
+- **web data** (page views, page ranks, IP-addresses, ...)
+
+
+## Before scraping, do some googling!
+
+- If the resource is well-known, someone else has probably built a tool which solves the problem for you.
+- [ropensci](https://ropensci.org/) has a [ton of R packages](https://ropensci.org/packages/) providing easy-to-use interfaces to open data.
+- The [Web Technologies and Services CRAN Task View](http://cran.r-project.org/web/views/WebTechnologies.html) is a great overview of various tools for working with data that lives on the web in R.
+
+## Extracting data from HTML
+
+For web scraping, we need to:
+
+1. identify the elements of a website which contain our information of interest
+2. extract the information from these elements
+
+## Extracting data from HTML
+
+For web scraping, we need to:
+
+1. identify the elements of a website which contain our information of interest;
+2. extract the information from these elements
+
+**Both steps require some basic understanding of HTML and CSS.** More advanced scraping techniques require an understanding of *XPath* and *regular expressions*.
+
+## What's HTML?
+
+**HyperText Markup Language**
+
+* markup language = plain text + markups
+* standard for the construction of websites
+* relevance for web scraping: web architecture is important because it determines where and how information is stored
+
+## Inspect the source code in your browser
+
+**Firefox**
+1. right click on page
+2. select "View Page Source"
+
+**Chrome**
+1. right click on page
+2. select "View Page Source"
+
+**Safari**
+1. click on "Safari"
+2. select "Preferences"
+3. go to "Advanced"
+4. check "Show Develop menu in menu bar"
+5. click on "Develop"
+6. select "Show Page Source."
+
+## CSS?
+
+**Cascading Style Sheets**
+
+* style sheet language to give browsers information of how to render HTML documents
+* CSS code can be stored within an HTML document or in an external CSS file
+* selectors, i.e. patterns used to specify which elements to format in a certain way, can be used to address the elements we want to extract information from
+* works via tag name (e.g.,`<h2>`,`<p>`) or element attributes `id` and `class`
+
+## Exercise
+
+1. Complete the first 5 levels on [CSS Diner]("http://flukeout.github.io/")
+
+## XPath
+
+* XPath is a query language for selecting nodes from an XML-style document (including HTML)
+* provides just another way of extracting data from static webpages
+* you can also use XPath with R, it can be more powerful than CSS selectors
+
+## Example
+
+```{r, out.width = "700px", echo = F}
+knitr::include_graphics("img/wikiTable.png")
+```  
+
+## Inspecting elements
+
+```{r, out.width = "500px", echo = F}
+knitr::include_graphics("img/inspect-element.png")
+```  
+
+## Hover to find desired elements
+
+```{r, out.width = "700px", echo = F}
+knitr::include_graphics("img/inspector.png")
+```  
+
+## `Rvest`
+
+[rvest](https://github.com/hadley/rvest) is a nice R package for web-scraping by (you guessed it) Hadley Wickham.
+
+- see also: https://github.com/hadley/rvest
+- convenient package to scrape information from web pages
+- builds on other packages, such as xml2 and httr
+- provides very intuitive functions to import and process webpages
+
+
+## Basic workflow of scraping with rvest
+
+```{r}
+# 1. specify URL
+"http://en.wikipedia.org/wiki/Table_(information)" %>% 
+
+# 2. download static HTML behind the URL and parse it into an XML file
+read_html() %>% 
+
+# 3. extract specific nodes with CSS (or XPath)
+html_node(".wikitable") %>%
+
+# 4. extract content from nodes
+html_table(fill = TRUE)
+```
+
+## Selectorgadget
+
+- [Selectorgadget](http://selectorgadget.com/) is a [Chrome browser extension](https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en) for quickly extracting desired parts of an HTML page.
+
+* to learn about it, use vignette("selectorgadget")
+
+* to install it, visit http://selectorgadget.com/
+
+## Selectorgadget
+
+```{r, eval = FALSE}
+url <- "http://spiegel.de/schlagzeilen"
+css <- ".mr-6"
+url_parsed <- read_html(url)
+html_nodes(url_parsed, css = css) %>% html_text
+```
+
+## Exercise
+
+We want to collect some questions that users asks SPD candidate Olaf Scholz from [https://www.abgeordnetenwatch.de/profile/olaf-scholz/fragen-antworten](https://www.abgeordnetenwatch.de/profile/olaf-scholz/fragen-antworten).
+
+a. What's the first thing you would do?
+b. Oh no, SelectorGadget does not work. What else can we do?
+c. Write a simple scraper to collect the first 12 questions
+d. How can we get all the questions for Olaf Scholz? Every candidate?
+
+<!-- ## Exercise solutions -->
+
+<!-- ```{r, eval = FALSE} -->
+<!-- questions <- paste0("https://www.abgeordnetenwatch.de/profile/", -->
+<!-- "olaf-scholz/","fragen-antworten") %>%  -->
+<!--   read_html() %>%  -->
+<!--   html_nodes(".tile__question-text") %>%  -->
+<!--   html_text() -->
+<!-- ``` -->
+
+
+## APIs
+
+- API stands for *Application Programming Interface*
+- defined interface for communication between software components
+- *Web* API: provides an interface to structured data from a web service
+- APIs should be used whenever you need to automatically collect mass data from the web
+- it should definitely be preferred over web scraping
+
+## Functionality of APIs
+
+Web APIs usually employ a **client-server model**. The client – that is you. The server provides the *API endpoints* as URLs.
+
+```{r, out.width = "500px", echo = F}
+knitr::include_graphics("img/api.png")
+```  
+
+## Functionality of APIs
+
+Communication is done with request and response messages over *Hypertext transfer protocol (HTTP)*.
+
+Each HTTP message contains a *header* (message meta data) and a *message body* (the actual content). The three-digit [HTTP status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) plays an important role:
+
+- 2xx: Success
+- 4xx: Client error (incl. the popular *404: Not found* or *403: Forbidden*)
+- 5xx: Server error
+- The message body contains the requested data in a specific format, often JSON or XML.
+
+
+## Examples of popular APIs
+
+Social media:
+
+- [Twitter](https://developer.twitter.com/)
+- [Facebook Graph API](https://developers.facebook.com/docs/graph-api/) (restricted to own account and public pages)
+- [YouTube (Google)](https://developers.google.com/youtube/)
+- [LinkedIn](https://www.linkedin.com/developers/)
+- For more, see [programmableweb.com](http://www.programmableweb.com/).
+
+## API wrapper packages
+
+- Working with a web API involves:
+  - constructing request messages
+  - parsing result messages
+  - handling errors
+
+- For popular web services there are already "API wrapper packages" in R:
+  - implement communication with the server
+  - provide direct access to the data via R functions
+  - examples: *rtweet*, *ggmap* (geocoding via Google Maps), *wikipediR*, etc.
+
+## Twitter
+
+**Twitter has two types of APIs**
+
+- REST APIs --> reading/writing/following/etc.
+
+- Streaming APIs --> low latency access to 1% of global stream - public, user and site streams
+
+- authentication via OAuth
+
+- documentation at https://dev.twitter.com/overview/documentation
+
+## Accessing the Twitter APIs
+
+- To access the REST and streaming APIs, all you need is a Twitter account and you can be up in running in minutes!
+
+- Simply send a request to Twitter’s API (with a function like `search_tweets()`) during an interactive session of R, authorize the embedded `rstats2twitter` app (approve the browser popup), and your token will be created and saved/stored (for future sessions) for you!
+
+- You can obtain a developer account to get more stability and permissions.
+
+## Use twitter in R
+
+```{r, eval = FALSE}
+library(rtweet)
+
+## search for 1000 tweets using the #baerbock hashtag
+tweets <- search_tweets(
+  "#baerbock", n = 1000, include_rts = FALSE
+)
+```
+
+Find out what else you can do with the `rtweet` package:
+<https://github.com/mkearney/rtweet>
+
+## Homework Exercise
+
+1. We are still interested in getting data from [abgeordnetenwatch.de](https://www.abgeordnetenwatch.de/). The site has an API, so technically there is no need to scrape anything. Load the package `jsonlite` into library.
+
+2. Go to https://www.abgeordnetenwatch.de/api and figure our the syntax of their APIs.
+
+3. Collect some data from their API from a politician running in your constituency (or a constituency of your choice). Tip: Use the `fromJSON` function in `jsonlite` to load a JSON file via the API into R. Convert the output into a nicely formatted dataframe.
+
+# Wrapping up
+
+## Questions?
+
+## Outlook for our next session
+
+- Next week we will learn how to clean and transform text
+- We will meet online on MS Teams again
+
+## That's it for today
+
+Thanks for your attention!

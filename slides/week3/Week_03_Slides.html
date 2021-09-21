@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-09-22" />
+  <title>Text as Data: Week 3</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_03_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_03_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_03_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_03_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_03_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 3</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">22 September 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Introduction to data transformation with dplyr</li>
+<li class="fragment">Learn how to collect your own (text) data from the web</li>
+</ul>
+</section></section>
+<section>
+<section id="part-i-data-transformation-with-dplyr" class="title-slide slide level1">
+<h1>Part I: Data transformation with dplyr</h1>
+
+</section>
+<section id="dataset-for-today" class="slide level2">
+<h2>Dataset for today</h2>
+<p>336,776 flights that departed from New York City in 2013</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;nycflights13&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">month</th>
+<th style="text-align: right;">day</th>
+<th style="text-align: right;">dep_time</th>
+<th style="text-align: right;">sched_dep_time</th>
+<th style="text-align: right;">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">517</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">533</td>
+<td style="text-align: right;">529</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">542</td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">544</td>
+<td style="text-align: right;">545</td>
+<td style="text-align: right;">-1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="dplyr-core-functions" class="slide level2">
+<h2><code>dplyr</code> core functions</h2>
+<ul>
+<li class="fragment"><p><code>filter()</code>: select rows by their values</p></li>
+<li class="fragment"><p><code>arrange()</code>: order rows</p></li>
+<li class="fragment"><p><code>select()</code>: select columns by their names</p></li>
+<li class="fragment"><p><code>mutate()</code>: create new variables</p></li>
+<li class="fragment"><p><code>summarize()</code>: collapse many values down to a single summary</p></li>
+<li class="fragment"><p><code>group_by()</code>: operate on it group-by-group</p></li>
+<li class="fragment"><p><code>rename()</code>: rename columns</p></li>
+<li class="fragment"><p><code>distinct()</code>: find distinct rows</p></li>
+</ul>
+</section>
+<section id="dplyr-command-structure" class="slide level2">
+<h2><code>dplyr</code> command structure</h2>
+<ul>
+<li class="fragment">first argument is a data frame</li>
+<li class="fragment">return value is a data frame</li>
+<li class="fragment">nothing is modified in place</li>
+</ul>
+</section>
+<section id="filter" class="slide level2">
+<h2><code>filter()</code></h2>
+<p><code>filter()</code> allows to subset observations based on their values. The function takes logical expressions and returns the rows for which all are <code>TRUE</code>.</p>
+<p><img src="img/filter.png" width="250px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="filter-1" class="slide level2">
+<h2><code>filter()</code></h2>
+<p>Let’s select all flights on January 1st:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(flights, month <span class="sc">==</span> <span class="dv">1</span>, day <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">month</th>
+<th style="text-align: right;">day</th>
+<th style="text-align: right;">dep_time</th>
+<th style="text-align: right;">sched_dep_time</th>
+<th style="text-align: right;">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">517</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">533</td>
+<td style="text-align: right;">529</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">542</td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">544</td>
+<td style="text-align: right;">545</td>
+<td style="text-align: right;">-1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">-6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">558</td>
+<td style="text-align: right;">-4</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="filter-2" class="slide level2">
+<h2><code>filter()</code></h2>
+<p><code>filter()</code> revolves around using comparison operators: <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>!=</code> (not equal), and <code>==</code> (equal).</p>
+<p><code>dplyr</code> functions like <code>filter()</code> never modify inputs but instead return a new data frame that needs to be assigned to an object if you want to save the result.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>jan1 <span class="ot">&lt;-</span> <span class="fu">filter</span>(flights, month <span class="sc">==</span> <span class="dv">1</span>, day <span class="sc">==</span> <span class="dv">1</span>)</span></code></pre></div>
+</section>
+<section id="boolean-operators" class="slide level2">
+<h2>Boolean operators</h2>
+<p><code>filter()</code> also supports the Boolean operators <code>&amp;</code> (“and”), <code>|</code> (“or”), <code>!</code> (is “not”), and <code>xor</code> (exclusive “or”.</p>
+<p><img src="img/operators.png" width="250px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="boolean-operators-1" class="slide level2">
+<h2>Boolean operators</h2>
+<p>Why does this not work?</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(flights, month <span class="sc">==</span> <span class="dv">11</span> <span class="sc">|</span> <span class="dv">12</span>)</span></code></pre></div>
+<p>Generally a good idea to use <code>x %in% y</code>, which will select every row where <code>x</code> is part of the values of <code>y</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(flights, month <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">11</span>, <span class="dv">12</span>))</span></code></pre></div>
+</section>
+<section id="between-condition" class="slide level2">
+<h2><code>between</code> condition</h2>
+<p>Another useful dplyr filtering helper is <code>between()</code>. <code>between(x, left, right)</code> is equivalent to <code>x &gt;= left &amp; x &lt;= right</code>.</p>
+<p>To <code>filter()</code> all flights that departed between midnight and 6am (inclusive):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(flights, <span class="fu">between</span>(dep_time, <span class="dv">0</span>, <span class="dv">600</span>))</span></code></pre></div>
+</section>
+<section id="filter-exercise" class="slide level2">
+<h2><code>filter()</code> exercise</h2>
+<p>First, find all flights that had an arrival delay of two or more hours. Then find all flights that flew to Houston (<code>IAH</code> or <code>HOU</code>).</p>
+<!-- ## `filter()` exercises solutions -->
+<!-- Arrival delay of two or more hours -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>%  -->
+<!--   filter(arr_delay > 120) -->
+<!-- ``` -->
+<!-- Flew to Houston (`IAH` or `HOU`) -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>% -->
+<!--   filter(dest %in% c("IAH", "HOU")) -->
+<!-- ``` -->
+</section>
+<section id="arrange" class="slide level2">
+<h2><code>arrange()</code></h2>
+<p><code>arrange()</code> takes a data frame and a set of column names to order the rows by. Multiple column names are evaluated subsequently.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(flights, year, month, day)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">month</th>
+<th style="text-align: right;">day</th>
+<th style="text-align: right;">dep_time</th>
+<th style="text-align: right;">sched_dep_time</th>
+<th style="text-align: right;">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">517</td>
+<td style="text-align: right;">515</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">533</td>
+<td style="text-align: right;">529</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">542</td>
+<td style="text-align: right;">540</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">544</td>
+<td style="text-align: right;">545</td>
+<td style="text-align: right;">-1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">-6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">554</td>
+<td style="text-align: right;">558</td>
+<td style="text-align: right;">-4</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="arrange-in-descending-order" class="slide level2">
+<h2><code>arrange()</code> in descending order</h2>
+<p>By dafault <code>arrange()</code> sorts values in ascending order. Use <code>desc()</code> to re-order by a column in descending order.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">arrange</span>(flights, <span class="fu">desc</span>(arr_delay))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">month</th>
+<th style="text-align: right;">day</th>
+<th style="text-align: right;">dep_time</th>
+<th style="text-align: right;">sched_dep_time</th>
+<th style="text-align: right;">dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">641</td>
+<td style="text-align: right;">900</td>
+<td style="text-align: right;">1301</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">1432</td>
+<td style="text-align: right;">1935</td>
+<td style="text-align: right;">1137</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1121</td>
+<td style="text-align: right;">1635</td>
+<td style="text-align: right;">1126</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1139</td>
+<td style="text-align: right;">1845</td>
+<td style="text-align: right;">1014</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">845</td>
+<td style="text-align: right;">1600</td>
+<td style="text-align: right;">1005</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1100</td>
+<td style="text-align: right;">1900</td>
+<td style="text-align: right;">960</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="select" class="slide level2">
+<h2><code>select()</code></h2>
+<p><code>select()</code> is used to select a subset of variables from a dataset.</p>
+<p><img src="img/select.png" width="250px" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(flights, year, month, day)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">year</th>
+<th style="text-align: right;">month</th>
+<th style="text-align: right;">day</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="select-1" class="slide level2">
+<h2><code>select()</code></h2>
+<p><code>select()</code> has various helper functions:</p>
+<ul>
+<li class="fragment"><p><code>everything()</code>: selects all variables.</p></li>
+<li class="fragment"><p><code>starts_with("abc")</code>: matches names that begin with “abc”.</p></li>
+<li class="fragment"><p><code>ends_with("xyz")</code>: matches names that end with “xyz”.</p></li>
+<li class="fragment"><p><code>contains("ijk")</code>: matches names that contain “ijk”.</p></li>
+<li class="fragment"><p><code>matches("(.)\\1")</code>: selects variables that match a regular expression.</p></li>
+<li class="fragment"><p><code>num_range("x", 1:3)</code> matches <code>x1</code>, <code>x2</code> and <code>x3</code>.</p></li>
+</ul>
+</section>
+<section id="select-2" class="slide level2">
+<h2><code>select()</code></h2>
+<p>You can use <code>select()</code> to rename variables</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(flights, <span class="at">tail_num =</span> tailnum)</span></code></pre></div>
+<p>which will drop all of the variables not explicitly mentioned. Therefore it’s better to use <code>rename()</code> instead:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rename</span>(flights, <span class="at">tail_num =</span> tailnum)</span></code></pre></div>
+</section>
+<section id="mutate" class="slide level2">
+<h2><code>mutate()</code></h2>
+<p><code>mutate()</code> allows to add new columns to the end of your dataset that are functions of existing columns.</p>
+<p><img src="img/mutate.png" width="250px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="mutate-1" class="slide level2">
+<h2><code>mutate()</code></h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">ends_with</span>(<span class="st">&quot;delay&quot;</span>), distance, air_time) <span class="sc">%&gt;%</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gain =</span> arr_delay <span class="sc">-</span> dep_delay,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">speed =</span> distance <span class="sc">/</span> air_time <span class="sc">*</span> <span class="dv">60</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">dep_delay</th>
+<th style="text-align: right;">arr_delay</th>
+<th style="text-align: right;">distance</th>
+<th style="text-align: right;">air_time</th>
+<th style="text-align: right;">gain</th>
+<th style="text-align: right;">speed</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">1400</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">370.0441</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">1416</td>
+<td style="text-align: right;">227</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">374.2731</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">1089</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">408.3750</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-1</td>
+<td style="text-align: right;">-18</td>
+<td style="text-align: right;">1576</td>
+<td style="text-align: right;">183</td>
+<td style="text-align: right;">-17</td>
+<td style="text-align: right;">516.7213</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">-6</td>
+<td style="text-align: right;">-25</td>
+<td style="text-align: right;">762</td>
+<td style="text-align: right;">116</td>
+<td style="text-align: right;">-19</td>
+<td style="text-align: right;">394.1379</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">-4</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">719</td>
+<td style="text-align: right;">150</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">287.6000</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions-to-use-with-mutate" class="slide level2">
+<h2>Functions to use with <code>mutate()</code></h2>
+<p>There are many functions for creating new variables with <code>mutate()</code>:</p>
+<ul>
+<li class="fragment">Arithmetic operators: <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>^</code> (e.g. <code>air_time / 60</code>).</li>
+<li class="fragment">Aggregate functions: <code>sum(x)</code> <code>mean(y)</code> (e.g. <code>mean(dep_delay)</code>).</li>
+<li class="fragment">Logical comparisons, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>!=</code>.</li>
+<li class="fragment">…</li>
+</ul>
+</section>
+<section id="mutate-exercises" class="slide level2">
+<h2><code>mutate()</code> exercises</h2>
+<p>Use <code>mutate()</code> to find the 10 most delayed flights using a ranking function (<code>?mutate</code>).</p>
+<!-- ## `mutate()` exercise solutions -->
+<!-- 10 most delayed flights -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>% -->
+<!--   mutate(dep_delay_rank = min_rank(-dep_delay)) %>% -->
+<!--   arrange(dep_delay_rank) %>% -->
+<!--   filter(dep_delay_rank <= 10) -->
+<!-- ``` -->
+</section>
+<section id="summarize" class="slide level2">
+<h2><code>summarize()</code></h2>
+<p><code>summarize()</code> collapses a data frame to a single row.</p>
+<p><img src="img/summarise.png" width="250px" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summarise</span>(flights, <span class="at">delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##   delay
+##   &lt;dbl&gt;
+## 1  12.6</code></pre>
+</section>
+<section id="summarize-with-group_by" class="slide level2">
+<h2><code>summarize()</code> with <code>group_by()</code></h2>
+<p><code>summarize()</code> is most effectively used with <code>group_by()</code>, which changes the unit of analysis from the complete dataset to individual groups.</p>
+<p><img src="img/group.png" width="250px" style="display: block; margin: auto;" /></p>
+<p>Grouping is most useful in conjunction with <code>summarise()</code>, but you can also do convenient operations with <code>mutate()</code> and <code>filter()</code>.</p>
+</section>
+<section id="summarize-with-group_by-1" class="slide level2">
+<h2><code>summarize()</code> with <code>group_by()</code></h2>
+<p>For example, to get the average delay per date</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, month, day) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+</section>
+<section id="summarize-count" class="slide level2">
+<h2><code>summarize()</code> count</h2>
+<p>For aggregations it is generally a good idea to include a count <code>n()</code>. For example, let’s look at the (not cancelled) planes that have the highest average delays:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay), <span class="sc">!</span><span class="fu">is.na</span>(arr_delay))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(tailnum) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">delay =</span> <span class="fu">mean</span>(arr_delay)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(delay)</span></code></pre></div>
+</section>
+<section id="summarize-useful-functions" class="slide level2">
+<h2><code>summarize()</code> useful functions</h2>
+<p>There are a number of useful summary functions:</p>
+<ul>
+<li class="fragment">Measures of location: <code>mean(x)</code>, <code>sum(x)</code>, <code>median(x)</code>.</li>
+<li class="fragment">Measures of spread: <code>sd(x)</code>, <code>IQR(x)</code>, <code>mad(x)</code>.</li>
+<li class="fragment">Measures of rank: <code>min(x)</code>, <code>quantile(x, 0.25)</code>, <code>max(x)</code>.</li>
+<li class="fragment">Measures of position: <code>first(x)</code>, <code>nth(x, 2)</code>, <code>last(x)</code>.</li>
+<li class="fragment">Counts: <code>n()</code>, <code>sum(!is.na(x))</code>, <code>n_distinct(x)</code>.</li>
+<li class="fragment">Counts and proportions of logical values: <code>sum(x &gt; 10)</code>, <code>mean(y == 0)</code>.</li>
+</ul>
+</section>
+<section id="summarize-exercises" class="slide level2">
+<h2><code>summarize()</code> exercises</h2>
+<p>Use <code>summarize()</code> to find the carrier with the worst delays.</p>
+<!-- ## `summarize()` exercises solutions -->
+<!-- Frontier Airlines (FL) has the worst delays. -->
+<!-- ```{r, eval = FALSE} -->
+<!-- flights %>% -->
+<!--   group_by(carrier) %>% -->
+<!--   summarise(arr_delay = mean(arr_delay, na.rm = TRUE)) %>% -->
+<!--   arrange(desc(arr_delay)) -->
+<!-- ``` -->
+</section></section>
+<section id="lets-take-a-10-minute-break" class="title-slide slide level1">
+<h1>Let’s take a 10 minute break!</h1>
+
+</section>
+
+<section>
+<section id="part-ii-basic-introduction-to-collecting-data-from-the-web" class="title-slide slide level1">
+<h1>Part II: Basic Introduction to collecting data from the web</h1>
+
+</section>
+<section id="browsing-vs.-scraping" class="slide level2">
+<h2>Browsing vs. scraping</h2>
+<ul>
+<li class="fragment"><strong>Browsing</strong>
+<ul>
+<li class="fragment">you click on something</li>
+<li class="fragment">browser sends request to server that hosts website</li>
+<li class="fragment">server returns resource (often an HTML document)</li>
+<li class="fragment">browser interprets HTML and renders it in a nice fashion</li>
+</ul></li>
+</ul>
+</section>
+<section id="browsing-vs.-scraping-1" class="slide level2">
+<h2>Browsing vs. scraping</h2>
+<ul>
+<li class="fragment"><strong>Scraping with R</strong>
+<ul>
+<li class="fragment">you manually specify a resource</li>
+<li class="fragment">R sends request to server that hosts website</li>
+<li class="fragment">server returns resource</li>
+<li class="fragment">R parses HTML (i.e., interprets the structure), but does not render it in a nice fashion</li>
+<li class="fragment">it’s up to you to tell R which parts of the structure to focus on and what content to extract</li>
+</ul></li>
+</ul>
+</section>
+<section id="online-text-data-sources" class="slide level2">
+<h2>Online text data sources</h2>
+<ul>
+<li class="fragment"><strong>web pages</strong> (e.g. <a href="http://example.com" class="uri">http://example.com</a>)</li>
+<li class="fragment"><strong>web formats</strong> (XML, HTML, JSON, …)</li>
+<li class="fragment"><strong>web frameworks</strong> (HTTP, URL, APIs, …)</li>
+<li class="fragment"><strong>social media</strong> (Twitter, Facebook, LinkedIn, Snapchat, Tumbler, …)</li>
+<li class="fragment"><strong>data in the web</strong> (speeches, laws, policy reports, news, … )</li>
+<li class="fragment"><strong>web data</strong> (page views, page ranks, IP-addresses, …)</li>
+</ul>
+</section>
+<section id="before-scraping-do-some-googling" class="slide level2">
+<h2>Before scraping, do some googling!</h2>
+<ul>
+<li class="fragment">If the resource is well-known, someone else has probably built a tool which solves the problem for you.</li>
+<li class="fragment"><a href="https://ropensci.org/">ropensci</a> has a <a href="https://ropensci.org/packages/">ton of R packages</a> providing easy-to-use interfaces to open data.</li>
+<li class="fragment">The <a href="http://cran.r-project.org/web/views/WebTechnologies.html">Web Technologies and Services CRAN Task View</a> is a great overview of various tools for working with data that lives on the web in R.</li>
+</ul>
+</section>
+<section id="extracting-data-from-html" class="slide level2">
+<h2>Extracting data from HTML</h2>
+<p>For web scraping, we need to:</p>
+<ol type="1">
+<li class="fragment">identify the elements of a website which contain our information of interest</li>
+<li class="fragment">extract the information from these elements</li>
+</ol>
+</section>
+<section id="extracting-data-from-html-1" class="slide level2">
+<h2>Extracting data from HTML</h2>
+<p>For web scraping, we need to:</p>
+<ol type="1">
+<li class="fragment">identify the elements of a website which contain our information of interest;</li>
+<li class="fragment">extract the information from these elements</li>
+</ol>
+<p><strong>Both steps require some basic understanding of HTML and CSS.</strong> More advanced scraping techniques require an understanding of <em>XPath</em> and <em>regular expressions</em>.</p>
+</section>
+<section id="whats-html" class="slide level2">
+<h2>What’s HTML?</h2>
+<p><strong>HyperText Markup Language</strong></p>
+<ul>
+<li class="fragment">markup language = plain text + markups</li>
+<li class="fragment">standard for the construction of websites</li>
+<li class="fragment">relevance for web scraping: web architecture is important because it determines where and how information is stored</li>
+</ul>
+</section>
+<section id="inspect-the-source-code-in-your-browser" class="slide level2">
+<h2>Inspect the source code in your browser</h2>
+<p><strong>Firefox</strong> 1. right click on page 2. select “View Page Source”</p>
+<p><strong>Chrome</strong> 1. right click on page 2. select “View Page Source”</p>
+<p><strong>Safari</strong> 1. click on “Safari” 2. select “Preferences” 3. go to “Advanced” 4. check “Show Develop menu in menu bar” 5. click on “Develop” 6. select “Show Page Source.”</p>
+</section>
+<section id="css" class="slide level2">
+<h2>CSS?</h2>
+<p><strong>Cascading Style Sheets</strong></p>
+<ul>
+<li class="fragment">style sheet language to give browsers information of how to render HTML documents</li>
+<li class="fragment">CSS code can be stored within an HTML document or in an external CSS file</li>
+<li class="fragment">selectors, i.e. patterns used to specify which elements to format in a certain way, can be used to address the elements we want to extract information from</li>
+<li class="fragment">works via tag name (e.g.,<code>&lt;h2&gt;</code>,<code>&lt;p&gt;</code>) or element attributes <code>id</code> and <code>class</code></li>
+</ul>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<ol type="1">
+<li class="fragment">Complete the first 5 levels on <a href="%22http://flukeout.github.io/%22">CSS Diner</a></li>
+</ol>
+</section>
+<section id="xpath" class="slide level2">
+<h2>XPath</h2>
+<ul>
+<li class="fragment">XPath is a query language for selecting nodes from an XML-style document (including HTML)</li>
+<li class="fragment">provides just another way of extracting data from static webpages</li>
+<li class="fragment">you can also use XPath with R, it can be more powerful than CSS selectors</li>
+</ul>
+</section>
+<section id="example" class="slide level2">
+<h2>Example</h2>
+<p><img src="img/wikiTable.png" width="700px" /></p>
+</section>
+<section id="inspecting-elements" class="slide level2">
+<h2>Inspecting elements</h2>
+<p><img src="img/inspect-element.png" width="500px" /></p>
+</section>
+<section id="hover-to-find-desired-elements" class="slide level2">
+<h2>Hover to find desired elements</h2>
+<p><img src="img/inspector.png" width="700px" /></p>
+</section>
+<section id="rvest" class="slide level2">
+<h2><code>Rvest</code></h2>
+<p><a href="https://github.com/hadley/rvest">rvest</a> is a nice R package for web-scraping by (you guessed it) Hadley Wickham.</p>
+<ul>
+<li class="fragment">see also: <a href="https://github.com/hadley/rvest" class="uri">https://github.com/hadley/rvest</a></li>
+<li class="fragment">convenient package to scrape information from web pages</li>
+<li class="fragment">builds on other packages, such as xml2 and httr</li>
+<li class="fragment">provides very intuitive functions to import and process webpages</li>
+</ul>
+</section>
+<section id="basic-workflow-of-scraping-with-rvest" class="slide level2">
+<h2>Basic workflow of scraping with rvest</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. specify URL</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;http://en.wikipedia.org/wiki/Table_(information)&quot;</span> <span class="sc">%&gt;%</span> </span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. download static HTML behind the URL and parse it into an XML file</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">read_html</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. extract specific nodes with CSS (or XPath)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="fu">html_node</span>(<span class="st">&quot;.wikitable&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. extract content from nodes</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="fu">html_table</span>(<span class="at">fill =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 9 × 3
+##   `First name` `Last name`   Age
+##   &lt;chr&gt;        &lt;chr&gt;       &lt;int&gt;
+## 1 Tinu         Elejogun       14
+## 2 Javier       Zapata         28
+## 3 Lily         McGarrett      18
+## 4 Olatunkbo    Chijiaku       22
+## 5 Adrienne     Anthoula       22
+## 6 Axelia       Athanasios     22
+## 7 Jon-Kabat    Zinn           22
+## 8 Thabang      Mosoa          15
+## 9 Kgaogelo     Mosoa          11</code></pre>
+</section>
+<section id="selectorgadget" class="slide level2">
+<h2>Selectorgadget</h2>
+<ul>
+<li class="fragment"><p><a href="http://selectorgadget.com/">Selectorgadget</a> is a <a href="https://chrome.google.com/webstore/detail/selectorgadget/mhjhnkcfbdhnjickkkdbjoemdmbfginb?hl=en">Chrome browser extension</a> for quickly extracting desired parts of an HTML page.</p></li>
+<li class="fragment"><p>to learn about it, use vignette(“selectorgadget”)</p></li>
+<li class="fragment"><p>to install it, visit <a href="http://selectorgadget.com/" class="uri">http://selectorgadget.com/</a></p></li>
+</ul>
+</section>
+<section id="selectorgadget-1" class="slide level2">
+<h2>Selectorgadget</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;http://spiegel.de/schlagzeilen&quot;</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>css <span class="ot">&lt;-</span> <span class="st">&quot;.mr-6&quot;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>url_parsed <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">html_nodes</span>(url_parsed, <span class="at">css =</span> css) <span class="sc">%&gt;%</span> html_text</span></code></pre></div>
+</section>
+<section id="exercise-1" class="slide level2">
+<h2>Exercise</h2>
+<p>We want to collect some questions that users asks SPD candidate Olaf Scholz from <a href="https://www.abgeordnetenwatch.de/profile/olaf-scholz/fragen-antworten">https://www.abgeordnetenwatch.de/profile/olaf-scholz/fragen-antworten</a>.</p>
+<ol type="a">
+<li class="fragment">What’s the first thing you would do?</li>
+<li class="fragment">Oh no, SelectorGadget does not work. What else can we do?</li>
+<li class="fragment">Write a simple scraper to collect the first 12 questions</li>
+<li class="fragment">How can we get all the questions for Olaf Scholz? Every candidate?</li>
+</ol>
+<!-- ## Exercise solutions -->
+<!-- ```{r, eval = FALSE} -->
+<!-- questions <- paste0("https://www.abgeordnetenwatch.de/profile/", -->
+<!-- "olaf-scholz/","fragen-antworten") %>%  -->
+<!--   read_html() %>%  -->
+<!--   html_nodes(".tile__question-text") %>%  -->
+<!--   html_text() -->
+<!-- ``` -->
+</section>
+<section id="apis" class="slide level2">
+<h2>APIs</h2>
+<ul>
+<li class="fragment">API stands for <em>Application Programming Interface</em></li>
+<li class="fragment">defined interface for communication between software components</li>
+<li class="fragment"><em>Web</em> API: provides an interface to structured data from a web service</li>
+<li class="fragment">APIs should be used whenever you need to automatically collect mass data from the web</li>
+<li class="fragment">it should definitely be preferred over web scraping</li>
+</ul>
+</section>
+<section id="functionality-of-apis" class="slide level2">
+<h2>Functionality of APIs</h2>
+<p>Web APIs usually employ a <strong>client-server model</strong>. The client – that is you. The server provides the <em>API endpoints</em> as URLs.</p>
+<p><img src="img/api.png" width="500px" /></p>
+</section>
+<section id="functionality-of-apis-1" class="slide level2">
+<h2>Functionality of APIs</h2>
+<p>Communication is done with request and response messages over <em>Hypertext transfer protocol (HTTP)</em>.</p>
+<p>Each HTTP message contains a <em>header</em> (message meta data) and a <em>message body</em> (the actual content). The three-digit <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP status code</a> plays an important role:</p>
+<ul>
+<li class="fragment">2xx: Success</li>
+<li class="fragment">4xx: Client error (incl. the popular <em>404: Not found</em> or <em>403: Forbidden</em>)</li>
+<li class="fragment">5xx: Server error</li>
+<li class="fragment">The message body contains the requested data in a specific format, often JSON or XML.</li>
+</ul>
+</section>
+<section id="examples-of-popular-apis" class="slide level2">
+<h2>Examples of popular APIs</h2>
+<p>Social media:</p>
+<ul>
+<li class="fragment"><a href="https://developer.twitter.com/">Twitter</a></li>
+<li class="fragment"><a href="https://developers.facebook.com/docs/graph-api/">Facebook Graph API</a> (restricted to own account and public pages)</li>
+<li class="fragment"><a href="https://developers.google.com/youtube/">YouTube (Google)</a></li>
+<li class="fragment"><a href="https://www.linkedin.com/developers/">LinkedIn</a></li>
+<li class="fragment">For more, see <a href="http://www.programmableweb.com/">programmableweb.com</a>.</li>
+</ul>
+</section>
+<section id="api-wrapper-packages" class="slide level2">
+<h2>API wrapper packages</h2>
+<ul>
+<li class="fragment">Working with a web API involves:
+<ul>
+<li class="fragment">constructing request messages</li>
+<li class="fragment">parsing result messages</li>
+<li class="fragment">handling errors</li>
+</ul></li>
+<li class="fragment">For popular web services there are already “API wrapper packages” in R:
+<ul>
+<li class="fragment">implement communication with the server</li>
+<li class="fragment">provide direct access to the data via R functions</li>
+<li class="fragment">examples: <em>rtweet</em>, <em>ggmap</em> (geocoding via Google Maps), <em>wikipediR</em>, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="twitter" class="slide level2">
+<h2>Twitter</h2>
+<p><strong>Twitter has two types of APIs</strong></p>
+<ul>
+<li class="fragment"><p>REST APIs –&gt; reading/writing/following/etc.</p></li>
+<li class="fragment"><p>Streaming APIs –&gt; low latency access to 1% of global stream - public, user and site streams</p></li>
+<li class="fragment"><p>authentication via OAuth</p></li>
+<li class="fragment"><p>documentation at <a href="https://dev.twitter.com/overview/documentation" class="uri">https://dev.twitter.com/overview/documentation</a></p></li>
+</ul>
+</section>
+<section id="accessing-the-twitter-apis" class="slide level2">
+<h2>Accessing the Twitter APIs</h2>
+<ul>
+<li class="fragment"><p>To access the REST and streaming APIs, all you need is a Twitter account and you can be up in running in minutes!</p></li>
+<li class="fragment"><p>Simply send a request to Twitter’s API (with a function like <code>search_tweets()</code>) during an interactive session of R, authorize the embedded <code>rstats2twitter</code> app (approve the browser popup), and your token will be created and saved/stored (for future sessions) for you!</p></li>
+<li class="fragment"><p>You can obtain a developer account to get more stability and permissions.</p></li>
+</ul>
+</section>
+<section id="use-twitter-in-r" class="slide level2">
+<h2>Use twitter in R</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtweet)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="do">## search for 1000 tweets using the #baerbock hashtag</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>tweets <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;#baerbock&quot;</span>, <span class="at">n =</span> <span class="dv">1000</span>, <span class="at">include_rts =</span> <span class="cn">FALSE</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Find out what else you can do with the <code>rtweet</code> package: <a href="https://github.com/mkearney/rtweet" class="uri">https://github.com/mkearney/rtweet</a></p>
+</section>
+<section id="homework-exercise" class="slide level2">
+<h2>Homework Exercise</h2>
+<ol type="1">
+<li class="fragment"><p>We are still interested in getting data from <a href="https://www.abgeordnetenwatch.de/">abgeordnetenwatch.de</a>. The site has an API, so technically there is no need to scrape anything. Load the package <code>jsonlite</code> into library.</p></li>
+<li class="fragment"><p>Go to <a href="https://www.abgeordnetenwatch.de/api" class="uri">https://www.abgeordnetenwatch.de/api</a> and figure our the syntax of their APIs.</p></li>
+<li class="fragment"><p>Collect some data from their API from a politician running in your constituency (or a constituency of your choice). Tip: Use the <code>fromJSON</code> function in <code>jsonlite</code> to load a JSON file via the API into R. Convert the output into a nicely formatted dataframe.</p></li>
+</ol>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li class="fragment">Next week we will learn how to clean and transform text</li>
+<li class="fragment">We will meet online on MS Teams again</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_03_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_03_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_03_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_03_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_03_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
