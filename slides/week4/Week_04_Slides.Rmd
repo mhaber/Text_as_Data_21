@@ -1,0 +1,322 @@
+---
+title: "Text as Data: Week 4"
+author: "Matthias Haber"
+date: "29 September 2021"
+output:
+    revealjs::revealjs_presentation:
+      theme: moon
+      reveal_plugins: ["notes", "zoom", "chalkboard"]
+      highlight: haddock
+      center: false
+      self_contained: false
+      incremental: true
+      reveal_options:
+        slideNumber: true
+        progress: true
+        previewLinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+library(tidyverse)
+library(readtext)
+library(quanteda)
+library(readxl)
+library(DBI)
+library(httr)
+library(rvest)
+library(jsonlite)
+library(nycflights13)
+```
+
+# Goals for Today
+
+## Goals
+
+- Finish web scraping
+- Introduction to tidy data and tidy text
+
+
+## APIs
+
+- API stands for *Application Programming Interface*
+- defined interface for communication between software components
+- *Web* API: provides an interface to structured data from a web service
+- APIs should be used whenever you need to automatically collect mass data from the web
+- it should definitely be preferred over web scraping
+
+## Functionality of APIs
+
+Web APIs usually employ a **client-server model**. The client – that is you. The server provides the *API endpoints* as URLs.
+
+```{r, out.width = "500px", echo = F}
+knitr::include_graphics("img/api.png")
+```  
+
+## Functionality of APIs
+
+Communication is done with request and response messages over *Hypertext transfer protocol (HTTP)*.
+
+Each HTTP message contains a *header* (message meta data) and a *message body* (the actual content). The three-digit [HTTP status code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes) plays an important role:
+
+- 2xx: Success
+- 4xx: Client error (incl. the popular *404: Not found* or *403: Forbidden*)
+- 5xx: Server error
+- The message body contains the requested data in a specific format, often JSON or XML.
+
+
+## Examples of popular APIs
+
+Social media:
+
+- [Twitter](https://developer.twitter.com/)
+- [Facebook Graph API](https://developers.facebook.com/docs/graph-api/) (restricted to own account and public pages)
+- [YouTube (Google)](https://developers.google.com/youtube/)
+- [LinkedIn](https://www.linkedin.com/developers/)
+- For more, see [programmableweb.com](http://www.programmableweb.com/).
+
+## API wrapper packages
+
+- Working with a web API involves:
+  - constructing request messages
+  - parsing result messages
+  - handling errors
+
+- For popular web services there are already "API wrapper packages" in R:
+  - implement communication with the server
+  - provide direct access to the data via R functions
+  - examples: *rtweet*, *ggmap* (geocoding via Google Maps), *wikipediR*, etc.
+
+## Twitter
+
+**Twitter has two types of APIs**
+
+- REST APIs --> reading/writing/following/etc.
+
+- Streaming APIs --> low latency access to 1% of global stream - public, user and site streams
+
+- authentication via OAuth
+
+- documentation at https://dev.twitter.com/overview/documentation
+
+## Accessing the Twitter APIs
+
+- To access the REST and streaming APIs, all you need is a Twitter account and you can be up in running in minutes!
+
+- Simply send a request to Twitter’s API (with a function like `search_tweets()`) during an interactive session of R, authorize the embedded `rstats2twitter` app (approve the browser popup), and your token will be created and saved/stored (for future sessions) for you!
+
+- You can obtain a developer account to get more stability and permissions.
+
+## Use twitter in R
+
+```{r, eval = FALSE}
+library(rtweet)
+
+## search for 1000 tweets using the #baerbock hashtag
+tweets <- search_tweets(
+  "#baerbock", n = 1000, include_rts = FALSE
+)
+```
+
+Find out what else you can do with the `rtweet` package:
+<https://github.com/mkearney/rtweet>
+
+## Homework Exercise
+
+1. We are still interested in getting data from [abgeordnetenwatch.de](https://www.abgeordnetenwatch.de/). The site has an API, so technically there is no need to scrape anything. Load the package `jsonlite` into library.
+
+2. Go to https://www.abgeordnetenwatch.de/api and figure our the syntax of their APIs.
+
+3. Collect some data from their API from a politician running in your constituency (or a constituency of your choice). Tip: Use the `fromJSON` function in `jsonlite` to load a JSON file via the API into R. Convert the output into a nicely formatted dataframe.
+
+
+# Tidy data
+
+## Tidy data
+
+- In tidy data:
+
+    + Each variable forms a column
+    + Each observation forms a row
+    + Each type of observational unit forms a table
+
+```{r, out.width = "350px", echo = F, fig.align='center'}
+knitr::include_graphics("img/tidy.png")
+```  
+
+- Any dataset that doesn't satisfy these conditions is considered 'messy'
+
+## `gather()` and `spread()` 
+
+- The two most important functions in `tidyr` are `gather()` and `spread()`. 
+- `tidyr` builds on the idea of a key value pair. A key that explains what the information describes, and a value that contains the actual information (e.g. _Password: 0123456789_).
+- `gather()` makes wide tables narrower and longer; `spread()` makes long tables shorter and wider.
+
+
+## `gather()`
+
+* Problem: Column names are not names of a variable, but _values_
+
+* Goal: Gather the non-variable volumns into a two-column key-value pair
+
+## `gather()`
+
+Three parameters:
+
+1. Set of columns that represent values, not variables
+
+2. The name of the variable whose values form the column names `key`.
+
+3. The name of the variable whose values are spread over the cells `value`.
+
+## `gather()`
+
+```{r}
+iris %>% 
+  mutate(obs = 1:n()) %>% 
+  gather(measurement, value, Sepal.Length:Petal.Width) %>% 
+head()
+```
+
+## `spread()`
+
+- Spreading is the opposite of gathering. You use it when an observation is scattered across multiple rows. `spread()` turns a pair of key:value columns into a set of tidy columns. 
+
+- We only need two parameters:
+  - The column that contains variable names, the `key` column.
+  - The column that contains values forms multiple variables, the `value` column.
+
+```{r, out.width = "250px", echo = F, fig.align='center'}
+knitr::include_graphics("img/spread.png")
+```  
+
+## `spread()`
+
+```{r,}
+iris %>% 
+  mutate(obs = 1:n()) %>% 
+  gather(measurement, value, Sepal.Length:Petal.Width)  %>% 
+  tidyr::spread(key = measurement, value = value) %>% 
+  head()
+```
+
+
+##  Further functions: `separate()`
+
+`separate()` pulls apart one column into multiple columns, by splitting wherever a separator character appears. `separate()` takes the name of the column to separate, and the names of the columns to separate into.
+
+```{r, out.width = "500px", echo = F, fig.align='center'}
+knitr::include_graphics("img/separate.png")
+```  
+
+## Further functions: `unite()`
+
+`unite()` is the inverse of `separate()`: it combines multiple columns into a single column. You'll need it much less frequently than `separate()`, but it's still a useful tool to have in your back pocket.
+
+## Exercise
+
+Tidy the simple tibble below. Do you need to make it wider or longer? What are the variables?
+
+ ```{r, echo = FALSE}
+tribble(
+~pregnant, ~male, ~female,
+"yes",     NA,    10,
+"no",      20,    12
+    )
+```
+
+# Tidy text
+
+## Tidy text
+
+- Following the principle of the tidy data structure, tidy text is *a table with one-token-per-row*
+- A token in each row can be a single word, an n-gram, a sentence, etc.
+- Tidy data sets can be manipulated with the standard tidy tools (dplyr, tidyr, ggplot2, etc.)
+
+## Tidy text flowchart
+
+```{r, out.width = "750px", echo = F, fig.align='center'}
+knitr::include_graphics("img/tidy_text.png")
+```  
+
+## A tidy text example
+
+```{r}
+text <- c("Because I could not stop for Death -",
+          "He kindly stopped for me -",
+          "The Carriage held but just Ourselves -",
+          "and Immortality")
+text
+```
+
+## A tidy text example
+
+```{r}
+# let's put this into a data frame
+library(dplyr)
+text_df <- tibble(line = 1:4, text)
+text_df
+```
+
+- Does that data frame already contain tidy text?
+
+## Breaking text into tokens
+
+```{r}
+library(tidytext)
+text_df %>%
+  unnest_tokens(word, text)
+```
+
+## Tidying Jane Austen: create data frame
+
+```{r}
+library(janeaustenr)
+original_books <- austen_books() %>%
+  group_by(book) %>%
+  mutate(linenumber = row_number()) %>%
+  ungroup()
+original_books
+```
+
+## Tidying Jane Austen: unnest tokens
+
+```{r}
+tidy_books <- original_books %>%
+  unnest_tokens(word, text)
+tidy_books
+```
+
+## Tidying Jane Austen: remove stopwords and count words
+
+```{r}
+data("stop_words")
+tidy_books <- original_books %>%
+  unnest_tokens(word, text) %>% 
+  anti_join(stop_words)
+tidy_books %>% 
+  count(word, sort = TRUE)
+```
+
+## Excersise
+
+Install and load the package `gutenbergR` and find out the gutenberg_id of "Treasure Island" by Robert Louis Stevenson. Replace ID with the correct id in the following function: 
+```{r, eval = FALSE}
+gutenberg_download(ID, 
+mirror = "http://mirrors.xmission.com/gutenberg/")
+```
+
+and save the book in an object. Tidy the text and create a plot that shows all the words that appear more than 50 times.
+
+# Wrapping up
+
+## Questions?
+
+## Outlook for our next session
+
+- Next week we will look at string manipulation with regular expressions
+
+## That's it for today
+
+Thanks for your attention!

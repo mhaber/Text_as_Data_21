@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-09-29" />
+  <title>Text as Data: Week 4</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_04_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_04_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_04_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_04_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_04_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 4</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">29 September 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Finish web scraping</li>
+<li class="fragment">Introduction to tidy data and tidy text</li>
+</ul>
+</section>
+<section id="apis" class="slide level2">
+<h2>APIs</h2>
+<ul>
+<li class="fragment">API stands for <em>Application Programming Interface</em></li>
+<li class="fragment">defined interface for communication between software components</li>
+<li class="fragment"><em>Web</em> API: provides an interface to structured data from a web service</li>
+<li class="fragment">APIs should be used whenever you need to automatically collect mass data from the web</li>
+<li class="fragment">it should definitely be preferred over web scraping</li>
+</ul>
+</section>
+<section id="functionality-of-apis" class="slide level2">
+<h2>Functionality of APIs</h2>
+<p>Web APIs usually employ a <strong>client-server model</strong>. The client – that is you. The server provides the <em>API endpoints</em> as URLs.</p>
+<p><img src="img/api.png" width="500px" /></p>
+</section>
+<section id="functionality-of-apis-1" class="slide level2">
+<h2>Functionality of APIs</h2>
+<p>Communication is done with request and response messages over <em>Hypertext transfer protocol (HTTP)</em>.</p>
+<p>Each HTTP message contains a <em>header</em> (message meta data) and a <em>message body</em> (the actual content). The three-digit <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP status code</a> plays an important role:</p>
+<ul>
+<li class="fragment">2xx: Success</li>
+<li class="fragment">4xx: Client error (incl. the popular <em>404: Not found</em> or <em>403: Forbidden</em>)</li>
+<li class="fragment">5xx: Server error</li>
+<li class="fragment">The message body contains the requested data in a specific format, often JSON or XML.</li>
+</ul>
+</section>
+<section id="examples-of-popular-apis" class="slide level2">
+<h2>Examples of popular APIs</h2>
+<p>Social media:</p>
+<ul>
+<li class="fragment"><a href="https://developer.twitter.com/">Twitter</a></li>
+<li class="fragment"><a href="https://developers.facebook.com/docs/graph-api/">Facebook Graph API</a> (restricted to own account and public pages)</li>
+<li class="fragment"><a href="https://developers.google.com/youtube/">YouTube (Google)</a></li>
+<li class="fragment"><a href="https://www.linkedin.com/developers/">LinkedIn</a></li>
+<li class="fragment">For more, see <a href="http://www.programmableweb.com/">programmableweb.com</a>.</li>
+</ul>
+</section>
+<section id="api-wrapper-packages" class="slide level2">
+<h2>API wrapper packages</h2>
+<ul>
+<li class="fragment">Working with a web API involves:
+<ul>
+<li class="fragment">constructing request messages</li>
+<li class="fragment">parsing result messages</li>
+<li class="fragment">handling errors</li>
+</ul></li>
+<li class="fragment">For popular web services there are already “API wrapper packages” in R:
+<ul>
+<li class="fragment">implement communication with the server</li>
+<li class="fragment">provide direct access to the data via R functions</li>
+<li class="fragment">examples: <em>rtweet</em>, <em>ggmap</em> (geocoding via Google Maps), <em>wikipediR</em>, etc.</li>
+</ul></li>
+</ul>
+</section>
+<section id="twitter" class="slide level2">
+<h2>Twitter</h2>
+<p><strong>Twitter has two types of APIs</strong></p>
+<ul>
+<li class="fragment"><p>REST APIs –&gt; reading/writing/following/etc.</p></li>
+<li class="fragment"><p>Streaming APIs –&gt; low latency access to 1% of global stream - public, user and site streams</p></li>
+<li class="fragment"><p>authentication via OAuth</p></li>
+<li class="fragment"><p>documentation at <a href="https://dev.twitter.com/overview/documentation" class="uri">https://dev.twitter.com/overview/documentation</a></p></li>
+</ul>
+</section>
+<section id="accessing-the-twitter-apis" class="slide level2">
+<h2>Accessing the Twitter APIs</h2>
+<ul>
+<li class="fragment"><p>To access the REST and streaming APIs, all you need is a Twitter account and you can be up in running in minutes!</p></li>
+<li class="fragment"><p>Simply send a request to Twitter’s API (with a function like <code>search_tweets()</code>) during an interactive session of R, authorize the embedded <code>rstats2twitter</code> app (approve the browser popup), and your token will be created and saved/stored (for future sessions) for you!</p></li>
+<li class="fragment"><p>You can obtain a developer account to get more stability and permissions.</p></li>
+</ul>
+</section>
+<section id="use-twitter-in-r" class="slide level2">
+<h2>Use twitter in R</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rtweet)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="do">## search for 1000 tweets using the #baerbock hashtag</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>tweets <span class="ot">&lt;-</span> <span class="fu">search_tweets</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;#baerbock&quot;</span>, <span class="at">n =</span> <span class="dv">1000</span>, <span class="at">include_rts =</span> <span class="cn">FALSE</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div>
+<p>Find out what else you can do with the <code>rtweet</code> package: <a href="https://github.com/mkearney/rtweet" class="uri">https://github.com/mkearney/rtweet</a></p>
+</section>
+<section id="homework-exercise" class="slide level2">
+<h2>Homework Exercise</h2>
+<ol type="1">
+<li class="fragment"><p>We are still interested in getting data from <a href="https://www.abgeordnetenwatch.de/">abgeordnetenwatch.de</a>. The site has an API, so technically there is no need to scrape anything. Load the package <code>jsonlite</code> into library.</p></li>
+<li class="fragment"><p>Go to <a href="https://www.abgeordnetenwatch.de/api" class="uri">https://www.abgeordnetenwatch.de/api</a> and figure our the syntax of their APIs.</p></li>
+<li class="fragment"><p>Collect some data from their API from a politician running in your constituency (or a constituency of your choice). Tip: Use the <code>fromJSON</code> function in <code>jsonlite</code> to load a JSON file via the API into R. Convert the output into a nicely formatted dataframe.</p></li>
+</ol>
+</section></section>
+<section>
+<section id="tidy-data" class="title-slide slide level1">
+<h1>Tidy data</h1>
+
+</section>
+<section id="tidy-data-1" class="slide level2">
+<h2>Tidy data</h2>
+<ul>
+<li class="fragment"><p>In tidy data:</p>
+<ul>
+<li class="fragment">Each variable forms a column</li>
+<li class="fragment">Each observation forms a row</li>
+<li class="fragment">Each type of observational unit forms a table</li>
+</ul></li>
+</ul>
+<p><img src="img/tidy.png" width="350px" style="display: block; margin: auto;" /></p>
+<ul>
+<li class="fragment">Any dataset that doesn’t satisfy these conditions is considered ‘messy’</li>
+</ul>
+</section>
+<section id="gather-and-spread" class="slide level2">
+<h2><code>gather()</code> and <code>spread()</code></h2>
+<ul>
+<li class="fragment">The two most important functions in <code>tidyr</code> are <code>gather()</code> and <code>spread()</code>.</li>
+<li class="fragment"><code>tidyr</code> builds on the idea of a key value pair. A key that explains what the information describes, and a value that contains the actual information (e.g. <em>Password: 0123456789</em>).</li>
+<li class="fragment"><code>gather()</code> makes wide tables narrower and longer; <code>spread()</code> makes long tables shorter and wider.</li>
+</ul>
+</section>
+<section id="gather" class="slide level2">
+<h2><code>gather()</code></h2>
+<ul>
+<li class="fragment"><p>Problem: Column names are not names of a variable, but <em>values</em></p></li>
+<li class="fragment"><p>Goal: Gather the non-variable volumns into a two-column key-value pair</p></li>
+</ul>
+</section>
+<section id="gather-1" class="slide level2">
+<h2><code>gather()</code></h2>
+<p>Three parameters:</p>
+<ol type="1">
+<li class="fragment"><p>Set of columns that represent values, not variables</p></li>
+<li class="fragment"><p>The name of the variable whose values form the column names <code>key</code>.</p></li>
+<li class="fragment"><p>The name of the variable whose values are spread over the cells <code>value</code>.</p></li>
+</ol>
+</section>
+<section id="gather-2" class="slide level2">
+<h2><code>gather()</code></h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(measurement, value, Sepal.Length<span class="sc">:</span>Petal.Width) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>()</span></code></pre></div>
+<pre><code>##   Species obs  measurement value
+## 1  setosa   1 Sepal.Length   5.1
+## 2  setosa   2 Sepal.Length   4.9
+## 3  setosa   3 Sepal.Length   4.7
+## 4  setosa   4 Sepal.Length   4.6
+## 5  setosa   5 Sepal.Length   5.0
+## 6  setosa   6 Sepal.Length   5.4</code></pre>
+</section>
+<section id="spread" class="slide level2">
+<h2><code>spread()</code></h2>
+<ul>
+<li class="fragment"><p>Spreading is the opposite of gathering. You use it when an observation is scattered across multiple rows. <code>spread()</code> turns a pair of key:value columns into a set of tidy columns.</p></li>
+<li class="fragment"><p>We only need two parameters:</p>
+<ul>
+<li class="fragment">The column that contains variable names, the <code>key</code> column.</li>
+<li class="fragment">The column that contains values forms multiple variables, the <code>value</code> column.</li>
+</ul></li>
+</ul>
+<p><img src="img/spread.png" width="250px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="spread-1" class="slide level2">
+<h2><code>spread()</code></h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">obs =</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(measurement, value, Sepal.Length<span class="sc">:</span>Petal.Width)  <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">spread</span>(<span class="at">key =</span> measurement, <span class="at">value =</span> value) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>()</span></code></pre></div>
+<pre><code>##   Species obs Petal.Length Petal.Width Sepal.Length Sepal.Width
+## 1  setosa   1          1.4         0.2          5.1         3.5
+## 2  setosa   2          1.4         0.2          4.9         3.0
+## 3  setosa   3          1.3         0.2          4.7         3.2
+## 4  setosa   4          1.5         0.2          4.6         3.1
+## 5  setosa   5          1.4         0.2          5.0         3.6
+## 6  setosa   6          1.7         0.4          5.4         3.9</code></pre>
+</section>
+<section id="further-functions-separate" class="slide level2">
+<h2>Further functions: <code>separate()</code></h2>
+<p><code>separate()</code> pulls apart one column into multiple columns, by splitting wherever a separator character appears. <code>separate()</code> takes the name of the column to separate, and the names of the columns to separate into.</p>
+<p><img src="img/separate.png" width="500px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="further-functions-unite" class="slide level2">
+<h2>Further functions: <code>unite()</code></h2>
+<p><code>unite()</code> is the inverse of <code>separate()</code>: it combines multiple columns into a single column. You’ll need it much less frequently than <code>separate()</code>, but it’s still a useful tool to have in your back pocket.</p>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<p>Tidy the simple tibble below. Do you need to make it wider or longer? What are the variables?</p>
+<pre><code>## # A tibble: 2 × 3
+##   pregnant  male female
+##   &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
+## 1 yes         NA     10
+## 2 no          20     12</code></pre>
+</section></section>
+<section>
+<section id="tidy-text" class="title-slide slide level1">
+<h1>Tidy text</h1>
+
+</section>
+<section id="tidy-text-1" class="slide level2">
+<h2>Tidy text</h2>
+<ul>
+<li class="fragment">Following the principle of the tidy data structure, tidy text is <em>a table with one-token-per-row</em></li>
+<li class="fragment">A token in each row can be a single word, an n-gram, a sentence, etc.</li>
+<li class="fragment">Tidy data sets can be manipulated with the standard tidy tools (dplyr, tidyr, ggplot2, etc.)</li>
+</ul>
+</section>
+<section id="tidy-text-flowchart" class="slide level2">
+<h2>Tidy text flowchart</h2>
+<p><img src="img/tidy_text.png" width="750px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="a-tidy-text-example" class="slide level2">
+<h2>A tidy text example</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Because I could not stop for Death -&quot;</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;He kindly stopped for me -&quot;</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;The Carriage held but just Ourselves -&quot;</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>          <span class="st">&quot;and Immortality&quot;</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>text</span></code></pre></div>
+<pre><code>## [1] &quot;Because I could not stop for Death -&quot;  
+## [2] &quot;He kindly stopped for me -&quot;            
+## [3] &quot;The Carriage held but just Ourselves -&quot;
+## [4] &quot;and Immortality&quot;</code></pre>
+</section>
+<section id="a-tidy-text-example-1" class="slide level2">
+<h2>A tidy text example</h2>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># let&#39;s put this into a data frame</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>text_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">line =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>, text)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>text_df</span></code></pre></div>
+<pre><code>## # A tibble: 4 × 2
+##    line text                                  
+##   &lt;int&gt; &lt;chr&gt;                                 
+## 1     1 Because I could not stop for Death -  
+## 2     2 He kindly stopped for me -            
+## 3     3 The Carriage held but just Ourselves -
+## 4     4 and Immortality</code></pre>
+<ul>
+<li class="fragment">Does that data frame already contain tidy text?</li>
+</ul>
+</section>
+<section id="breaking-text-into-tokens" class="slide level2">
+<h2>Breaking text into tokens</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>text_df <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text)</span></code></pre></div>
+<pre><code>## # A tibble: 20 × 2
+##     line word       
+##    &lt;int&gt; &lt;chr&gt;      
+##  1     1 because    
+##  2     1 i          
+##  3     1 could      
+##  4     1 not        
+##  5     1 stop       
+##  6     1 for        
+##  7     1 death      
+##  8     2 he         
+##  9     2 kindly     
+## 10     2 stopped    
+## 11     2 for        
+## 12     2 me         
+## 13     3 the        
+## 14     3 carriage   
+## 15     3 held       
+## 16     3 but        
+## 17     3 just       
+## 18     3 ourselves  
+## 19     4 and        
+## 20     4 immortality</code></pre>
+</section>
+<section id="tidying-jane-austen-create-data-frame" class="slide level2">
+<h2>Tidying Jane Austen: create data frame</h2>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janeaustenr)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>original_books <span class="ot">&lt;-</span> <span class="fu">austen_books</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(book) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">linenumber =</span> <span class="fu">row_number</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>original_books</span></code></pre></div>
+<pre><code>## # A tibble: 73,422 × 3
+##    text                    book                linenumber
+##    &lt;chr&gt;                   &lt;fct&gt;                    &lt;int&gt;
+##  1 &quot;SENSE AND SENSIBILITY&quot; Sense &amp; Sensibility          1
+##  2 &quot;&quot;                      Sense &amp; Sensibility          2
+##  3 &quot;by Jane Austen&quot;        Sense &amp; Sensibility          3
+##  4 &quot;&quot;                      Sense &amp; Sensibility          4
+##  5 &quot;(1811)&quot;                Sense &amp; Sensibility          5
+##  6 &quot;&quot;                      Sense &amp; Sensibility          6
+##  7 &quot;&quot;                      Sense &amp; Sensibility          7
+##  8 &quot;&quot;                      Sense &amp; Sensibility          8
+##  9 &quot;&quot;                      Sense &amp; Sensibility          9
+## 10 &quot;CHAPTER 1&quot;             Sense &amp; Sensibility         10
+## # … with 73,412 more rows</code></pre>
+</section>
+<section id="tidying-jane-austen-unnest-tokens" class="slide level2">
+<h2>Tidying Jane Austen: unnest tokens</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>tidy_books <span class="ot">&lt;-</span> original_books <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>tidy_books</span></code></pre></div>
+<pre><code>## # A tibble: 725,055 × 3
+##    book                linenumber word       
+##    &lt;fct&gt;                    &lt;int&gt; &lt;chr&gt;      
+##  1 Sense &amp; Sensibility          1 sense      
+##  2 Sense &amp; Sensibility          1 and        
+##  3 Sense &amp; Sensibility          1 sensibility
+##  4 Sense &amp; Sensibility          3 by         
+##  5 Sense &amp; Sensibility          3 jane       
+##  6 Sense &amp; Sensibility          3 austen     
+##  7 Sense &amp; Sensibility          5 1811       
+##  8 Sense &amp; Sensibility         10 chapter    
+##  9 Sense &amp; Sensibility         10 1          
+## 10 Sense &amp; Sensibility         13 the        
+## # … with 725,045 more rows</code></pre>
+</section>
+<section id="tidying-jane-austen-remove-stopwords-and-count-words" class="slide level2">
+<h2>Tidying Jane Austen: remove stopwords and count words</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;stop_words&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>tidy_books <span class="ot">&lt;-</span> original_books <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text) <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>tidy_books <span class="sc">%&gt;%</span> </span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 13,914 × 2
+##    word       n
+##    &lt;chr&gt;  &lt;int&gt;
+##  1 miss    1855
+##  2 time    1337
+##  3 fanny    862
+##  4 dear     822
+##  5 lady     817
+##  6 sir      806
+##  7 day      797
+##  8 emma     787
+##  9 sister   727
+## 10 house    699
+## # … with 13,904 more rows</code></pre>
+</section>
+<section id="excersise" class="slide level2">
+<h2>Excersise</h2>
+<p>Install and load the package <code>gutenbergR</code> and find out the gutenberg_id of “Treasure Island” by Robert Louis Stevenson. Replace ID with the correct id in the following function:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gutenberg_download</span>(ID, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="at">mirror =</span> <span class="st">&quot;http://mirrors.xmission.com/gutenberg/&quot;</span>)</span></code></pre></div>
+<p>and save the book in an object. Tidy the text and create a plot that shows all the words that appear more than 50 times.</p>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li class="fragment">Next week we will look at string manipulation with regular expressions</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_04_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_04_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_04_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_04_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_04_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
