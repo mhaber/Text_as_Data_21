@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-10-06" />
+  <title>Text as Data: Week 5</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_05_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_05_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_05_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_05_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_05_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+    <script src="Week_05_Slides_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+    <link href="Week_05_Slides_files/str_view-0.1.0/str_view.css" rel="stylesheet" />
+    <script src="Week_05_Slides_files/str_view-binding-1.4.0/str_view.js"></script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 5</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">06 October 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Review homework</li>
+<li class="fragment">String manipulation and regular expressions</li>
+</ul>
+</section></section>
+<section>
+<section id="homework-from-last-week" class="title-slide slide level1">
+<h1>Homework from last week</h1>
+
+</section>
+<section id="connecting-to-an-api" class="slide level2">
+<h2>Connecting to an API</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">fromJSON</span>(<span class="fu">paste0</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;https://www.abgeordnetenwatch.de/api/v2/&quot;</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;candidacies-mandates?&quot;</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;politician=175456&quot;</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> data<span class="sc">$</span>data <span class="sc">%&gt;%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">&quot;candidacy&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>()</span></code></pre></div>
+</section>
+<section id="top-50-words-in-treasure-island" class="slide level2">
+<h2>Top 50 words in Treasure Island</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gutenbergr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;stop_words&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>treasure_island <span class="ot">&lt;-</span> <span class="fu">gutenberg_download</span>(<span class="dv">120</span>, <span class="at">mirror =</span> <span class="st">&quot;http://mirrors.xmission.com/gutenberg/&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>treasure_island_top <span class="ot">&lt;-</span> treasure_island <span class="sc">%&gt;%</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">50</span>) </span></code></pre></div>
+</section>
+<section id="plot-top-50-words" class="slide level2">
+<h2>Plot top 50 words</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>treasure_island_top <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">reorder</span>(word, n), <span class="at">x =</span> n)) <span class="sc">+</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;&quot;</span>, <span class="at">x =</span> <span class="st">&quot;count&quot;</span>) <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">rect =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">&quot;transparent&quot;</span>))</span></code></pre></div>
+</section>
+<section id="plot-top-50-words-1" class="slide level2">
+<h2>Plot top 50 words</h2>
+<p><img src="Week_05_Slides_files/figure-revealjs/unnamed-chunk-4-1.png" width="768" /></p>
+</section></section>
+<section>
+<section id="string-manipulation-with-stringr" class="title-slide slide level1">
+<h1>String manipulation with stringr</h1>
+
+</section>
+<section id="packages" class="slide level2">
+<h2>Packages</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr) <span class="co">#install.packages(&quot;stringr&quot;)</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(htmlwidgets) <span class="co">#install.packages(&quot;htmlwidgets&quot;)</span></span></code></pre></div>
+</section>
+<section id="creating-strings" class="slide level2">
+<h2>Creating strings</h2>
+<p>Strings are wrapped in <code>'</code> or <code>"</code> quotes:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>string1 <span class="ot">&lt;-</span> <span class="st">&quot;This is a string&quot;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>string2 <span class="ot">&lt;-</span> <span class="st">&#39;If I want to include a &quot;quote&quot; inside</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">a string, I use single quotes&#39;</span></span></code></pre></div>
+<p>You can use <code>\</code> to “escape” single or double quotes inside a string:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>double_quote <span class="ot">&lt;-</span> <span class="st">&quot;</span><span class="sc">\&quot;</span><span class="st">&quot;</span> <span class="co"># or &#39;&quot;&#39;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>single_quote <span class="ot">&lt;-</span> <span class="st">&#39;</span><span class="sc">\&#39;</span><span class="st">&#39;</span> <span class="co"># or &quot;&#39;&quot;</span></span></code></pre></div>
+</section>
+<section id="special-characters" class="slide level2">
+<h2>Special characters</h2>
+<ul>
+<li class="fragment"><code>\n    newline</code></li>
+<li class="fragment"><code>\r    carriage return</code></li>
+<li class="fragment"><code>\t    tab</code></li>
+<li class="fragment"><code>\b    backspace</code></li>
+<li class="fragment"><code>\a    alert (bell)</code></li>
+<li class="fragment"><code>\f    form feed</code></li>
+<li class="fragment"><code>\v    vertical tab</code></li>
+<li class="fragment"><code>\\    backslash \</code></li>
+</ul>
+</section>
+<section id="functions-for-strings" class="slide level2">
+<h2>Functions for strings</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Length</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_length</span>(<span class="st">&quot;Text as Data&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 12</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Combining strings</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_c</span>(<span class="st">&quot;Text&quot;</span>,<span class="st">&quot;as Data&quot;</span>, <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;Text as Data&quot;</code></pre>
+</section>
+<section id="functions-for-strings-1" class="slide level2">
+<h2>Functions for strings</h2>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Subsetting strings</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Apple&quot;</span>, <span class="st">&quot;Banana&quot;</span>, <span class="st">&quot;Pear&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(x, <span class="dv">1</span>, <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;App&quot; &quot;Ban&quot; &quot;Pea&quot;</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_sub</span>(x, <span class="sc">-</span><span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ple&quot; &quot;ana&quot; &quot;ear&quot;</code></pre>
+</section>
+<section id="functions-for-strings-2" class="slide level2">
+<h2>Functions for strings</h2>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Changing case</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_upper</span>(<span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;A&quot; &quot;B&quot;</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_lower</span>(<span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;a&quot; &quot;b&quot;</code></pre>
+</section>
+<section id="functions-for-strings-3" class="slide level2">
+<h2>Functions for strings</h2>
+<p><code>stringr</code> has 43 functions to manipulate strings. If you need more, then use <code>stringi</code>, which has 232 functions. The main difference between the functions in both packages is the prefix: <code>str_</code> vs. <code>stri_</code>.</p>
+</section></section>
+<section>
+<section id="regular-expressions" class="title-slide slide level1">
+<h1>Regular expressions</h1>
+
+</section>
+<section id="regular-expressions-1" class="slide level2">
+<h2>Regular expressions</h2>
+<p>Regular Expressions (regex) are a language or syntax to search in texts. Regex are used by most search engines in one form or another and are part of almost any programming language. In R, many string functions in <code>base</code> R as well as in <code>stringr</code> package use regular expressions, even Rstudio’s search and replace allows regular expression.</p>
+</section>
+<section id="regular-expression-syntax" class="slide level2">
+<h2>Regular expression syntax</h2>
+<p>Regular expressions typically specify characters to seek out, possibly with information about repeats and location within the string. This is accomplished with the help of meta characters that have specific meaning:</p>
+<ul>
+<li class="fragment"><code>$ * + . ? [ ] ^ { } | ( ) \</code>.</li>
+</ul>
+</section>
+<section id="string-functions-related-to-regular-expression" class="slide level2">
+<h2>String functions related to regular expression</h2>
+<ul>
+<li class="fragment"><p>To identify match to a pattern</p>
+<ul>
+<li class="fragment"><code>grep(..., value = FALSE)</code>, <code>grepl()</code>, <code>stringr::str_detect()</code></li>
+</ul></li>
+<li class="fragment"><p>To extract match to a pattern</p>
+<ul>
+<li class="fragment"><code>grep(..., value = TRUE)</code>, <code>stringr::str_extract()</code>, <code>stringr::str_extract_all()</code></li>
+</ul></li>
+<li class="fragment"><p>To locate pattern within a string</p>
+<ul>
+<li class="fragment"><code>regexpr()</code>, <code>gregexpr()</code>, <code>stringr::str_locate()</code>, <code>stringr::str_locate_all()</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="more-string-functions-related-to-regular-expression" class="slide level2">
+<h2>More string functions related to regular expression</h2>
+<ul>
+<li class="fragment"><p>To replace a pattern</p>
+<ul>
+<li class="fragment"><code>sub()</code>, <code>gsub()</code>, <code>stringr::str_replace()</code>, <code>stringr::str_replace_all()</code></li>
+</ul></li>
+<li class="fragment"><p>To split a string using a pattern</p>
+<ul>
+<li class="fragment"><code>strsplit()</code>, <code>stringr::str_split()</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="pattern-matching" class="slide level2">
+<h2>Pattern matching</h2>
+<p>The simplest patterns match exact strings:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;pear&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(x, <span class="st">&quot;an&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-868c560423cdd73ca9dd" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-868c560423cdd73ca9dd">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>b<span class='match'>an<\/span>ana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+</section>
+<section id="pattern-matching-1" class="slide level2">
+<h2>Pattern matching</h2>
+<p><code>.</code> matches any character (except a newline):</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(x, <span class="st">&quot;.a.&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-30cf4dff1d65f50253bd" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-30cf4dff1d65f50253bd">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li><span class='match'>ban<\/span>ana<\/li>\n  <li>p<span class='match'>ear<\/span><\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+</section>
+<section id="position-of-pattern-within-the-string" class="slide level2">
+<h2>Position of pattern within the string</h2>
+<p><code>^</code> matches the start of the string.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;pear&quot;</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(x, <span class="st">&quot;^a&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-000f6771c3cb22c7cfce" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-000f6771c3cb22c7cfce">{"x":{"html":"<ul>\n  <li><span class='match'>a<\/span>pple<\/li>\n  <li>banana<\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+</section>
+<section id="position-of-pattern-within-the-string-1" class="slide level2">
+<h2>Position of pattern within the string</h2>
+<p><code>$</code> matches the end of the string.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_view</span>(x, <span class="st">&quot;a$&quot;</span>)</span></code></pre></div>
+<div id="htmlwidget-d03a0ae5c89f7c570e29" style="width:960px;height:100%;" class="str_view html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d03a0ae5c89f7c570e29">{"x":{"html":"<ul>\n  <li>apple<\/li>\n  <li>banan<span class='match'>a<\/span><\/li>\n  <li>pear<\/li>\n<\/ul>"},"evals":[],"jsHooks":[]}</script>
+<p><code>\b</code> matches the empty string at either edge of a <em>word</em>.<br />
+<code>\B</code> matches the empty string provided it is not at an edge of a word.</p>
+</section>
+<section id="quantifiers" class="slide level2">
+<h2>Quantifiers</h2>
+<p>Quantifiers specify the number of repetitions of the pattern.</p>
+<ul>
+<li class="fragment"><code>*</code>: matches at least 0 times.<br />
+</li>
+<li class="fragment"><code>+</code>: matches at least 1 times.<br />
+</li>
+<li class="fragment"><code>?</code>: matches at most 1 times.<br />
+</li>
+<li class="fragment"><code>{n}</code>: matches exactly n times.<br />
+</li>
+<li class="fragment"><code>{n,}</code>: matches at least n times.<br />
+</li>
+<li class="fragment"><code>{n,m}</code>: matches between n and m times.</li>
+</ul>
+</section>
+<section id="quantifiers-1" class="slide level2">
+<h2>Quantifiers</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>strings <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;ab&quot;</span>, <span class="st">&quot;acb&quot;</span>, <span class="st">&quot;accb&quot;</span>, <span class="st">&quot;acccb&quot;</span>, <span class="st">&quot;accccb&quot;</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ac*b&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ab&quot;     &quot;acb&quot;    &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;</code></pre>
+</section>
+<section id="quantifiers-2" class="slide level2">
+<h2>Quantifiers</h2>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ac+b&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;acb&quot;    &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;</code></pre>
+</section>
+<section id="quantifiers-3" class="slide level2">
+<h2>Quantifiers</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ac?b&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ab&quot;  &quot;acb&quot;</code></pre>
+</section>
+<section id="quantifiers-4" class="slide level2">
+<h2>Quantifiers</h2>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ac{2}b&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;accb&quot;</code></pre>
+</section>
+<section id="quantifiers-5" class="slide level2">
+<h2>Quantifiers</h2>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ac{2,}b&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;accb&quot;   &quot;acccb&quot;  &quot;accccb&quot;</code></pre>
+</section>
+<section id="quantifiers-6" class="slide level2">
+<h2>Quantifiers</h2>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ac{2,3}b&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;accb&quot;  &quot;acccb&quot;</code></pre>
+</section>
+<section id="more-operators" class="slide level2">
+<h2>More operators</h2>
+<ul>
+<li class="fragment"><code>\</code>: suppress the special meaning of meta characters in regular expression, i.e. <code>$ * + . ? [ ] ^ { } | ( ) \</code>, similar to its usage in escape sequences. Since <code>\</code> itself needs to be escaped in R, we need to escape these meta characters with double backslash like <code>\\$</code>.</li>
+<li class="fragment"><code>[...]</code>: a character list, matches any one of the characters inside the square brackets. We can also use <code>-</code> inside the brackets to specify a range of characters.</li>
+<li class="fragment"><code>[^...]</code>: an inverted character list, similar to <code>[...]</code>, but matches any characters <strong>except</strong> those inside the square brackets.</li>
+</ul>
+</section>
+<section id="more-operators-1" class="slide level2">
+<h2>More operators</h2>
+<ul>
+<li class="fragment"><code>|</code>: an “or” operator, matches patterns on either side of the <code>|</code>.<br />
+</li>
+<li class="fragment"><code>(...)</code>: grouping in regular expressions which allows to retrieve the bits that matched various parts of your regular expression. Each group can than be refer using <code>\\N</code>, with N being the No. of <code>(...)</code> used. This is called <strong>backreference</strong>.</li>
+</ul>
+</section>
+<section id="operators" class="slide level2">
+<h2>Operators</h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>strings <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;^ab&quot;</span>, <span class="st">&quot;ab&quot;</span>, <span class="st">&quot;abc&quot;</span>, <span class="st">&quot;abd&quot;</span>, <span class="st">&quot;abe&quot;</span>, <span class="st">&quot;ab 12&quot;</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ab[c-e]&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;abc&quot; &quot;abd&quot; &quot;abe&quot;</code></pre>
+</section>
+<section id="operators-1" class="slide level2">
+<h2>Operators</h2>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;ab[^c]&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;abd&quot;   &quot;abe&quot;   &quot;ab 12&quot;</code></pre>
+</section>
+<section id="operators-2" class="slide level2">
+<h2>Operators</h2>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;^ab&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;ab&quot;    &quot;abc&quot;   &quot;abd&quot;   &quot;abe&quot;   &quot;ab 12&quot;</code></pre>
+</section>
+<section id="operators-3" class="slide level2">
+<h2>Operators</h2>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">^ab&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;^ab&quot;</code></pre>
+</section>
+<section id="operators-4" class="slide level2">
+<h2>Operators</h2>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span>(<span class="st">&quot;abc|abd&quot;</span>, strings, <span class="at">value =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;abc&quot; &quot;abd&quot;</code></pre>
+</section>
+<section id="operators-5" class="slide level2">
+<h2>Operators</h2>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gsub</span>(<span class="st">&quot;(ab) 12&quot;</span>, <span class="st">&quot;</span><span class="sc">\\</span><span class="st">1 34&quot;</span>, strings)</span></code></pre></div>
+<pre><code>## [1] &quot;^ab&quot;   &quot;ab&quot;    &quot;abc&quot;   &quot;abd&quot;   &quot;abe&quot;   &quot;ab 34&quot;</code></pre>
+</section>
+<section id="character-classes" class="slide level2">
+<h2>Character classes</h2>
+<p>Character classes allow to specify classes such as numbers, letters, etc. There are two flavors of character classes, one uses <code>[:</code> and <code>:]</code> around a predefined name and the other uses <code>\</code> and a special character:</p>
+<ul>
+<li class="fragment"><code>[:digit:]</code> or <code>\d</code>: digits, 0 1 2 3 4 5 6 7 8 9, equivalent to <code>[0-9]</code>.<br />
+</li>
+<li class="fragment"><code>\D</code>: non-digits, equivalent to <code>[^0-9]</code>.<br />
+</li>
+<li class="fragment"><code>[:lower:]</code>: lower-case letters, equivalent to <code>[a-z]</code>.<br />
+</li>
+<li class="fragment"><code>[:upper:]</code>: upper-case letters, equivalent to <code>[A-Z]</code>.<br />
+</li>
+<li class="fragment"><code>[:alpha:]</code>: alphabetic characters, equivalent to <code>[[:lower:][:upper:]]</code> or <code>[A-z]</code>.<br />
+</li>
+<li class="fragment"><code>[:alnum:]</code>: alphanumeric characters, equivalent to <code>[[:alpha:][:digit:]]</code> or <code>[A-z0-9]</code>.</li>
+</ul>
+</section>
+<section id="common-character-classes" class="slide level2">
+<h2>Common Character classes</h2>
+<ul>
+<li class="fragment"><code>\w</code>: word characters, equivalent to <code>[[:alnum:]_]</code> or <code>[A-z0-9_]</code>.<br />
+</li>
+<li class="fragment"><code>\W</code>: not word, equivalent to <code>[^A-z0-9_]</code>.<br />
+</li>
+<li class="fragment"><code>[:xdigit:]</code>: hexadecimal digits (base 16), 0 1 2 3 4 5 6 7 8 9 A B C D E F a b c d e f, equivalent to <code>[0-9A-Fa-f]</code>.</li>
+<li class="fragment"><code>[:blank:]</code>: blank characters, i.e. space and tab.<br />
+</li>
+<li class="fragment"><code>[:space:]</code>: space characters: tab, newline, vertical tab, form feed, carriage return, space.</li>
+<li class="fragment"><code>\s</code>: space, <code></code>.<br />
+</li>
+<li class="fragment"><code>\S</code>: not space.<br />
+</li>
+<li class="fragment"><code>[:punct:]</code>: punctuation characters, ! " # $ % &amp; ’ ( ) - + , - . / : ; &lt; = &gt; ? @ [  ] ^ _ ` { | } ~.</li>
+</ul>
+</section>
+<section id="general-modes-for-patterns" class="slide level2">
+<h2>General modes for patterns</h2>
+<p>There are different <a href="http://en.wikipedia.org/wiki/Regular_expression#Standards">syntax standards</a> for regular expressions, and R offers two: POSIX extended regular expressions (default) and Perl-like regular expressions.</p>
+<p>You can easily switch between by specifying <code>perl = FALSE/TRUE</code> in <code>base</code> R functions, such as <code>grep()</code> and <code>sub()</code>. For functions in the <code>stringr</code> package, wrap the pattern with <code>perl()</code>.</p>
+</section>
+<section id="general-modes-for-patterns-1" class="slide level2">
+<h2>General modes for patterns</h2>
+<p>By default, pattern matching is case sensitive in R, but you can turn it off with <code>ignore.case = TRUE</code> (base R functions). In <code>stringr</code>, you need to pass the <code>ignore.case = TRUE</code> inside a modifier function like <code>str_replace(string, regex(pattern, ignore.case=TRUE))</code>. Alternatively, you can use <code>tolower()</code> and <code>toupper()</code> functions to convert everything to lower or upper case.</p>
+</section>
+<section id="regular-expression-vs-shell-globbing" class="slide level2">
+<h2>Regular expression vs shell globbing</h2>
+<p>The term globbing refers to pattern matching based on wildcard characters. A wildcard character can be used to substitute for any other character or characters in a string. Globbing is commonly used for matching file names or paths, and has a much simpler syntax. Below is a list of globbing syntax and their comparisons to regular expression:</p>
+<ul>
+<li class="fragment"><code>*</code>: matches any number of unknown characters, same as <code>.*</code> in regular expression.<br />
+</li>
+<li class="fragment"><code>?</code>: matches one unknown character, same as <code>.</code> in regular expression.</li>
+</ul>
+</section>
+<section id="detect-matches" class="slide level2">
+<h2>Detect matches</h2>
+<p>To determine if a character vector matches a pattern, use <code>str_detect()</code>. It returns a logical vector the same length as the input:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;pear&quot;</span>)</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_detect</span>(x, <span class="st">&quot;e&quot;</span>)</span></code></pre></div>
+<pre><code>## [1]  TRUE FALSE  TRUE</code></pre>
+</section>
+<section id="detect-matches-1" class="slide level2">
+<h2>Detect matches</h2>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># How many common words start with b?</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">str_detect</span>(words, <span class="st">&quot;^b&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] 58</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># What proportion of common words end with a vowel?</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">str_detect</span>(words, <span class="st">&quot;[aeiou]$&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] 0.2765306</code></pre>
+</section>
+<section id="detect-matches-2" class="slide level2">
+<h2>Detect matches</h2>
+<p>A variation on <code>str_detect()</code> is <code>str_count()</code>: rather than a simple yes or no, it tells you how many matches there are in a string:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;banana&quot;</span>, <span class="st">&quot;pear&quot;</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_count</span>(x, <span class="st">&quot;a&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] 1 3 1</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># On average, how many vowels per word?</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">str_count</span>(words, <span class="st">&quot;[aeiou]&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] 1.991837</code></pre>
+</section>
+<section id="replace-matches" class="slide level2">
+<h2>Replace matches</h2>
+<p>str_replace()<code>and</code>str_replace_all()` allow you to replace matches with new strings. The simplest use is to replace a pattern with a fixed string:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;apple&quot;</span>, <span class="st">&quot;pear&quot;</span>, <span class="st">&quot;banana&quot;</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace</span>(x, <span class="st">&quot;[aeiou]&quot;</span>, <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;-pple&quot;  &quot;p-ar&quot;   &quot;b-nana&quot;</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(x, <span class="st">&quot;[aeiou]&quot;</span>, <span class="st">&quot;-&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;-ppl-&quot;  &quot;p--r&quot;   &quot;b-n-n-&quot;</code></pre>
+</section>
+<section id="replace-matches-1" class="slide level2">
+<h2>Replace matches</h2>
+<p>With <code>str_replace_all()</code> you can perform multiple replacements by supplying a named vector:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;1 house&quot;</span>, <span class="st">&quot;2 cars&quot;</span>, <span class="st">&quot;3 people&quot;</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(x, <span class="fu">c</span>(<span class="st">&quot;1&quot;</span> <span class="ot">=</span> <span class="st">&quot;one&quot;</span>, <span class="st">&quot;2&quot;</span> <span class="ot">=</span> <span class="st">&quot;two&quot;</span>, <span class="st">&quot;3&quot;</span> <span class="ot">=</span> <span class="st">&quot;three&quot;</span>))</span></code></pre></div>
+<pre><code>## [1] &quot;one house&quot;    &quot;two cars&quot;     &quot;three people&quot;</code></pre>
+</section>
+<section id="string-splitting" class="slide level2">
+<h2>String splitting</h2>
+<p>Use <code>str_split()</code> to split a string up into pieces.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;a|b|c|d&quot;</span> <span class="sc">%&gt;%</span> </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_split</span>(<span class="st">&quot;</span><span class="sc">\\</span><span class="st">|&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot;</code></pre>
+</section>
+<section id="resources" class="slide level2">
+<h2>Resources</h2>
+<ul>
+<li class="fragment"><p>Regular expression in R <a href="https://stat.ethz.ch/R-manual/R-devel/library/base/html/regex.html">official document</a>.<br />
+</p></li>
+<li class="fragment"><p>Perl-like regular expression: regular expression in perl <a href="http://perldoc.perl.org/perlre.html#Regular-Expressions">manual</a>.<br />
+</p></li>
+<li class="fragment"><p><a href="http://trinkerrstuff.wordpress.com/2014/09/27/canned-regular-expressions-qdapregex-0-1-2-on-cran/"><code>qdapRegex</code> package</a>: a collection of handy regular expression tools</p></li>
+<li class="fragment"><p>On these websites, you can simply paste your test data and write regular expression, and matches will be highlighted.</p>
+<ul>
+<li class="fragment"><a href="http://regexpal.com/">regexpal</a></li>
+<li class="fragment"><a href="http://www.regexr.com/">RegExr</a></li>
+</ul></li>
+</ul>
+<p>Test your skills solving regexp crosswords at <a href="https://regexcrossword.com/challenges/beginner" class="uri">https://regexcrossword.com/challenges/beginner</a></p>
+</section></section>
+<section>
+<section id="exercises" class="title-slide slide level1">
+<h1>Exercises</h1>
+
+</section>
+<section id="exercises-1" class="slide level2">
+<h2>Exercises</h2>
+<ol type="1">
+<li class="fragment"><p>Given the corpus of common words in <code>stringr::words</code>, create regular expressions that find all words that:</p>
+<ol type="1">
+<li class="fragment"><p>Start with “y”.</p></li>
+<li class="fragment"><p>End with “x”</p></li>
+<li class="fragment"><p>Start with a vowel.</p></li>
+<li class="fragment"><p>That only contain consonants.</p></li>
+<li class="fragment"><p>End with <code>ed</code>, but not with <code>eed</code>.</p></li>
+<li class="fragment"><p>Start with three consonants.</p></li>
+<li class="fragment"><p>Have three or more vowels in a row.</p></li>
+<li class="fragment"><p>Have two or more vowel-consonant pairs in a row.</p></li>
+</ol></li>
+</ol>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li class="fragment">Next week we will look at how to prepare text for actual analysis</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_05_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_05_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_05_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_05_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_05_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
