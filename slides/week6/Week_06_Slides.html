@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-10-13" />
+  <title>Text as Data: Week 6</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_06_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_06_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_06_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_06_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_06_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 6</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">13 October 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Quanteda</li>
+<li class="fragment">Text preprocessing</li>
+<li class="fragment">Document-Feature Matrix</li>
+</ul>
+</section></section>
+<section>
+<section id="quanteda" class="title-slide slide level1">
+<h1>Quanteda</h1>
+
+</section>
+<section id="quanteda-1" class="slide level2">
+<h2>quanteda</h2>
+<p>The <em>quanteda</em> package is an extensive text analysis suite for R, containing everything you need to perform a variety of automatic text analyses. <em>quanteda</em> is to text analysis what dplyr and tidyr are to data wrangling.</p>
+<p><em>quanteda</em> is built for efficiency and speed, through its design around three infrastructures: the stringi package for text processing, the Matrix package for sparse matrix objects, and computationally intensive processing (e.g. for tokens) handled in parallelized C++.</p>
+<p>In addition to the extensive documentation, there’s a very helpful cheatsheet <a href="https://muellerstefan.net/files/quanteda-cheatsheet.pdf">here</a></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda) <span class="co">#install.packages(&quot;quanteda&quot;)</span></span></code></pre></div>
+</section>
+<section id="build-in-corpuses-in-quanteda" class="slide level2">
+<h2>Build-in corpuses in quanteda</h2>
+<p><code>quanteda</code> comes with several corpora included, like the corpus of US presidential inaugural addresses:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>corp <span class="ot">&lt;-</span> quanteda<span class="sc">::</span>data_corpus_inaugural</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(corp)</span></code></pre></div>
+<pre><code>## Corpus consisting of 59 documents, showing 59 documents:
+## 
+##             Text Types Tokens Sentences Year  President       FirstName
+##  1789-Washington   625   1537        23 1789 Washington          George
+##  1793-Washington    96    147         4 1793 Washington          George
+##       1797-Adams   826   2577        37 1797      Adams            John
+##   1801-Jefferson   717   1923        41 1801  Jefferson          Thomas
+##   1805-Jefferson   804   2380        45 1805  Jefferson          Thomas
+##     1809-Madison   535   1261        21 1809    Madison           James
+##     1813-Madison   541   1302        33 1813    Madison           James
+##      1817-Monroe  1040   3677       121 1817     Monroe           James
+##      1821-Monroe  1259   4886       131 1821     Monroe           James
+##       1825-Adams  1003   3147        74 1825      Adams     John Quincy
+##     1829-Jackson   517   1208        25 1829    Jackson          Andrew
+##     1833-Jackson   499   1267        29 1833    Jackson          Andrew
+##    1837-VanBuren  1315   4158        95 1837  Van Buren          Martin
+##    1841-Harrison  1898   9123       210 1841   Harrison   William Henry
+##        1845-Polk  1334   5186       153 1845       Polk      James Knox
+##      1849-Taylor   496   1178        22 1849     Taylor         Zachary
+##      1853-Pierce  1165   3636       104 1853     Pierce        Franklin
+##    1857-Buchanan   945   3083        89 1857   Buchanan           James
+##     1861-Lincoln  1075   3999       135 1861    Lincoln         Abraham
+##     1865-Lincoln   360    775        26 1865    Lincoln         Abraham
+##       1869-Grant   485   1229        40 1869      Grant      Ulysses S.
+##       1873-Grant   552   1472        43 1873      Grant      Ulysses S.
+##       1877-Hayes   831   2707        59 1877      Hayes   Rutherford B.
+##    1881-Garfield  1021   3209       111 1881   Garfield        James A.
+##   1885-Cleveland   676   1816        44 1885  Cleveland          Grover
+##    1889-Harrison  1352   4721       157 1889   Harrison        Benjamin
+##   1893-Cleveland   821   2125        58 1893  Cleveland          Grover
+##    1897-McKinley  1232   4353       130 1897   McKinley         William
+##    1901-McKinley   854   2437       100 1901   McKinley         William
+##   1905-Roosevelt   404   1079        33 1905  Roosevelt        Theodore
+##        1909-Taft  1437   5821       158 1909       Taft  William Howard
+##      1913-Wilson   658   1882        68 1913     Wilson         Woodrow
+##      1917-Wilson   549   1652        59 1917     Wilson         Woodrow
+##     1921-Harding  1169   3719       148 1921    Harding       Warren G.
+##    1925-Coolidge  1220   4440       196 1925   Coolidge          Calvin
+##      1929-Hoover  1090   3860       158 1929     Hoover         Herbert
+##   1933-Roosevelt   743   2057        85 1933  Roosevelt     Franklin D.
+##   1937-Roosevelt   725   1989        96 1937  Roosevelt     Franklin D.
+##   1941-Roosevelt   526   1519        68 1941  Roosevelt     Franklin D.
+##   1945-Roosevelt   275    633        27 1945  Roosevelt     Franklin D.
+##      1949-Truman   781   2504       116 1949     Truman        Harry S.
+##  1953-Eisenhower   900   2743       119 1953 Eisenhower       Dwight D.
+##  1957-Eisenhower   621   1907        92 1957 Eisenhower       Dwight D.
+##     1961-Kennedy   566   1541        52 1961    Kennedy         John F.
+##     1965-Johnson   568   1710        93 1965    Johnson   Lyndon Baines
+##       1969-Nixon   743   2416       103 1969      Nixon Richard Milhous
+##       1973-Nixon   544   1995        68 1973      Nixon Richard Milhous
+##      1977-Carter   527   1369        52 1977     Carter           Jimmy
+##      1981-Reagan   902   2780       129 1981     Reagan          Ronald
+##      1985-Reagan   925   2909       123 1985     Reagan          Ronald
+##        1989-Bush   795   2673       141 1989       Bush          George
+##     1993-Clinton   642   1833        81 1993    Clinton            Bill
+##     1997-Clinton   773   2436       111 1997    Clinton            Bill
+##        2001-Bush   621   1806        97 2001       Bush       George W.
+##        2005-Bush   772   2312        99 2005       Bush       George W.
+##       2009-Obama   938   2689       110 2009      Obama          Barack
+##       2013-Obama   814   2317        88 2013      Obama          Barack
+##       2017-Trump   582   1660        88 2017      Trump       Donald J.
+##       2021-Biden   811   2766       216 2021      Biden       Joseph R.
+##                  Party
+##                   none
+##                   none
+##             Federalist
+##  Democratic-Republican
+##  Democratic-Republican
+##  Democratic-Republican
+##  Democratic-Republican
+##  Democratic-Republican
+##  Democratic-Republican
+##  Democratic-Republican
+##             Democratic
+##             Democratic
+##             Democratic
+##                   Whig
+##                   Whig
+##                   Whig
+##             Democratic
+##             Democratic
+##             Republican
+##             Republican
+##             Republican
+##             Republican
+##             Republican
+##             Republican
+##             Democratic
+##             Republican
+##             Democratic
+##             Republican
+##             Republican
+##             Republican
+##             Republican
+##             Democratic
+##             Democratic
+##             Republican
+##             Republican
+##             Republican
+##             Democratic
+##             Democratic
+##             Democratic
+##             Democratic
+##             Democratic
+##             Republican
+##             Republican
+##             Democratic
+##             Democratic
+##             Republican
+##             Republican
+##             Democratic
+##             Republican
+##             Republican
+##             Republican
+##             Democratic
+##             Democratic
+##             Republican
+##             Republican
+##             Democratic
+##             Democratic
+##             Republican
+##             Democratic</code></pre>
+</section></section>
+<section>
+<section id="preprocessing" class="title-slide slide level1">
+<h1>Preprocessing</h1>
+
+</section>
+<section id="preprocessing-steps" class="slide level2">
+<h2>Preprocessing Steps</h2>
+<p>Preprocessing text for analysis typically involves 8 steps:</p>
+<ol type="1">
+<li class="fragment">Tokenizing the text to unigrams (or bigrams, trigrams, sentences, etc.)</li>
+<li class="fragment">Converting all characters to lowercase</li>
+<li class="fragment">Removing punctuation</li>
+<li class="fragment">Removing numbers &amp; symbols</li>
+<li class="fragment">Removing stop words, including custom stop words</li>
+<li class="fragment">“Stemming” words, or lemmatization</li>
+<li class="fragment">Creating a Document-Feature Matrix</li>
+<li class="fragment">Removing sparse or frequent terms</li>
+</ol>
+</section>
+<section id="tokenization" class="slide level2">
+<h2>Tokenization</h2>
+<p>The <code>token()</code> function from <em>quanteda</em> allows to use external or the internal tokenizer to construct a token object, By default it creates word tokens and preserves hyphens, URLs, social media “tag” characters, and email addresses.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">text1 =</span> <span class="st">&quot;This is a short text,</span><span class="sc">\n</span><span class="st"> separated across two lines.&quot;</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">text2 =</span> <span class="st">&quot;Text-As-Data: https://github.com/mhaber/Text_as_Data_21&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens</span>(txt)</span></code></pre></div>
+<pre><code>## Tokens consisting of 2 documents.
+## text1 :
+##  [1] &quot;This&quot;      &quot;is&quot;        &quot;a&quot;         &quot;short&quot;     &quot;text&quot;      &quot;,&quot;        
+##  [7] &quot;separated&quot; &quot;across&quot;    &quot;two&quot;       &quot;lines&quot;     &quot;.&quot;        
+## 
+## text2 :
+## [1] &quot;Text-As-Data&quot;                             
+## [2] &quot;:&quot;                                        
+## [3] &quot;https://github.com/mhaber/Text_as_Data_21&quot;</code></pre>
+</section>
+<section id="tokenization-1" class="slide level2">
+<h2>Tokenization</h2>
+<p>You can use the <code>what</code> argument to change the type of token object you want to create. For example, if you want it to construct sentences:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens</span>(<span class="fu">c</span>(<span class="st">&quot;Kurt Vonnegut said; only assholes use semi-colons.&quot;</span>,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">&quot;To be? Or not to be?&quot;</span>), <span class="at">what =</span> <span class="st">&quot;sentence&quot;</span>)</span></code></pre></div>
+<pre><code>## Tokens consisting of 2 documents.
+## text1 :
+## [1] &quot;Kurt Vonnegut said; only assholes use semi-colons.&quot;
+## 
+## text2 :
+## [1] &quot;To be?&quot;        &quot;Or not to be?&quot;</code></pre>
+</section>
+<section id="tokenization-2" class="slide level2">
+<h2>Tokenization</h2>
+<p>or characters:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens</span>(<span class="st">&quot;Just a bunch of characters.&quot;</span>, <span class="at">what =</span> <span class="st">&quot;character&quot;</span>)</span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document.
+## text1 :
+##  [1] &quot;J&quot; &quot;u&quot; &quot;s&quot; &quot;t&quot; &quot;a&quot; &quot;b&quot; &quot;u&quot; &quot;n&quot; &quot;c&quot; &quot;h&quot; &quot;o&quot; &quot;f&quot;
+## [ ... and 11 more ]</code></pre>
+</section>
+<section id="tokenization-3" class="slide level2">
+<h2>Tokenization</h2>
+<p>If you want to create n-grams in any length you can use the <code>tokens_ngrams()</code> function on a tokenized object.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>toks <span class="ot">&lt;-</span> <span class="fu">tokens</span>(data_char_ukimmig2010[[<span class="dv">3</span>]])</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens_ngrams</span>(toks, <span class="at">n =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">10</span>)</span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document.
+## text1 :
+##  [1] &quot;Attract_the&quot;     &quot;the_brightest&quot;   &quot;brightest_and&quot;   &quot;and_best&quot;       
+##  [5] &quot;best_to&quot;         &quot;to_our&quot;          &quot;our_country&quot;     &quot;country_.&quot;      
+##  [9] &quot;._Immigration&quot;   &quot;Immigration_has&quot; &quot;has_enriched&quot;    &quot;enriched_our&quot;   
+## [ ... and 1,479 more ]</code></pre>
+</section>
+<section id="tokenization-4" class="slide level2">
+<h2>Tokenization</h2>
+<p>You can also use other tokenizers like the ones contained in the <code>tokenizers</code> library.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tokenizers)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>song <span class="ot">&lt;-</span>  <span class="fu">paste0</span>(<span class="st">&quot;How many roads must a man walk down</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Before you call him a man?</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;How many seas must a white dove sail</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Before she sleeps in the sand?</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;How many times must the cannonballs fly</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;Before they&#39;re forever banned?</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;The answer, my friend, is blowin&#39; in the wind.</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                <span class="st">&quot;The answer is blowin&#39; in the wind.</span><span class="sc">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>tokenizers<span class="sc">::</span><span class="fu">tokenize_paragraphs</span>(song)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] &quot;How many roads must a man walk down Before you call him a man? How many seas must a white dove sail Before she sleeps in the sand?&quot;                       
+## [2] &quot;How many times must the cannonballs fly Before they&#39;re forever banned? The answer, my friend, is blowin&#39; in the wind. The answer is blowin&#39; in the wind. &quot;</code></pre>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<p>Tokenize the following tweet using quanteda’s built-in word tokenizer, the tokenize_words tokenizer from the tokenizers package, and the tokenize_tweets tokenizer from the tokenizers package. What’s the difference?</p>
+<p><em><a href="https://t.co/8z2f3P3sUc" class="uri">https://t.co/8z2f3P3sUc</a> <span class="citation" data-cites="datageneral">@datageneral</span> FB needs to hurry up and add a laugh/cry button 😬😭😓🤢🙄😱 Since eating my feelings has not fixed the world’s problems, I guess I’ll try to sleep…</em></p>
+</section>
+<section id="conversion-to-lower-case" class="slide level2">
+<h2>Conversion to lower case</h2>
+<p>In text analysis, it usually makes sense to convert characters to lower case although sometimes you may want to keep proper names capitalized. In <code>quanteda</code> you can use the <code>char_tolower()</code> directly on strings:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>test1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">text1 =</span> <span class="st">&quot;England and France are members of NATO and UNESCO&quot;</span>,</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">text2 =</span> <span class="st">&quot;NASA sent a rocket into space.&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">char_tolower</span>(test1)</span></code></pre></div>
+<pre><code>##                                               text1 
+## &quot;england and france are members of nato and unesco&quot; 
+##                                               text2 
+##                    &quot;nasa sent a rocket into space.&quot;</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">char_tolower</span>(test1, <span class="at">keep_acronyms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>##                                               text1 
+## &quot;england and france are members of NATO and UNESCO&quot; 
+##                                               text2 
+##                    &quot;NASA sent a rocket into space.&quot;</code></pre>
+</section>
+<section id="conversion-to-lower-case-1" class="slide level2">
+<h2>Conversion to lower case</h2>
+<p>or the <code>tokens_tolower()</code> function after you created your tokens object:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>test2 <span class="ot">&lt;-</span> <span class="fu">tokens</span>(test1)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens_tolower</span>(test2, <span class="at">keep_acronyms =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Tokens consisting of 2 documents.
+## text1 :
+## [1] &quot;england&quot; &quot;and&quot;     &quot;france&quot;  &quot;are&quot;     &quot;members&quot; &quot;of&quot;      &quot;NATO&quot;   
+## [8] &quot;and&quot;     &quot;UNESCO&quot; 
+## 
+## text2 :
+## [1] &quot;NASA&quot;   &quot;sent&quot;   &quot;a&quot;      &quot;rocket&quot; &quot;into&quot;   &quot;space&quot;  &quot;.&quot;</code></pre>
+</section>
+<section id="removing-punctuation-numbers-symbols" class="slide level2">
+<h2>Removing punctuation, numbers &amp; symbols</h2>
+<p>Removing unwanted features like punctuation, symbols and numbers is really easy and be done directly insight the <code>tokens</code> function:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="st">&quot;ph4t, phat, ph@    is 1337 for awesome or cool&quot;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens</span>(text, </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">remove_symbols =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document.
+## text1 :
+## [1] &quot;ph4t&quot;    &quot;phat&quot;    &quot;ph&quot;      &quot;is&quot;      &quot;for&quot;     &quot;awesome&quot; &quot;or&quot;     
+## [8] &quot;cool&quot;</code></pre>
+</section>
+<section id="removing-stop-words" class="slide level2">
+<h2>Removing stop words</h2>
+<p>As we’ve seen in the previous sessions, we often may want to remove stop words from our tokens object. <code>quanteda</code> automatically loads the <code>stopwords()</code> function from the <code>stopwords</code> package and defaults to the Snowball collection. Use <code>stopwords_getsources()</code> to get a list of available sources and <code>stopwords_getlanguages</code> to get a list of available languages for each source.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>stopwords<span class="sc">::</span><span class="fu">stopwords_getsources</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;snowball&quot;      &quot;stopwords-iso&quot; &quot;misc&quot;          &quot;smart&quot;        
+## [5] &quot;marimo&quot;        &quot;ancient&quot;       &quot;nltk&quot;          &quot;perseus&quot;</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>stopwords<span class="sc">::</span><span class="fu">stopwords_getlanguages</span>(<span class="st">&quot;snowball&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;da&quot; &quot;de&quot; &quot;en&quot; &quot;es&quot; &quot;fi&quot; &quot;fr&quot; &quot;hu&quot; &quot;ir&quot; &quot;it&quot; &quot;nl&quot; &quot;no&quot; &quot;pt&quot; &quot;ro&quot; &quot;ru&quot; &quot;sv&quot;</code></pre>
+</section>
+<section id="removing-stop-words-1" class="slide level2">
+<h2>Removing stop words</h2>
+<p>We can remove stopwords from our tokens object with the <code>tokens_remove()</code> function.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>text_token <span class="ot">&lt;-</span> <span class="fu">tokens</span>(<span class="st">&quot;The quick brown fox jumps over the lazy dog&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens_remove</span>(text_token, <span class="fu">stopwords</span>(<span class="st">&quot;en&quot;</span>))</span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document.
+## text1 :
+## [1] &quot;quick&quot; &quot;brown&quot; &quot;fox&quot;   &quot;jumps&quot; &quot;lazy&quot;  &quot;dog&quot;</code></pre>
+</section>
+<section id="removing-other-unwanted-words" class="slide level2">
+<h2>Removing other unwanted words</h2>
+<p>We can also use <code>tokens_remove()</code> to remove other unwanted words from our tokens object:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens_remove</span>(text_token, <span class="fu">c</span>(<span class="st">&quot;fox&quot;</span>, <span class="st">&quot;dog&quot;</span>))</span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document.
+## text1 :
+## [1] &quot;The&quot;   &quot;quick&quot; &quot;brown&quot; &quot;jumps&quot; &quot;over&quot;  &quot;the&quot;   &quot;lazy&quot;</code></pre>
+</section>
+<section id="exercise-1" class="slide level2">
+<h2>Exercise</h2>
+<p>Remove all the stopwords from the following Turkish poem:</p>
+<p>“Yaşamak bir ağaç gibi tek ve hür ve bir orman gibi<br />
+kardeşçesine, bu hasret bizim.”</p>
+</section>
+<section id="stemming" class="slide level2">
+<h2>Stemming</h2>
+<p>Stemming is the truncation of words to their root form, e.g. <em>playing</em>, <em>plays</em>, <em>played</em> become <em>play</em>.</p>
+<p>The tokenizers package provides a wrapper to the wordStem function from the SnowballC package, which applies a standard stemmer called the Porter stemmer. The stemmer is available for the following languages:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>SnowballC<span class="sc">::</span><span class="fu">getStemLanguages</span>()</span></code></pre></div>
+<pre><code>##  [1] &quot;arabic&quot;     &quot;basque&quot;     &quot;catalan&quot;    &quot;danish&quot;     &quot;dutch&quot;     
+##  [6] &quot;english&quot;    &quot;finnish&quot;    &quot;french&quot;     &quot;german&quot;     &quot;greek&quot;     
+## [11] &quot;hindi&quot;      &quot;hungarian&quot;  &quot;indonesian&quot; &quot;irish&quot;      &quot;italian&quot;   
+## [16] &quot;lithuanian&quot; &quot;nepali&quot;     &quot;norwegian&quot;  &quot;porter&quot;     &quot;portuguese&quot;
+## [21] &quot;romanian&quot;   &quot;russian&quot;    &quot;spanish&quot;    &quot;swedish&quot;    &quot;tamil&quot;     
+## [26] &quot;turkish&quot;</code></pre>
+</section>
+<section id="stemming-1" class="slide level2">
+<h2>Stemming</h2>
+<p>To reduce words to their word stem we can use the <code>tokens_wordstem()</code> function and apply it again to a tokens object:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>txt <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="at">one =</span> <span class="st">&quot;eating eater eaters eats ate&quot;</span>,</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">two =</span> <span class="st">&quot;taxing taxes taxed my tax return&quot;</span>)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>th <span class="ot">&lt;-</span> <span class="fu">tokens</span>(txt)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a><span class="fu">tokens_wordstem</span>(th)</span></code></pre></div>
+<pre><code>## Tokens consisting of 2 documents.
+## one :
+## [1] &quot;eat&quot;   &quot;eater&quot; &quot;eater&quot; &quot;eat&quot;   &quot;ate&quot;  
+## 
+## two :
+## [1] &quot;tax&quot;    &quot;tax&quot;    &quot;tax&quot;    &quot;my&quot;     &quot;tax&quot;    &quot;return&quot;</code></pre>
+</section>
+<section id="all-the-preprocessing-in-one-go" class="slide level2">
+<h2>All the preprocessing in one go</h2>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load data corpus</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>corp <span class="ot">&lt;-</span> quanteda<span class="sc">::</span>data_corpus_inaugural</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="co">#create token</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>inaugural_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(corp,</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">what =</span> <span class="st">&quot;word&quot;</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">remove_punct =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">remove_symbols =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">remove_numbers =</span> <span class="cn">FALSE</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>                       )</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># apply further preprocessing</span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>inaugural_tokens_reduced <span class="ot">&lt;-</span> inaugural_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>(<span class="st">&#39;en&#39;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_wordstem</span>()</span></code></pre></div>
+</section>
+<section id="keywords-in-context" class="slide level2">
+<h2>Keywords in context</h2>
+<p>A useful feature built into <code>quanteda</code> is keywords in context, which returns all the appearances of a word (or combination of words) in its immediate context.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="fu">kwic</span>(inaugural_tokens, <span class="st">&quot;humble&quot;</span>, <span class="at">window=</span><span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Keyword-in-context with 13 matches.                                                         
+##   [1789-Washington, 572]         along with an | humble |
+##  [1789-Washington, 1359]         Human Race in | humble |
+##       [1797-Adams, 2123]          age and with | humble |
+##    [1801-Jefferson, 169] the contemplation and | humble |
+##       [1821-Monroe, 173]           favor of my | humble |
+##       [1825-Adams, 2902]         I commit with | humble |
+##       [1829-Jackson, 85]      dedication of my | humble |
+##       [1833-Jackson, 91]          extent of my | humble |
+##      [1853-Pierce, 3174]       in the nation&#39;s | humble |
+##    [1857-Buchanan, 1204]             I feel an | humble |
+##   [1953-Eisenhower, 765]           of the most | humble |
+##      [1997-Clinton, 586]         a new century | humble |
+##       [2009-Obama, 1760]      we remember with | humble |
+##                              
+##  anticipation of the         
+##  supplication that since     
+##  reverence I feel            
+##  myself before the           
+##  pretensions the difficulties
+##  but fearless confidence     
+##  abilities to their          
+##  abilities in continued      
+##  acknowledged dependence upon
+##  confidence that the         
+##  and of the                  
+##  enough not to               
+##  gratitude those brave</code></pre>
+</section>
+<section id="exercise-2" class="slide level2">
+<h2>Exercise</h2>
+<ol type="a">
+<li class="fragment">How many times has the word “slave” been used in inaugural addresses?</li>
+<li class="fragment">How many times has a word that included “slave” (like “slavery” or “enslaved”) been used in inaugural addresses?</li>
+</ol>
+</section></section>
+<section>
+<section id="document-feature-matrix" class="title-slide slide level1">
+<h1>Document-Feature-Matrix</h1>
+
+</section>
+<section id="quanteda-dfm" class="slide level2">
+<h2>quanteda dfm</h2>
+<p>Quanteda is focused on bag-of-words (or bag-of-tokens) models that work from a document-feature matrix, where each row represents a document, each column represents a type (a “term” in the vocabulary) and the entries are the counts of tokens matching the term in the current document.</p>
+<p>To create a document-feature maxtrix use the <code>dfm()</code> function and apply it directly to the tokens object along with some common preprocessing options:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>my_dfm <span class="ot">&lt;-</span> quanteda<span class="sc">::</span><span class="fu">dfm</span>(inaugural_tokens,</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">tolower =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</section>
+<section id="dfm-summary" class="slide level2">
+<h2>dfm summary</h2>
+<p>Typing the dfm’s name will show an object summary.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>my_dfm</span></code></pre></div>
+<pre><code>## Document-feature matrix of: 59 documents, 9,422 features (91.89% sparse) and 4 docvars.
+##                  features
+## docs              fellow-citizens  of the senate and house representatives
+##   1789-Washington               1  71 116      1  48     2               2
+##   1793-Washington               0  11  13      0   2     0               0
+##   1797-Adams                    3 140 163      1 130     0               2
+##   1801-Jefferson                2 104 130      0  81     0               0
+##   1805-Jefferson                0 101 143      0  93     0               0
+##   1809-Madison                  1  69 104      0  43     0               0
+##                  features
+## docs              among vicissitudes incident
+##   1789-Washington     1            1        1
+##   1793-Washington     0            0        0
+##   1797-Adams          4            0        0
+##   1801-Jefferson      1            0        0
+##   1805-Jefferson      7            0        0
+##   1809-Madison        0            0        0
+## [ reached max_ndoc ... 53 more documents, reached max_nfeat ... 9,412 more features ]</code></pre>
+</section>
+<section id="dfm-subsetting" class="slide level2">
+<h2>dfm subsetting</h2>
+<p>You can look inside your dfm by indexing it like you would a Matrix object:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>my_dfm[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<pre><code>## Document-feature matrix of: 5 documents, 5 features (20.00% sparse) and 4 docvars.
+##                  features
+## docs              fellow-citizens  of the senate and
+##   1789-Washington               1  71 116      1  48
+##   1793-Washington               0  11  13      0   2
+##   1797-Adams                    3 140 163      1 130
+##   1801-Jefferson                2 104 130      0  81
+##   1805-Jefferson                0 101 143      0  93</code></pre>
+</section>
+<section id="dfm-topfeatures" class="slide level2">
+<h2>dfm topfeatures</h2>
+<p>You can list the most (or least) frequently occuring features in a dfm by using the <code>topfeatures()</code> function:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">topfeatures</span>(my_dfm, <span class="dv">40</span>)</span></code></pre></div>
+<pre><code>##        the         of        and         to         in          a        our 
+##      10183       7180       5406       4591       2827       2292       2224 
+##         we       that         be         is         it        for         by 
+##       1827       1813       1502       1491       1398       1230       1091 
+##       have      which        not       with         as       will       this 
+##       1031       1007        980        970        966        944        874 
+##          i        all        are      their        but        has     people 
+##        871        836        828        761        670        631        584 
+##       from        its government         or         on         my         us 
+##        578        573        564        563        544        515        505 
+##       been        can         no       they         so 
+##        496        487        470        463        397</code></pre>
+</section>
+<section id="dfm_trim" class="slide level2">
+<h2>dfm_trim()</h2>
+<p>You can also reduce the size of your dfm by removing sparse or frequently appearing terms with the <code>dfm_trim()</code> function. For example, to keep only those words that occur at least 10 times but not more than 100 times:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dfm_trim</span>(my_dfm, <span class="at">min_termfreq =</span> <span class="dv">10</span>, <span class="at">max_termfreq =</span> <span class="dv">100</span>)</span></code></pre></div>
+<pre><code>## Document-feature matrix of: 59 documents, 1,381 features (74.22% sparse) and 4 docvars.
+##                  features
+## docs              fellow-citizens senate house representatives event could
+##   1789-Washington               1      1     2               2     2     3
+##   1793-Washington               0      0     0               0     0     0
+##   1797-Adams                    3      1     0               2     0     1
+##   1801-Jefferson                2      0     0               0     0     0
+##   1805-Jefferson                0      0     0               0     0     2
+##   1809-Madison                  1      0     0               0     0     1
+##                  features
+## docs              greater order received day
+##   1789-Washington       1     2        1   2
+##   1793-Washington       0     0        0   0
+##   1797-Adams            0     4        0   1
+##   1801-Jefferson        1     1        0   1
+##   1805-Jefferson        0     3        0   1
+##   1809-Madison          0     0        0   0
+## [ reached max_ndoc ... 53 more documents, reached max_nfeat ... 1,371 more features ]</code></pre>
+</section>
+<section id="exercise-3" class="slide level2">
+<h2>Exercise</h2>
+<p>Construct a <code>dfm</code> of trigrams from the inaugural speeches (lower case, no punctuation, not stemmed, no stop words removed).</p>
+<ol type="a">
+<li class="fragment"><p>How big is the matrix? How sparse is it?</p></li>
+<li class="fragment"><p>What are the 20 most frequent trigrams?</p></li>
+<li class="fragment"><p>Keep only those trigrams occurring at least 50 times and in at least 3/4 of the documents</p></li>
+</ol>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li class="fragment">Next week there is no class!</li>
+<li class="fragment">We’ll meet again on October 27 where we’ll learn different ways to visualize text</li>
+<li class="fragment">I’ll upload the code completion exercise this week. Please hand in your solution as an <code>.Rmd</code> file by October 26.</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_06_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_06_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_06_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_06_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_06_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

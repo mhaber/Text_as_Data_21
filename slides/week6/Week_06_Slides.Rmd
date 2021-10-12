@@ -1,0 +1,318 @@
+---
+title: "Text as Data: Week 6"
+author: "Matthias Haber"
+date: "13 October 2021"
+output:
+    revealjs::revealjs_presentation:
+      theme: moon
+      reveal_plugins: ["notes", "zoom", "chalkboard"]
+      highlight: haddock
+      center: false
+      self_contained: false
+      incremental: true
+      reveal_options:
+        slideNumber: true
+        progress: true
+        previewLinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+library(tidyverse)
+library(readtext)
+library(quanteda)
+```
+
+# Goals for Today
+
+## Goals
+
+- Quanteda
+- Text preprocessing
+- Document-Feature Matrix
+
+# Quanteda
+
+## quanteda
+The _quanteda_ package is an extensive text analysis suite for R, containing everything you need to perform a variety of automatic text analyses. _quanteda_ is to text analysis what dplyr and tidyr are to data wrangling.  
+
+_quanteda_ is built for efficiency and speed, through its design around three infrastructures: the stringi package for text processing, the Matrix package for sparse matrix objects, and computationally intensive processing (e.g. for tokens) handled in parallelized C++.
+
+In addition to the extensive documentation, there's a very helpful cheatsheet [here](https://muellerstefan.net/files/quanteda-cheatsheet.pdf)
+
+```{r}
+library(quanteda) #install.packages("quanteda")
+```
+
+## Build-in corpuses in quanteda
+`quanteda` comes with several corpora included, like the corpus of US presidential inaugural addresses:
+
+```{r}
+corp <- quanteda::data_corpus_inaugural
+summary(corp)
+```
+
+
+# Preprocessing
+
+## Preprocessing Steps
+
+Preprocessing text for analysis typically involves 8 steps:
+
+1. Tokenizing the text to unigrams (or bigrams, trigrams, sentences, etc.)
+2. Converting all characters to lowercase
+3. Removing punctuation
+4. Removing numbers & symbols
+5. Removing stop words, including custom stop words
+6. "Stemming" words, or lemmatization
+7. Creating a Document-Feature Matrix
+8. Removing sparse or frequent terms
+
+## Tokenization 
+
+The `token()` function from _quanteda_ allows to use external or the internal tokenizer to construct a token object, By default it creates word tokens and preserves hyphens, URLs, social media "tag" characters, and email addresses.
+
+```{r}
+txt <- c(text1 = "This is a short text,\n separated across two lines.",
+         text2 = "Text-As-Data: https://github.com/mhaber/Text_as_Data_21")
+tokens(txt)
+```
+
+## Tokenization
+
+You can use the `what` argument to change the type of token object you want to create. For example, if you want it to construct sentences:
+
+```{r}
+tokens(c("Kurt Vonnegut said; only assholes use semi-colons.",
+         "To be? Or not to be?"), what = "sentence")
+```
+
+## Tokenization
+
+or characters:
+
+```{r}
+tokens("Just a bunch of characters.", what = "character")
+```
+
+## Tokenization
+
+If you want to create n-grams in any length you can use the `tokens_ngrams()` function on a tokenized object.
+
+```{r}
+toks <- tokens(data_char_ukimmig2010[[3]])
+tokens_ngrams(toks, n = 2:4) %>% head(10)
+```
+
+## Tokenization
+
+You can also use other tokenizers like the ones contained in the `tokenizers` library.
+
+```{r}
+library(tokenizers)
+song <-  paste0("How many roads must a man walk down\n",
+                "Before you call him a man?\n",
+                "How many seas must a white dove sail\n",
+                "Before she sleeps in the sand?\n",
+                "\n",
+                "How many times must the cannonballs fly\n",
+                "Before they're forever banned?\n",
+                "The answer, my friend, is blowin' in the wind.\n",
+                "The answer is blowin' in the wind.\n")
+tokenizers::tokenize_paragraphs(song)
+```
+
+## Exercise
+
+Tokenize the following tweet using quanteda's built-in word tokenizer, the tokenize_words tokenizer from the tokenizers package, and the tokenize_tweets tokenizer from the tokenizers package. What's the difference?
+
+_https://t.co/8z2f3P3sUc  @datageneral FB needs to hurry up and add a laugh/cry button 😬😭😓🤢🙄😱 Since eating my feelings has not fixed the world's problems, I guess I'll try to sleep..._
+
+## Conversion to lower case
+
+In text analysis, it usually makes sense to convert characters to lower case although sometimes you may want to keep proper names capitalized. In `quanteda` you can use the `char_tolower()` directly on strings:
+
+```{r}
+test1 <- c(text1 = "England and France are members of NATO and UNESCO",
+           text2 = "NASA sent a rocket into space.")
+char_tolower(test1)
+char_tolower(test1, keep_acronyms = TRUE)
+```
+
+## Conversion to lower case
+
+or the `tokens_tolower()` function after you created your tokens object:
+
+```{r}
+test2 <- tokens(test1)
+tokens_tolower(test2, keep_acronyms = TRUE)
+```
+
+## Removing punctuation, numbers & symbols
+
+Removing unwanted features like punctuation, symbols and numbers is really easy and be done directly insight the `tokens` function:
+
+```{r}
+text <- "ph4t, phat, ph@	is 1337 for awesome or cool"
+tokens(text, 
+       remove_punct = TRUE, 
+       remove_numbers = TRUE, 
+       remove_symbols = TRUE)
+```
+
+## Removing stop words
+As we've seen in the previous sessions, we often may want to remove stop words from our tokens object. `quanteda` automatically loads the `stopwords()` function from the `stopwords` package and defaults to the Snowball collection. Use `stopwords_getsources()` to get a list of available sources and `stopwords_getlanguages` to get a list of available languages for each source.
+
+```{r}
+stopwords::stopwords_getsources()
+stopwords::stopwords_getlanguages("snowball")
+```
+
+## Removing stop words
+
+We can remove stopwords from our tokens object with the `tokens_remove()` function. 
+
+```{r}
+text_token <- tokens("The quick brown fox jumps over the lazy dog")
+tokens_remove(text_token, stopwords("en"))
+```
+
+## Removing other unwanted words
+
+We can also use `tokens_remove()` to remove other unwanted words from our tokens object:
+
+```{r}
+tokens_remove(text_token, c("fox", "dog"))
+```
+
+## Exercise
+
+Remove all the stopwords from the following Turkish poem:
+
+"Yaşamak bir ağaç gibi
+tek ve hür ve bir orman gibi   
+kardeşçesine,
+bu hasret bizim."
+
+## Stemming
+
+Stemming is the truncation of words to their root form, e.g. _playing_, _plays_, _played_ become _play_.
+
+The tokenizers package provides a wrapper to the wordStem function from the SnowballC package, which applies a standard stemmer called the Porter stemmer. The stemmer is available for the following languages:
+
+```{r}
+SnowballC::getStemLanguages()
+```
+
+## Stemming
+
+To reduce words to their word stem we can use the `tokens_wordstem()` function and apply it again to a tokens object:
+
+```{r}
+txt <- c(one = "eating eater eaters eats ate",
+         two = "taxing taxes taxed my tax return")
+th <- tokens(txt)
+tokens_wordstem(th)
+```
+
+## All the preprocessing in one go
+
+```{r}
+# load data corpus
+corp <- quanteda::data_corpus_inaugural
+#create token
+inaugural_tokens <- tokens(corp,
+                       what = "word",
+                       remove_punct = TRUE,
+                       remove_symbols = TRUE,
+                       remove_numbers = FALSE
+                       )
+# apply further preprocessing
+inaugural_tokens_reduced <- inaugural_tokens %>% 
+  tokens_tolower() %>%
+  tokens_remove(stopwords('en')) %>% 
+  tokens_wordstem()
+```
+
+## Keywords in context
+
+A useful feature built into `quanteda` is keywords in context, which returns all the appearances of a word (or combination of words) in its immediate context.
+
+```{r}
+kwic(inaugural_tokens, "humble", window=3)
+```
+
+## Exercise
+
+a) How many times has the word "slave" been used in inaugural addresses?
+b) How many times has a word that included "slave" (like "slavery" or "enslaved") been used in inaugural addresses?
+
+# Document-Feature-Matrix
+
+## quanteda dfm
+
+Quanteda is focused on bag-of-words (or bag-of-tokens) models that work from a document-feature matrix, where each row represents a document, each column represents a type (a "term" in the vocabulary) and the entries are the counts of tokens matching the term in the current document. 
+
+To create a document-feature maxtrix use the `dfm()` function and apply it directly to the tokens object along with some common preprocessing options:
+
+```{r}
+my_dfm <- quanteda::dfm(inaugural_tokens,
+                        tolower = TRUE)
+```
+
+## dfm summary
+
+Typing the dfm's name will show an object summary.
+
+```{r}
+my_dfm
+```
+
+## dfm subsetting
+
+You can look inside your dfm by indexing it like you would a Matrix object:
+
+```{r}
+my_dfm[1:5,1:5]
+```
+
+## dfm topfeatures
+
+You can list the most (or least) frequently occuring features in a dfm by using the `topfeatures()` function:
+
+```{r}
+topfeatures(my_dfm, 40)
+```
+
+## dfm_trim()
+
+You can also reduce the size of your dfm by removing sparse or frequently appearing terms with the `dfm_trim()` function. For example, to keep only those words that occur at least 10 times but not more than 100 times:
+
+```{r}
+dfm_trim(my_dfm, min_termfreq = 10, max_termfreq = 100)
+```
+
+## Exercise
+
+Construct a `dfm` of trigrams from the inaugural speeches (lower case, no punctuation, not stemmed, no stop words removed).
+
+a) How big is the matrix? How sparse is it?
+
+b) What are the 20 most frequent trigrams?
+
+c) Keep only those trigrams occurring at least 50 times and in at least 3/4 of the documents
+
+# Wrapping up
+
+## Questions?
+
+## Outlook for our next session
+
+- Next week there is no class!
+- We'll meet again on October 27 where we'll learn different ways to visualize text
+- I'll upload the code completion exercise this week. Please hand in your solution as an `.Rmd` file by October 26.
+
+## That's it for today
+
+Thanks for your attention!
