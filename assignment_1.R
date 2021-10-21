@@ -12,9 +12,6 @@ c("221B Baker St., London", "1600 Pennsylvania Avenue, Washington D.C.",
 addresses <-c("221B Baker St., London", "1600 Pennsylvania Avenue, Washington D.C.", 
               "742 Evergreen Terrace, Springfield")
 
-products <- c("TV  ", " laptop", "portable  charger", "Wireless Keybord",
-              "   HeadPhones   ")
-
 sentences <- stringr::sentences[1:20]
 
 field_names <- c("order_number", "order_date", "customer_email", "product_title", "amount")
