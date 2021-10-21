@@ -60,7 +60,7 @@ str_***(string = sentences, pattern = "***")
 
 str_***(string = sentences, ***, ellipsis = "...")
 
-#replace all underscores in products with spaces and capitalize the first letter of each word
+#replace all underscores in field_names with spaces and capitalize the first letter of each word
 
 str_replace_all(***) %>% 
   str_***
