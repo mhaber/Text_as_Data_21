@@ -6,8 +6,6 @@
 # the three *** indicate where you need to to insert the correct code 
 
 # stringr & regular expressions -------------------------------------------
-c("221B Baker St., London", "1600 Pennsylvania Avenue, Washington D.C.", 
-  "742 Evergreen Terrace, Springfield")
 
 addresses <-c("221B Baker St., London", "1600 Pennsylvania Avenue, Washington D.C.", 
               "742 Evergreen Terrace, Springfield")

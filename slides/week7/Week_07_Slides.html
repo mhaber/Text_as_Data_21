@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-10-27" />
+  <title>Text as Data: Week 7</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_07_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_07_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_07_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_07_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_07_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 7</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">27 October 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Solution assignment 1</li>
+<li class="fragment">ggplot2</li>
+<li class="fragment">Visualizing text</li>
+</ul>
+</section></section>
+<section>
+<section id="solution-to-assignment-1" class="title-slide slide level1">
+<h1>Solution to assignment 1</h1>
+
+</section>
+<section id="regular-expressions" class="slide level2">
+<h2>Regular expressions</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>addresses <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;221B Baker St., London&quot;</span>, <span class="st">&quot;1600 Pennsylvania Avenue, Washington D.C.&quot;</span>, </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>              <span class="st">&quot;742 Evergreen Terrace, Springfield&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sentences <span class="ot">&lt;-</span> stringr<span class="sc">::</span>sentences[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>field_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;order_number&quot;</span>, <span class="st">&quot;order_date&quot;</span>, <span class="st">&quot;customer_email&quot;</span>, <span class="st">&quot;product_title&quot;</span>, <span class="st">&quot;amount&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>email <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;tom@hogwarts.com&quot;</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;tom.riddle@hogwarts.com&quot;</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;tom@hogwarts.eu.com&quot;</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;potter@hogwarts.com&quot;</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;harry@hogwarts.com&quot;</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;hermione+witch@hogwarts.com&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;.bash_profile&quot;</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;workspace.doc&quot;</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;img0912.jpg&quot;</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;updated_img0912.png&quot;</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;documentation.html&quot;</span>,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;favicon.gif&quot;</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;img0912.jpg.tmp&quot;</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;access.lock&quot;</span>)</span></code></pre></div>
+</section>
+<section id="convert-addresses-to-lower-case" class="slide level2">
+<h2>Convert addresses to lower-case</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str_to_lower</span>(<span class="at">string =</span> addresses)</span></code></pre></div>
+<pre><code>## [1] &quot;221b baker st., london&quot;                   
+## [2] &quot;1600 pennsylvania avenue, washington d.c.&quot;
+## [3] &quot;742 evergreen terrace, springfield&quot;</code></pre>
+</section>
+<section id="extract-digits-from-addresses" class="slide level2">
+<h2>Extract digits from addresses</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract</span>(<span class="at">string =</span> addresses, <span class="at">pattern =</span> <span class="st">&quot;[:digit:]+&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;221&quot;  &quot;1600&quot; &quot;742&quot;</code></pre>
+</section>
+<section id="split-addresses-into-two-parts-street-city" class="slide level2">
+<h2>Split addresses into two parts: street &amp; city</h2>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split</span>(<span class="at">string =</span> addresses, <span class="at">pattern =</span> <span class="st">&quot;, &quot;</span>, <span class="at">simplify =</span> T)</span></code></pre></div>
+<pre><code>##      [,1]                       [,2]             
+## [1,] &quot;221B Baker St.&quot;           &quot;London&quot;         
+## [2,] &quot;1600 Pennsylvania Avenue&quot; &quot;Washington D.C.&quot;
+## [3,] &quot;742 Evergreen Terrace&quot;    &quot;Springfield&quot;</code></pre>
+</section>
+<section id="split-addresses-into-three-parts-house-number-street-city" class="slide level2">
+<h2>Split addresses into three parts: house number, street &amp; city</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_split</span>(<span class="at">string =</span> addresses, <span class="at">pattern =</span> <span class="st">&quot;(?&lt;=[:digit:].) |, &quot;</span>, <span class="at">simplify =</span> T)</span></code></pre></div>
+<pre><code>##      [,1]   [,2]                  [,3]             
+## [1,] &quot;221B&quot; &quot;Baker St.&quot;           &quot;London&quot;         
+## [2,] &quot;1600&quot; &quot;Pennsylvania Avenue&quot; &quot;Washington D.C.&quot;
+## [3,] &quot;742&quot;  &quot;Evergreen Terrace&quot;   &quot;Springfield&quot;</code></pre>
+</section>
+<section id="for-sentences-that-end-with-the-letter-t-extract-the-last-word" class="slide level2">
+<h2>For sentences that end with the letter “t” extract the last word</h2>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract_all</span>(<span class="at">string =</span> sentences, <span class="at">pattern =</span> <span class="st">&quot;[A-z]+t</span><span class="sc">\\</span><span class="st">.$&quot;</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## character(0)
+## 
+## [[2]]
+## character(0)
+## 
+## [[3]]
+## character(0)
+## 
+## [[4]]
+## character(0)
+## 
+## [[5]]
+## character(0)
+## 
+## [[6]]
+## character(0)
+## 
+## [[7]]
+## character(0)
+## 
+## [[8]]
+## character(0)
+## 
+## [[9]]
+## character(0)
+## 
+## [[10]]
+## character(0)
+## 
+## [[11]]
+## character(0)
+## 
+## [[12]]
+## character(0)
+## 
+## [[13]]
+## character(0)
+## 
+## [[14]]
+## character(0)
+## 
+## [[15]]
+## [1] &quot;feet.&quot;
+## 
+## [[16]]
+## character(0)
+## 
+## [[17]]
+## [1] &quot;heat.&quot;
+## 
+## [[18]]
+## character(0)
+## 
+## [[19]]
+## character(0)
+## 
+## [[20]]
+## character(0)</code></pre>
+</section>
+<section id="extract-the-first-30-characters-from-each-sentence" class="slide level2">
+<h2>Extract the first 30 characters from each sentence</h2>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_trunc</span>(<span class="at">string =</span> sentences, <span class="at">width =</span> <span class="dv">30</span>, <span class="at">ellipsis =</span> <span class="st">&quot;...&quot;</span>)</span></code></pre></div>
+<pre><code>##  [1] &quot;The birch canoe slid on the...&quot; &quot;Glue the sheet to the dark ...&quot;
+##  [3] &quot;It&#39;s easy to tell the depth...&quot; &quot;These days a chicken leg is...&quot;
+##  [5] &quot;Rice is often served in rou...&quot; &quot;The juice of lemons makes f...&quot;
+##  [7] &quot;The box was thrown beside t...&quot; &quot;The hogs were fed chopped c...&quot;
+##  [9] &quot;Four hours of steady work f...&quot; &quot;Large size in stockings is ...&quot;
+## [11] &quot;The boy was there when the ...&quot; &quot;A rod is used to catch pink...&quot;
+## [13] &quot;The source of the huge rive...&quot; &quot;Kick the ball straight and ...&quot;
+## [15] &quot;Help the woman get back to ...&quot; &quot;A pot of tea helps to pass ...&quot;
+## [17] &quot;Smoky fires lack flame and ...&quot; &quot;The soft cushion broke the ...&quot;
+## [19] &quot;The salt breeze came across...&quot; &quot;The girl at the booth sold ...&quot;</code></pre>
+</section>
+<section id="replace-all-underscores-in-field_names-with-spaces-and-capitalize-the-first-letter-of-each-word" class="slide level2">
+<h2>Replace all underscores in field_names with spaces and capitalize the first letter of each word</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_replace_all</span>(<span class="at">string =</span> field_names, <span class="at">pattern =</span> <span class="st">&quot;_&quot;</span>, <span class="at">replacement =</span> <span class="st">&quot; &quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">str_to_title</span>()</span></code></pre></div>
+<pre><code>## [1] &quot;Order Number&quot;   &quot;Order Date&quot;     &quot;Customer Email&quot; &quot;Product Title&quot; 
+## [5] &quot;Amount&quot;</code></pre>
+</section>
+<section id="extract-names-appearing-before-from-email" class="slide level2">
+<h2>Extract names appearing before @ from email</h2>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract</span>(email, <span class="st">&quot;^[</span><span class="sc">\\</span><span class="st">w</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">+]*&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;tom&quot;            &quot;tom.riddle&quot;     &quot;tom&quot;            &quot;potter&quot;        
+## [5] &quot;harry&quot;          &quot;hermione+witch&quot;</code></pre>
+</section>
+<section id="extract-the-three-images-.jpg-.png-.gif-from-files" class="slide level2">
+<h2>Extract the three images (.jpg, .png, .gif) from files</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str_extract</span>(files, <span class="st">&quot;.*</span><span class="sc">\\</span><span class="st">.(jpg|png|gif)$&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] NA                    NA                    &quot;img0912.jpg&quot;        
+## [4] &quot;updated_img0912.png&quot; NA                    &quot;favicon.gif&quot;        
+## [7] NA                    NA</code></pre>
+</section>
+<section id="web-scraping-tidytext" class="slide level2">
+<h2>Web scraping &amp; tidytext</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rvest)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytext)</span></code></pre></div>
+</section>
+<section id="extract-the-text-of-j.k.-rowlings-commencement-speech-at-harvard-university" class="slide level2">
+<h2>Extract the text of J.K. Rowling’s commencement speech at Harvard University</h2>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">&quot;https://news.harvard.edu/gazette/story/2008/06/text-of-j-k-rowling-speech/&quot;</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>speech <span class="ot">&lt;-</span> <span class="fu">read_html</span>(url) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="st">&quot;.article-body p&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span></code></pre></div>
+</section>
+<section id="convert-the-text-to-tibble-remove-the-first-and-15th-line-add-paragraph-number" class="slide level2">
+<h2>Convert the text to tibble, remove the first and 15th line, add paragraph number</h2>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>speech_df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">text =</span> speech) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">slice</span>(<span class="fu">c</span>(<span class="dv">2</span><span class="sc">:</span><span class="dv">14</span>,<span class="dv">16</span><span class="sc">:</span><span class="fu">n</span>())) <span class="sc">%&gt;%</span> </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">paragraphs =</span> <span class="fu">row_number</span>())</span></code></pre></div>
+</section>
+<section id="tokenize-the-text-into-words-and-remove-stop-words" class="slide level2">
+<h2>Tokenize the text into words and remove stop words</h2>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>speech_df <span class="ot">&lt;-</span> speech_df <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest_tokens</span>(word, text) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">anti_join</span>(stop_words)</span></code></pre></div>
+</section>
+<section id="list-the-5-most-frequent-words" class="slide level2">
+<h2>List the 5 most frequent words</h2>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>speech_df <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(word, <span class="at">sort =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">top_n</span>(<span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## # A tibble: 5 × 2
+##   word        n
+##   &lt;chr&gt;   &lt;int&gt;
+## 1 life       14
+## 2 failure    13
+## 3 day        10
+## 4 people      9
+## 5 parents     8</code></pre>
+</section>
+<section id="readtext-and-quanteda" class="slide level2">
+<h2>Readtext and quanteda</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readtext)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span></code></pre></div>
+</section>
+<section id="read-in-the-uk-manifestos-and-create-document-names-from-file-names" class="slide level2">
+<h2>Read in the UK manifestos and create document names from file names</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>manifestos <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/UK_manifestos/*.txt&quot;</span>, </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">docvarsfrom=</span> <span class="st">&quot;filenames&quot;</span>, <span class="at">dvsep =</span> <span class="st">&quot;-&quot;</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">docvarnames =</span> <span class="fu">c</span>(<span class="st">&quot;party&quot;</span>, <span class="st">&quot;year&quot;</span>))</span></code></pre></div>
+</section>
+<section id="create-a-corpus-out-of-the-documents" class="slide level2">
+<h2>Create a corpus out of the documents</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>manifesto_corpus <span class="ot">&lt;-</span> <span class="fu">corpus</span>(manifestos)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(manifesto_corpus)</span></code></pre></div>
+<pre><code>## Corpus consisting of 18 documents, showing 18 documents:
+## 
+##          Text Types Tokens Sentences party year
+##  Con-1918.txt   727   2084        56   Con 1918
+##  Con-1922.txt   567   1665        42   Con 1922
+##  Con-1923.txt   641   1715        59   Con 1923
+##  Con-1924.txt  1016   3169        85   Con 1924
+##  Con-1929.txt  1699   7103       222   Con 1929
+##  Con-1931.txt   387    895        30   Con 1931
+##  Lab-1918.txt   476   1241        47   Lab 1918
+##  Lab-1922.txt   589   1401        54   Lab 1922
+##  Lab-1923.txt   550   1259        39   Lab 1923
+##  Lab-1924.txt   877   2495        69   Lab 1924
+##  Lab-1929.txt   997   2720       116   Lab 1929
+##  Lab-1931.txt   812   2267        91   Lab 1931
+##  Lib-1918.txt   424    917        27   Lib 1918
+##  Lib-1922.txt   467   1057        48   Lib 1922
+##  Lib-1923.txt   863   2362        85   Lib 1923
+##  Lib-1924.txt   871   2401        80   Lib 1924
+##  Lib-1929.txt   564   1354        35   Lib 1929
+##  Lib-1931.txt   413   1013        26   Lib 1931</code></pre>
+</section>
+<section id="overwrite-the-party-column-with-new-labels" class="slide level2">
+<h2>Overwrite the party column with new labels</h2>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>party <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Conservatives&quot;</span>, <span class="dv">6</span>), <span class="fu">rep</span>(<span class="st">&quot;Labour&quot;</span>, <span class="dv">6</span>), <span class="fu">rep</span>(<span class="st">&quot;LibDems&quot;</span>, <span class="dv">6</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>manifesto_corpus<span class="sc">$</span>party <span class="ot">&lt;-</span> party</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(manifesto_corpus)</span></code></pre></div>
+<pre><code>## Corpus consisting of 18 documents, showing 18 documents:
+## 
+##          Text Types Tokens Sentences         party year
+##  Con-1918.txt   727   2084        56 Conservatives 1918
+##  Con-1922.txt   567   1665        42 Conservatives 1922
+##  Con-1923.txt   641   1715        59 Conservatives 1923
+##  Con-1924.txt  1016   3169        85 Conservatives 1924
+##  Con-1929.txt  1699   7103       222 Conservatives 1929
+##  Con-1931.txt   387    895        30 Conservatives 1931
+##  Lab-1918.txt   476   1241        47        Labour 1918
+##  Lab-1922.txt   589   1401        54        Labour 1922
+##  Lab-1923.txt   550   1259        39        Labour 1923
+##  Lab-1924.txt   877   2495        69        Labour 1924
+##  Lab-1929.txt   997   2720       116        Labour 1929
+##  Lab-1931.txt   812   2267        91        Labour 1931
+##  Lib-1918.txt   424    917        27       LibDems 1918
+##  Lib-1922.txt   467   1057        48       LibDems 1922
+##  Lib-1923.txt   863   2362        85       LibDems 1923
+##  Lib-1924.txt   871   2401        80       LibDems 1924
+##  Lib-1929.txt   564   1354        35       LibDems 1929
+##  Lib-1931.txt   413   1013        26       LibDems 1931</code></pre>
+</section>
+<section id="tokenize-and-preprocess-the-text-and-find-context-for-discussion-around-europe" class="slide level2">
+<h2>Tokenize and preprocess the text and find context for discussion around “europe”</h2>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>manifesto_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(manifesto_corpus, <span class="at">what =</span> <span class="st">&quot;word&quot;</span>, </span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>()</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="fu">kwic</span>(manifesto_tokens, <span class="st">&quot;europe*&quot;</span>)</span></code></pre></div>
+<pre><code>## Keyword-in-context with 27 matches.                                                                            
+##    [Con-1918.txt, 76]               forever in the continent of |  europe  |
+##   [Con-1918.txt, 203]                      to make the peace of |  europe  |
+##   [Con-1918.txt, 277]            settle the political future of |  europe  |
+##   [Con-1918.txt, 362]                  the foundations of a new |  europe  |
+##  [Con-1922.txt, 1306]                       war we have lost in |  europe  |
+##   [Con-1923.txt, 150] political and economic disorganisation of |  europe  |
+##   [Con-1923.txt, 192]                        of a true peace in |  europe  |
+##   [Con-1923.txt, 278]        the disorganisation and poverty of |  europe  |
+##   [Con-1923.txt, 329]                standard of living in many | european |
+##   [Con-1923.txt, 783]          arising from the distractions of |  europe  |
+##   [Con-1924.txt, 638]     restore stable economic conditions in |  europe  |
+##   [Con-1924.txt, 989]               settled state of affairs in |  europe  |
+##  [Con-1929.txt, 1689]                   more upon them than any | european |
+##  [Con-1929.txt, 5833]               depends has been assured in |  europe  |
+##  [Con-1929.txt, 5848]           security has been extended from |  europe  |
+##  [Con-1929.txt, 6148]                   states of america as in | european |
+##   [Lab-1918.txt, 174]               of liberty and democracy in |  europe  |
+##   [Lab-1918.txt, 197]               intervention on the side of | european |
+##    [Lab-1922.txt, 80]            to pay turkey&#39;s relations with |  europe  |
+##  [Lab-1929.txt, 1185]      election the labour government found |  europe  |
+##   [Lib-1923.txt, 226]          upon trade and credit throughout |  europe  |
+##   [Lib-1923.txt, 255]          or moral question has confronted |  europe  |
+##   [Lib-1923.txt, 274]                      the ruhr in no great | european |
+##   [Lib-1923.txt, 475]              the chief rallying powers in |  europe  |
+##   [Lib-1923.txt, 502]       exercise any guiding influence upon | european |
+##   [Lib-1923.txt, 607]             the government have failed in |  europe  |
+##   [Lib-1923.txt, 724]          that the economic restoration of |  europe  |
+##                                     
+##  other tasks directly arising out   
+##  and to deal with the               
+##  should be supported by the         
+##  that occasion for further wars     
+##  can best be replaced by            
+##  consequent on the great war        
+##  but that at the best               
+##  accompanied by broken exchanges and
+##  countries has exposed us to        
+##  is in no sense free                
+##  might only prove disastrous to     
+##  and for co-operation in all        
+##  nation at the present time         
+##  and germany has entered the        
+##  to the whole world by              
+##  and world politics so also         
+##  it has warned the coalition        
+##  reaction will be disastrous labour 
+##  and the freedom of the             
+##  distracted by hostility and left   
+##  are the main cause of              
+##  than the french and belgian        
+##  question for at least a            
+##  after the napoleonic wars for      
+##  affairs in eastern policy the      
+##  and asia alike to make             
+##  is the necessary condition of</code></pre>
+</section>
+<section id="remove-stop-words-and-convert-into-bigrams" class="slide level2">
+<h2>Remove stop words and convert into bigrams</h2>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>manifesto_bigrams<span class="ot">&lt;-</span> manifesto_tokens <span class="sc">%&gt;%</span> </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>(<span class="st">&quot;en&quot;</span>, <span class="at">source =</span> <span class="st">&quot;smart&quot;</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_ngrams</span>(<span class="at">n=</span><span class="dv">2</span>)</span></code></pre></div>
+</section>
+<section id="create-a-document-feature-matrix-for-only-liberal-democrats" class="slide level2">
+<h2>Create a document feature matrix for only Liberal Democrats</h2>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>manifesto_dfm <span class="ot">&lt;-</span> <span class="fu">dfm</span>(manifesto_bigrams) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_subset</span>(., party <span class="sc">==</span> <span class="st">&quot;LibDems&quot;</span>)</span></code></pre></div>
+</section>
+<section id="find-out-how-many-bigrams-appear-only-once" class="slide level2">
+<h2>Find out how many bigrams appear only once</h2>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>manifesto_dfm <span class="sc">%&gt;%</span> </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>(<span class="at">min_termfreq =</span> <span class="dv">1</span>, <span class="at">max_termfreq =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nfeat</span>()</span></code></pre></div>
+<pre><code>## [1] 3453</code></pre>
+</section></section>
+<section>
+<section id="ggplot2" class="title-slide slide level1">
+<h1>ggplot2</h1>
+
+</section>
+<section id="ggplot2-1" class="slide level2">
+<h2>ggplot2</h2>
+<p>R has several systems for making graphs, but <code>ggplot2</code> is one of the most elegant and most versatile. <code>ggplot2</code> implements the grammar of graphics, a coherent system for describing and building graphs.</p>
+</section>
+<section id="ggplot2-examples" class="slide level2">
+<h2>ggplot2 examples</h2>
+<p><img src="img/weather.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><a href="http://rpubs.com/bradleyboehmke/weather_graphic">Source</a></p>
+</section>
+<section id="ggplot2-examples-1" class="slide level2">
+<h2>ggplot2 examples</h2>
+<p><img src="img/vaccination.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><a href="https://benjaminlmoore.wordpress.com/2015/04/09/recreating-the-vaccination-heatmaps-in-r/">Source</a></p>
+</section>
+<section id="ggplot2-examples-2" class="slide level2">
+<h2>ggplot2 examples</h2>
+<p><img src="img/aircraft.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><a href="https://www.quora.com/What-is-the-most-elegant-plot-you-have-made-using-ggplot2-in-R-Embed-the-code-if-possible">Source</a></p>
+</section>
+<section id="ggplot2-examples-3" class="slide level2">
+<h2>ggplot2 examples</h2>
+<p><img src="img/map.png" width="700px" style="display: block; margin: auto;" /></p>
+<p><a href="https://github.com/hrbrmstr/ggcounty">Source</a></p>
+</section>
+<section id="the-grammar-of-graphics" class="slide level2">
+<h2>The grammar of graphics</h2>
+<ul>
+<li class="fragment">Each plot is made of layers. Layers include the coordinate system (x-y), points, labels, etc.</li>
+<li class="fragment">Each layer has aesthetics (<code>aes</code>) including x &amp; y, size, shape, and color.</li>
+<li class="fragment">The main layer types are called geometrics(<code>geom</code>) and include lines, points, etc.</li>
+</ul>
+</section>
+<section id="the-grammar-of-graphics-1" class="slide level2">
+<h2>The grammar of graphics</h2>
+<p>A <code>ggplot</code> is build piece by piece</p>
+<p><img src="img/ggplot1.png" width="300px" style="display: block; margin: auto;" /></p>
+<p><a href="http://socviz.co/make-a-plot.html#make-a-plot">Source</a></p>
+</section>
+<section id="the-grammar-of-graphics-2" class="slide level2">
+<h2>The grammar of graphics</h2>
+<p><img src="img/ggplot2.png" width="300px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="the-grammar-of-graphics-3" class="slide level2">
+<h2>The grammar of graphics</h2>
+<p><img src="img/ggplot3.png" width="300px" style="display: block; margin: auto;" /></p>
+</section>
+<section id="ggplot-workflow" class="slide level2">
+<h2>ggplot workflow</h2>
+<ol type="1">
+<li class="fragment"><p>Tell the <code>ggplot()</code> function what your data are.</p></li>
+<li class="fragment"><p>Tell <code>ggplot</code> what relationships we want to see.</p></li>
+<li class="fragment"><p>Tell <code>ggplot</code> how you want to see the relationships in your data.</p></li>
+<li class="fragment"><p>Add additional layers to the p object one at a time.</p></li>
+<li class="fragment"><p>Use additional functions to adjust scales, labels, tick marks.</p></li>
+</ol>
+</section>
+<section id="components-of-a-ggplot2-graph" class="slide level2">
+<h2>Components of a ggplot2 graph</h2>
+<ul>
+<li class="fragment">data: Variables mapped to aesthetic attributes</li>
+<li class="fragment">aesthetic: Visual property of the plot objects</li>
+<li class="fragment">geom: Geometrical object used to represent data</li>
+<li class="fragment">stats: Statistical transformations of the data</li>
+<li class="fragment">scales: Values mapped to aesthetic attributes</li>
+<li class="fragment">coord: Coordinate system</li>
+<li class="fragment">facets: Subplots that each display one subset of the data</li>
+</ul>
+</section>
+<section id="mapping" class="slide level2">
+<h2>Mapping</h2>
+<p>We start creating a plot by telling <code>ggplot</code> what our data are and by storing the function in an object called <code>p</code>. For example, let’s say we want to use the <code>gapminder</code> data to plot life expectancy against GDP per capita:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gapminder)</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder, </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> lifeExp))</span></code></pre></div>
+<p>The <code>data</code> argument tells ggplot where to find the variables it is about to use. The <code>mapping = aes(...)</code> argument links variables to things you will see on the plot.</p>
+</section>
+<section id="mapping-1" class="slide level2">
+<h2>Mapping</h2>
+<p>What happens if we just type <code>p</code> into the console at this point and hit return?</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-32-1.png" width="480" /></p>
+</section>
+<section id="choosing-a-geom" class="slide level2">
+<h2>Choosing a geom</h2>
+<p><code>p</code> already contains some information about out plot structure but we haven’t given it any instructions yet about what sort of plot to draw. We need to add a layer to the plot by using the <code>geom_</code> function:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-33-1.png" width="480" /></p>
+</section>
+<section id="choosing-a-geom-1" class="slide level2">
+<h2>Choosing a geom</h2>
+<p>Let’s try a different <code>geom_</code> and see what happens:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_smooth</span>()</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-34-1.png" width="480" /></p>
+</section>
+<section id="choosing-a-geom-2" class="slide level2">
+<h2>Choosing a geom</h2>
+<p>If we want to see data points and a smoothed line together we simply add <code>geom_point()</code> to the plot:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_smooth</span>() <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-35-1.png" width="480" /></p>
+</section>
+<section id="adjusting-the-scales" class="slide level2">
+<h2>Adjusting the scales</h2>
+<p>GDP pc does not seem to be normally distributed. We can account for that and transform the x-axis from a linear to a log scale by adding the <code>scale_x_log10()</code> function.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_smooth</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">scale_x_log10</span>()</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-36-1.png" width="480" /></p>
+</section>
+<section id="labels-and-titles" class="slide level2">
+<h2>Labels and titles</h2>
+<p>Having created an interesting plot, we could now polish it up with nicer axis labels and titles. For example, let’s swap the scientific notation on the x-axis for something more meaningful such as US dollars. The labels on the tick-marks can be controlled through the <code>scale_</code> functions. You can supply your own functions are use the pre-made functions from the handy <code>scales</code> library.</p>
+</section>
+<section id="labels-and-titles-1" class="slide level2">
+<h2>Labels and titles</h2>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_smooth</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span>dollar)</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-37-1.png" width="480" /></p>
+</section>
+<section id="labels-and-titles-2" class="slide level2">
+<h2>Labels and titles</h2>
+<p>We can adjust the axis labels and add plot titles using the <code>labs()</code> function:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span>dollar) <span class="sc">+</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;GDP Per Capita&quot;</span>,</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Life Expectancy in Years&quot;</span>,</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Economic Growth and Life Expectancy&quot;</span>,</span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Data points are country-years&quot;</span>,</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Source: Gapminder.&quot;</span>)</span></code></pre></div>
+</section>
+<section id="labels-and-titles-3" class="slide level2">
+<h2>Labels and titles</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-39-1.png" width="768" /></p>
+</section>
+<section id="aesthetics-mapping" class="slide level2">
+<h2>Aesthetics mapping</h2>
+<p>We can easily map variables in our dataset to aesthetics such size, color, shape, and so on. For example, to map color to <code>continent</code>:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder, </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> lifeExp,</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">color =</span> continent))</span></code></pre></div>
+</section>
+<section id="aesthetics-mapping-1" class="slide level2">
+<h2>Aesthetics mapping</h2>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder, </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> lifeExp,</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">color =</span> continent))</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">scale_x_log10</span>()</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-41-1.png" width="480" /></p>
+</section>
+<section id="aesthetic-mappings" class="slide level2">
+<h2>Aesthetic mappings</h2>
+<p><code>geom_</code> can take many other arguments that will affect how the plot looks. Some, such as color and size, have the same name as mappable arguments. Others are specific arguments only available for the <code>geom_</code> function. Let’s look at a few examples:</p>
+</section>
+<section id="aesthetic-mappings-1" class="slide level2">
+<h2>Aesthetic mappings</h2>
+<p>Change the size</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.8</span>)</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-42-1.png" width="480" /></p>
+</section>
+<section id="aesthetic-mappings-2" class="slide level2">
+<h2>Aesthetic mappings</h2>
+<p>Adjust transparency</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.3</span>)</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-43-1.png" width="480" /></p>
+</section>
+<section id="aesthetic-mappings-3" class="slide level2">
+<h2>Aesthetic mappings</h2>
+<p>Change the color of the smoother</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">&quot;orange&quot;</span>)</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-44-1.png" width="480" /></p>
+</section>
+<section id="aesthetic-mappings-per-geom" class="slide level2">
+<h2>Aesthetic mappings per geom</h2>
+<p>Let’s again map our <code>continent</code> variable to the color aesthetic. This time we also add a smoother.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder,</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> lifeExp,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">color =</span> continent))</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>()</span></code></pre></div>
+</section>
+<section id="aesthetic-mappings-per-geom-1" class="slide level2">
+<h2>Aesthetic mappings per geom</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-46-1.png" width="768" /></p>
+</section>
+<section id="aesthetic-mappings-per-geom-2" class="slide level2">
+<h2>Aesthetic mappings per geom</h2>
+<p>Both points and smoother are colored by continent. We can use <code>fill</code> inside <code>aes()</code> to color the interior of the smoother’s standard error ribbon:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder,</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> lifeExp,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                          <span class="at">color =</span> continent,</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>                          <span class="at">fill =</span> continent))</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>()</span></code></pre></div>
+</section>
+<section id="aesthetic-mappings-per-geom-3" class="slide level2">
+<h2>Aesthetic mappings per geom</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-48-1.png" width="768" /></p>
+</section>
+<section id="aesthetic-mappings-per-geom-4" class="slide level2">
+<h2>Aesthetic mappings per geom</h2>
+<p>Having 5 different smoothers makes the plot difficult to read. If we just want one line but keep the colored points we can map the aesthetics we want only the <code>geom_</code> functions that we want them to apply to:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder,</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap,</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> lifeExp))</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">color =</span> continent)) <span class="sc">+</span> </span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span> </span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>()</span></code></pre></div>
+</section>
+<section id="aesthetic-mappings-per-geom-5" class="slide level2">
+<h2>Aesthetic mappings per geom</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-50-1.png" width="768" /></p>
+</section>
+<section id="group-facet-transform" class="slide level2">
+<h2>Group, facet, transform</h2>
+<p>There are a number of additional functions in <code>ggplot</code> that are frequently used to plot data. <code>group</code>, for examples, allows to learn more about the internal structure of your data (). Let’s say we wanted to plot the trajectory of economic development over time for each country. How would we do that?</p>
+</section>
+<section id="group" class="slide level2">
+<h2>Group</h2>
+<p>What’s gone wrong here?</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder,</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> gdpPercap))</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_line</span>()</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-51-1.png" width="480" /></p>
+</section>
+<section id="group-1" class="slide level2">
+<h2>Group</h2>
+<p><code>ggplot</code> does not know that the yearly observations in the data are grouped by country. We have to tell it:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> country))</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-52-1.png" width="480" /></p>
+</section>
+<section id="facet" class="slide level2">
+<h2>Facet</h2>
+<p>The plot we just made looks a little messy. To make the trend clearly we could <em>facet</em> the data by a third variable and plot the results in separate panels. We use <code>facet_wrap()</code> to split our plot by <code>continent</code>:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> gapminder,</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> year,</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>                          <span class="at">y =</span> gdpPercap))</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> country)) <span class="sc">+</span> </span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> continent)</span></code></pre></div>
+</section>
+<section id="facet-1" class="slide level2">
+<h2>Facet</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-54-1.png" width="768" /></p>
+</section>
+<section id="facet-2" class="slide level2">
+<h2>Facet</h2>
+<p>We can also use the <code>ncol</code> argument to <code>facet_wrap()</code> to control the number of columns. We can add a smoother and a few cosmetic enhancements that make the graph a little more effective. Any geom that we include will be layered within each facet:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>p <span class="sc">+</span> <span class="fu">geom_line</span>(<span class="at">color=</span><span class="st">&quot;gray70&quot;</span>, <span class="fu">aes</span>(<span class="at">group =</span> country)) <span class="sc">+</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">size =</span> <span class="fl">1.1</span>, <span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>(<span class="at">labels=</span>scales<span class="sc">::</span>dollar) <span class="sc">+</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> continent, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Year&quot;</span>,</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">y =</span> <span class="st">&quot;GDP per capita&quot;</span>,</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">title =</span> <span class="st">&quot;GDP per capita on Five Continents&quot;</span>)</span></code></pre></div>
+</section>
+<section id="facet-3" class="slide level2">
+<h2>Facet</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-56-1.png" width="768" /></p>
+</section>
+<section id="facet-4" class="slide level2">
+<h2>Facet</h2>
+<p><code>facet_wrap()</code> is best used when you want a series of small multiples based on a single categorical variable. If you want to cross-classify some data by two categorical variables you should try <code>facet_grid()</code> instead.</p>
+</section>
+<section id="plotting-distributions-distributions-of-categorical-data" class="slide level2">
+<h2>Plotting Distributions: Distributions of categorical data</h2>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>diamonds) <span class="sc">+</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> cut))</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-57-1.png" width="480" /></p>
+</section>
+<section id="plotting-distributions-distributions-of-continuous-data" class="slide level2">
+<h2>Plotting Distributions: Distributions of continuous data</h2>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>diamonds) <span class="sc">+</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> carat), </span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">binwidth =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-58-1.png" width="480" /></p>
+</section>
+<section id="plotting-distributions-boxplot" class="slide level2">
+<h2>Plotting Distributions: Boxplot</h2>
+<p>We can use <code>geom_boxplot()</code> to plot covariation between continuous and catagorical variables</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> mpg, <span class="fu">aes</span>(<span class="at">x =</span> class, <span class="at">y =</span> hwy, <span class="at">fill =</span> class)) <span class="sc">+</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="fu">reorder</span>(class, hwy,<span class="at">FUN =</span> median), </span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">y =</span> hwy)) <span class="sc">+</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-59-1.png" width="480" /></p>
+</section>
+<section id="plotting-distributions-tile-plot" class="slide level2">
+<h2>Plotting Distributions: Tile Plot</h2>
+<p>We can use <code>geom_tile</code> to plot the covariation between two categorical variables</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>diamonds <span class="sc">%&gt;%</span> </span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(color, cut) <span class="sc">%&gt;%</span>  </span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> color, <span class="at">y =</span> cut)) <span class="sc">+</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_tile</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">fill =</span> n))</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-60-1.png" width="480" /></p>
+</section>
+<section id="plotting-distributions-scatter-plots" class="slide level2">
+<h2>Plotting Distributions: Scatter Plots</h2>
+<p>The easiest way to visualize the covariation between two continuous variables is to draw a scatterplot with <code>geom_point()</code>.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data=</span>gapminder, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gdpPercap, </span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">labels =</span> scales<span class="sc">::</span>dollar) <span class="sc">+</span></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;GDP Per Capita&quot;</span>,</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Life Expectancy in Years&quot;</span>,</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Economic Growth and Life Expectancy&quot;</span>,</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;Data points are country-years&quot;</span>,</span>
+<span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">&quot;Source: Gapminder.&quot;</span>)</span></code></pre></div>
+</section>
+<section id="plotting-distributions-scatter-plots-1" class="slide level2">
+<h2>Plotting Distributions: Scatter Plots</h2>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>p</span></code></pre></div>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-62-1.png" width="480" /></p>
+</section>
+<section id="saving-and-exporting-ggplot-objects" class="slide level2">
+<h2>Saving and exporting ggplot objects</h2>
+<p><code>ggsave()</code> is a convenient function for saving the last plot that you displayed. It also guesses the type of graphics device from the extension. This means the only argument you need to supply is the filename.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;myplot.pdf&quot;</span>) <span class="co"># save as pdf</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">&quot;myplot.png&quot;</span>, <span class="at">width =</span> <span class="dv">4</span>, <span class="at">height =</span> <span class="dv">4</span>) <span class="co"># save as png</span></span></code></pre></div>
+</section>
+<section id="more-theme-packages" class="slide level2">
+<h2>More theme packages</h2>
+<ul>
+<li class="fragment"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a> for publication-ready plots</li>
+<li class="fragment"><a href="https://jrnold.github.io/ggthemes/reference/index.html">ggthemes</a> for additional themes and scales, especially ones that match other software (Tableau)</li>
+<li class="fragment"><a href="https://github.com/hrbrmstr/hrbrthemes">hrbrthemes</a> my personal favorite theme package</li>
+</ul>
+</section>
+<section id="ggplot2-resources" class="slide level2">
+<h2>ggplot2 resources</h2>
+<ul>
+<li class="fragment"><a href="https://ggplot2.tidyverse.org/">General ggplot2 information</a></li>
+<li class="fragment"><a href="http://www.cookbook-r.com/Graphs/index.html">R Graphics Cookbook</a></li>
+<li class="fragment"><a href="https://socviz.co/">Data Visualization: A Practical Introduction</a></li>
+<li class="fragment"><a href="https://ggplot2-book.org/">ggplot2: Elegant Graphs for Data Analysis</a></li>
+<li class="fragment"><a href="https://rstudio.cloud/learn/primers/3">RStudio visual data primer</a></li>
+</ul>
+</section></section>
+<section>
+<section id="visualizing-text" class="title-slide slide level1">
+<h1>Visualizing text</h1>
+
+</section>
+<section id="loading-tokenizing-moby-dick" class="slide level2">
+<h2>Loading &amp; tokenizing Moby Dick</h2>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readtext)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a>moby_dick <span class="ot">&lt;-</span> <span class="fu">readtext</span>(<span class="st">&quot;data/moby_dick.txt&quot;</span>)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>moby_dick_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(moby_dick<span class="sc">$</span>text, <span class="at">what =</span> <span class="st">&quot;word&quot;</span>, </span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>(<span class="st">&quot;english&quot;</span>))</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>moby_dfm <span class="ot">&lt;-</span> <span class="fu">dfm</span>(moby_dick_tokens)</span></code></pre></div>
+</section>
+<section id="plot-frequent-words" class="slide level2">
+<h2>plot frequent words</h2>
+<p>To plot the frequency of often used words in the novel you first need to install and load the <code>quanteda.textstats</code>library.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textstats)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_minimal</span>())</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">textstat_frequency</span>(moby_dfm, <span class="at">n =</span> <span class="dv">20</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(feature, <span class="sc">-</span>rank), <span class="at">y =</span> frequency)) <span class="sc">+</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Term Frequency&quot;</span>)</span></code></pre></div>
+</section>
+<section id="plot-frequent-words-1" class="slide level2">
+<h2>plot frequent words</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-66-1.png" width="768" /></p>
+</section>
+<section id="plot-relative-word-frequencies" class="slide level2">
+<h2>plot relative word frequencies</h2>
+<p>The total number of occurrences of a word is not very useful. To plot the frequency as a percentage instead we first need to created a new dfm with the <code>dfm_weight</code> function and <code>scheme = "prop"</code>.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>moby_dfm_pct <span class="ot">&lt;-</span> <span class="fu">dfm_weight</span>(moby_dfm, <span class="at">scheme =</span> <span class="st">&quot;prop&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textstat_frequency</span>(moby_dfm_pct, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(feature, <span class="sc">-</span>rank), <span class="at">y =</span> frequency)) <span class="sc">+</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> <span class="fu">coord_flip</span>() <span class="sc">+</span> </span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>percent) <span class="sc">+</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Relative Term Frequency&quot;</span>) </span></code></pre></div>
+</section>
+<section id="plot-relative-word-frequencies-1" class="slide level2">
+<h2>plot relative word frequencies</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-69-1.png" width="768" /></p>
+</section>
+<section id="lexical-dispersion" class="slide level2">
+<h2>Lexical dispersion</h2>
+<p>Quanteda also has a number of plotting functions that are based on ggplot2 and are contained inside the <code>quanteda.textplots</code> package.</p>
+<p>For example, to visualize the occurrences of certain words throughout the novel we can create a dispersion plot. The great thing is that we can create the plot directly from the object returned by the <code>kwic()</code> function.</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;quanteda.textplots&quot;</span>)</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_xray</span>(<span class="fu">kwic</span>(moby_dick_tokens, <span class="at">pattern =</span> <span class="st">&quot;whale&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;Lexical dispersion&quot;</span>)</span></code></pre></div>
+</section>
+<section id="lexical-dispersion-1" class="slide level2">
+<h2>Lexical dispersion</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-71-1.png" width="768" /></p>
+</section>
+<section id="lexical-dispersion-2" class="slide level2">
+<h2>Lexical dispersion</h2>
+<p>We can also create dispersion plots for multiple words:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_xray</span>(</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kwic</span>(moby_dick_tokens, <span class="at">pattern =</span> <span class="st">&quot;whale&quot;</span>),</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kwic</span>(moby_dick_tokens, <span class="at">pattern =</span> <span class="st">&quot;Ahab&quot;</span>)) <span class="sc">+</span> </span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggtitle</span>(<span class="st">&quot;Lexical dispersion&quot;</span>)</span></code></pre></div>
+</section>
+<section id="lexical-dispersion-3" class="slide level2">
+<h2>Lexical dispersion</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-73-1.png" width="768" /></p>
+</section>
+<section id="analyzing-chapters" class="slide level2">
+<h2>Analyzing chapters</h2>
+<p>If we are interested in analyzing the book’s individual chapters in more detail we first need to create a corpus object and supply them as document names.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>moby_chapter <span class="ot">&lt;-</span> <span class="fu">corpus</span>(moby_dick) <span class="sc">%&gt;%</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">corpus_segment</span>(<span class="at">pattern =</span> <span class="st">&quot;CHAPTER </span><span class="sc">\\</span><span class="st">d+&quot;</span>, <span class="at">valuetype =</span> <span class="st">&quot;regex&quot;</span>) </span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">docnames</span>(moby_chapter) <span class="ot">&lt;-</span> <span class="fu">docvars</span>(moby_chapter, <span class="st">&quot;pattern&quot;</span>)</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a>moby_chapter_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(moby_chapter, <span class="at">remove_punct =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>(<span class="st">&quot;english&quot;</span>))</span></code></pre></div>
+</section>
+<section id="analyzing-chapters-1" class="slide level2">
+<h2>Analyzing chapters</h2>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_xray</span>(</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kwic</span>(moby_chapter_tokens[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="at">pattern =</span> <span class="st">&quot;Ishmael&quot;</span>),</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">kwic</span>(moby_chapter_tokens[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>], <span class="at">pattern =</span> <span class="st">&quot;whale&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">color =</span> keyword) <span class="sc">+</span>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+</section>
+<section id="analyzing-chapters-2" class="slide level2">
+<h2>Analyzing chapters</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-76-1.png" width="768" /></p>
+</section>
+<section id="plotting-word-clouds" class="slide level2">
+<h2>Plotting word clouds</h2>
+<p>Although there are a lot of things wrong with wordclouds you can easily create them with the <code>textplot_wordcloud</code> function.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_wordcloud</span>(moby_dfm, <span class="at">min_count =</span> <span class="dv">50</span>, <span class="at">random_order =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">rotation =</span> .<span class="dv">25</span>, </span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">color =</span> RColorBrewer<span class="sc">::</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Dark2&quot;</span>))</span></code></pre></div>
+</section>
+<section id="plotting-word-clouds-1" class="slide level2">
+<h2>Plotting word clouds</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-78-1.png" width="768" /></p>
+</section>
+<section id="plotting-word-clouds-2" class="slide level2">
+<h2>Plotting word clouds</h2>
+<p>You can even create grouped wordclouds using <code>dfm_group</code>.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>moby_chapter_tokens[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>] <span class="sc">%&gt;%</span> </span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_group</span>(<span class="at">groups =</span> pattern) <span class="sc">%&gt;%</span></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_trim</span>(<span class="at">min_termfreq =</span> <span class="dv">5</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textplot_wordcloud</span>(<span class="at">comparison =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</section>
+<section id="plotting-word-clouds-3" class="slide level2">
+<h2>Plotting word clouds</h2>
+<p><img src="Week_07_Slides_files/figure-revealjs/unnamed-chunk-80-1.png" width="768" /></p>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li class="fragment">Next week we’ll learn how to create custom dictionaries to label and cluster texts.</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_07_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_07_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_07_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_07_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_07_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

@@ -1,0 +1,879 @@
+---
+title: "Text as Data: Week 7"
+author: "Matthias Haber"
+date: "27 October 2021"
+output:
+    revealjs::revealjs_presentation:
+      theme: moon
+      reveal_plugins: ["notes", "zoom", "chalkboard"]
+      highlight: haddock
+      center: false
+      self_contained: false
+      incremental: true
+      reveal_options:
+        slideNumber: true
+        progress: true
+        previewLinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+library(tidyverse)
+library(readtext)
+library(quanteda)
+```
+
+# Goals for Today
+
+## Goals
+
+- Solution assignment 1
+- ggplot2
+- Visualizing text 
+
+# Solution to assignment 1
+
+## Regular expressions
+
+```{r}
+addresses <-c("221B Baker St., London", "1600 Pennsylvania Avenue, Washington D.C.", 
+              "742 Evergreen Terrace, Springfield")
+sentences <- stringr::sentences[1:20]
+field_names <- c("order_number", "order_date", "customer_email", "product_title", "amount")
+email <- c("tom@hogwarts.com",
+           "tom.riddle@hogwarts.com",
+           "tom@hogwarts.eu.com",
+           "potter@hogwarts.com",
+           "harry@hogwarts.com",
+           "hermione+witch@hogwarts.com")
+files <- c(".bash_profile",
+           "workspace.doc",
+           "img0912.jpg",
+           "updated_img0912.png",
+           "documentation.html",
+           "favicon.gif",
+           "img0912.jpg.tmp",
+           "access.lock")
+```
+
+## Convert addresses to lower-case
+
+```{r}
+library(stringr)
+str_to_lower(string = addresses)
+```
+
+## Extract digits from addresses
+
+```{r}
+str_extract(string = addresses, pattern = "[:digit:]+")
+```
+
+## Split addresses into two parts: street & city
+
+```{r}
+str_split(string = addresses, pattern = ", ", simplify = T)
+```
+
+## Split addresses into three parts: house number, street & city
+
+```{r}
+str_split(string = addresses, pattern = "(?<=[:digit:].) |, ", simplify = T)
+```
+
+## For sentences that end with the letter “t” extract the last word
+
+```{r}
+str_extract_all(string = sentences, pattern = "[A-z]+t\\.$")
+```
+
+## Extract the first 30 characters from each sentence
+
+```{r}
+str_trunc(string = sentences, width = 30, ellipsis = "...")
+```
+
+## Replace all underscores in field_names with spaces and capitalize the first letter of each word
+
+```{r}
+str_replace_all(string = field_names, pattern = "_", replacement = " ") %>% 
+  str_to_title()
+```
+
+## Extract names appearing before @ from email 
+
+```{r}
+str_extract(email, "^[\\w\\.\\+]*")
+```
+
+## Extract the three images (.jpg, .png, .gif) from files
+
+```{r}
+str_extract(files, ".*\\.(jpg|png|gif)$")
+```
+
+## Web scraping & tidytext
+
+```{r}
+library(rvest)
+library(tidytext)
+```
+
+## Extract the text of J.K. Rowling's commencement speech at Harvard University
+
+```{r}
+url <- "https://news.harvard.edu/gazette/story/2008/06/text-of-j-k-rowling-speech/"
+speech <- read_html(url) %>% 
+  html_nodes(".article-body p") %>% 
+  html_text()
+```
+
+## Convert the text to tibble, remove the first and 15th line, add paragraph number
+
+```{r}
+speech_df <- tibble(text = speech) %>% 
+ slice(c(2:14,16:n())) %>% 
+  mutate(paragraphs = row_number())
+```
+
+## Tokenize the text into words and remove stop words
+
+```{r}
+speech_df <- speech_df %>% 
+  unnest_tokens(word, text) %>% 
+  anti_join(stop_words)
+```
+
+
+## List the 5 most frequent words
+
+```{r}
+speech_df %>% 
+  count(word, sort = TRUE) %>% 
+  top_n(5)
+```
+
+## Readtext and quanteda
+
+```{r}
+library(readtext)
+library(quanteda)
+```
+
+## Read in the UK manifestos and create document names from file names
+
+```{r}
+manifestos <- readtext("data/UK_manifestos/*.txt", 
+                       docvarsfrom= "filenames", dvsep = "-",
+                       docvarnames = c("party", "year"))
+```
+
+## Create a corpus out of the documents
+
+```{r}
+manifesto_corpus <- corpus(manifestos)
+summary(manifesto_corpus)
+```
+
+## Overwrite the party column with new labels
+
+```{r}
+party <- c(rep("Conservatives", 6), rep("Labour", 6), rep("LibDems", 6))
+manifesto_corpus$party <- party
+summary(manifesto_corpus)
+```
+
+## Tokenize and preprocess the text and find context for discussion around "europe"
+
+```{r}
+manifesto_tokens <- tokens(manifesto_corpus, what = "word", 
+                           remove_numbers = TRUE,
+                           remove_punct = TRUE) %>% 
+  tokens_tolower()
+kwic(manifesto_tokens, "europe*")
+```
+
+## Remove stop words and convert into bigrams
+
+```{r}
+manifesto_bigrams<- manifesto_tokens %>% 
+  tokens_remove(stopwords("en", source = "smart")) %>% 
+  tokens_ngrams(n=2)
+```
+
+## Create a document feature matrix for only Liberal Democrats
+
+```{r}
+manifesto_dfm <- dfm(manifesto_bigrams) %>% 
+  dfm_subset(., party == "LibDems")
+```
+
+## Find out how many bigrams appear only once
+
+```{r}
+manifesto_dfm %>% 
+  dfm_trim(min_termfreq = 1, max_termfreq = 1) %>% 
+  nfeat()
+```
+
+# ggplot2
+
+## ggplot2
+
+R has several systems for making graphs, but `ggplot2` is one of the most elegant and most versatile. `ggplot2` implements the grammar of graphics, a coherent system for describing and building graphs.
+
+## ggplot2 examples
+
+```{r, out.width = "700px", echo = F, fig.align='center'}
+knitr::include_graphics("img/weather.png")
+```  
+
+[Source](http://rpubs.com/bradleyboehmke/weather_graphic)
+
+## ggplot2 examples
+
+```{r, out.width = "700px", echo = F, fig.align='center'}
+knitr::include_graphics("img/vaccination.png")
+```  
+
+[Source](https://benjaminlmoore.wordpress.com/2015/04/09/recreating-the-vaccination-heatmaps-in-r/)
+
+## ggplot2 examples
+
+```{r, out.width = "700px", echo = F, fig.align='center'}
+knitr::include_graphics("img/aircraft.png")
+``` 
+
+[Source](https://www.quora.com/What-is-the-most-elegant-plot-you-have-made-using-ggplot2-in-R-Embed-the-code-if-possible)
+
+## ggplot2 examples
+
+```{r, out.width = "700px", echo = F, fig.align='center'}
+knitr::include_graphics("img/map.png")
+``` 
+
+[Source](https://github.com/hrbrmstr/ggcounty)
+
+## The grammar of graphics
+- Each plot is made of layers. Layers include the coordinate system (x-y), points, labels, etc.
+- Each layer has aesthetics (`aes`) including x & y, size, shape, and color.
+- The main layer types are called geometrics(`geom`) and include
+lines, points, etc.
+
+## The grammar of graphics
+
+A `ggplot` is build piece by piece
+
+```{r, out.width = "300px", echo = F, fig.align='center'}
+knitr::include_graphics("img/ggplot1.png")
+``` 
+
+[Source](http://socviz.co/make-a-plot.html#make-a-plot)
+
+## The grammar of graphics
+
+```{r, out.width = "300px", echo = F, fig.align='center'}
+knitr::include_graphics("img/ggplot2.png")
+``` 
+
+## The grammar of graphics
+
+```{r, out.width = "300px", echo = F, fig.align='center'}
+knitr::include_graphics("img/ggplot3.png")
+``` 
+
+## ggplot workflow
+
+1. Tell the `ggplot()` function what your data are.
+
+2. Tell `ggplot` what relationships we want to see.
+
+3. Tell `ggplot` how you want to see the relationships in your data.
+
+4. Add additional layers to the p object one at a time.
+
+5. Use additional functions to adjust scales, labels, tick marks.
+
+## Components of a ggplot2 graph
+
+- data: Variables mapped to aesthetic attributes
+- aesthetic: Visual property of the plot objects
+- geom: Geometrical object used to represent data
+- stats: Statistical transformations of the data
+- scales: Values mapped to aesthetic attributes
+- coord: Coordinate system
+- facets: Subplots that each display one subset of the data
+
+## Mapping
+
+We start creating a plot by telling `ggplot` what our data are and by storing the function in an object called `p`. For example, let's say we want to use the `gapminder` data to plot life expectancy against GDP per capita:  
+
+```{r}
+library(gapminder)
+p <- ggplot(data = gapminder, 
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp))
+```
+
+The `data` argument tells ggplot where to find the variables it is about to use. The `mapping = aes(...)` argument links variables to things you will see on the plot.
+
+## Mapping
+
+What happens if we just type `p` into the console at this point and hit return?
+
+```{r, fig.width= 5, fig.height = 2.4}
+p
+```
+
+## Choosing a geom
+
+`p` already contains some information about out plot structure but we haven’t given it any instructions yet about what sort of plot to draw. We need to add a layer to the plot by using the `geom_` function:
+
+```{r, fig.width= 5, fig.height = 2.4}
+p + geom_point()
+```
+
+## Choosing a geom
+
+Let's try a different `geom_` and see what happens:
+
+```{r, fig.width= 5, fig.height = 2.4}
+p + geom_smooth()
+```
+
+## Choosing a geom
+
+If we want to see data points and a smoothed line together we simply add `geom_point()` to the plot:
+
+```{r, fig.width= 5, fig.height = 2.4, message=FALSE}
+p + geom_smooth() + geom_point()
+```
+
+## Adjusting the scales
+
+GDP pc does not seem to be normally distributed. We can account for that and transform the x-axis from a linear to a log scale by adding the `scale_x_log10()` function. 
+
+
+```{r, fig.width= 5, fig.height = 2.4, message=FALSE}
+p + geom_smooth() + geom_point() + scale_x_log10()
+```
+
+
+## Labels and titles
+
+Having created an interesting plot, we could now polish it up with nicer axis labels and titles. For example, let's swap the scientific notation on the x-axis for something more meaningful such as US dollars. The labels on the tick-marks can be controlled through the `scale_` functions. You can supply your own functions are use the pre-made functions from the handy `scales` library.
+
+## Labels and titles
+
+
+```{r, fig.width= 5, fig.height = 2.4, message=FALSE}
+p + geom_smooth() + geom_point() + 
+  scale_x_log10(labels = scales::dollar)
+```
+
+## Labels and titles
+
+We can adjust the axis labels and add plot titles using the `labs()` function:
+
+```{r, fig.width= 5, fig.height = 2.4, eval = FALSE}
+p + geom_point() +
+  geom_smooth() + 
+  scale_x_log10(labels = scales::dollar) +
+  labs(x = "GDP Per Capita",
+       y = "Life Expectancy in Years",
+       title = "Economic Growth and Life Expectancy",
+       subtitle = "Data points are country-years",
+       caption = "Source: Gapminder.")
+```
+
+## Labels and titles
+
+```{r, message = FALSE, echo = FALSE}
+p + geom_point() +
+    geom_smooth() + scale_x_log10(labels = scales::dollar) +
+    labs(x = "GDP Per Capita",
+         y = "Life Expectancy in Years",
+         title = "Economic Growth and Life Expectancy",
+         subtitle = "Data points are country-years",
+         caption = "Source: Gapminder.")
+```
+
+## Aesthetics mapping
+
+We can easily map variables in our dataset to aesthetics such size, color, shape, and so on. For example, to map color to `continent`:
+
+```{r, fig.width= 5, fig.height = 2.4, message=FALSE}
+p <- ggplot(data = gapminder, 
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+```
+
+## Aesthetics mapping
+
+```{r, fig.width= 5, fig.height = 2.4, message=FALSE}
+p <- ggplot(data = gapminder, 
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+p + geom_point() + scale_x_log10()
+```
+
+## Aesthetic mappings
+
+`geom_` can take many other arguments that will affect how the plot looks. Some, such as color and size, have the same name as mappable arguments. Others are specific arguments only available for the `geom_` function. Let's look at a few examples:
+
+## Aesthetic mappings
+
+Change the size
+
+```{r, fig.width= 5, fig.height = 2.4}
+p + geom_point(size = 0.8)
+```
+
+## Aesthetic mappings
+
+Adjust transparency 
+
+```{r, fig.width= 5, fig.height = 2.4}
+p + geom_point(alpha = 0.3)
+```
+
+## Aesthetic mappings
+
+Change the color of the smoother 
+
+```{r, fig.width= 5, fig.height = 2.4, message = FALSE}
+p + geom_point() + 
+  geom_smooth(color = "orange")
+```
+
+## Aesthetic mappings per geom
+
+Let's again map our `continent` variable to the color aesthetic. This time we also add a smoother.
+
+```{r, eval = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+p + geom_point() + 
+  geom_smooth() + 
+  scale_x_log10()
+```
+
+## Aesthetic mappings per geom
+
+```{r, echo = FALSE, message = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent))
+p + geom_point() + 
+  geom_smooth() + 
+  scale_x_log10()
+```
+
+
+## Aesthetic mappings per geom
+
+Both points and smoother are colored by continent. We can use `fill` inside `aes()` to color the interior of the smoother’s standard error ribbon:
+
+```{r, eval = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent,
+                          fill = continent))
+p + geom_point() + 
+  geom_smooth() + 
+  scale_x_log10()
+```
+
+## Aesthetic mappings per geom
+
+```{r, echo = FALSE, message = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp,
+                          color = continent, 
+                          fill = continent))
+p + geom_point() + 
+  geom_smooth() + 
+  scale_x_log10()
+```
+
+## Aesthetic mappings per geom
+
+Having 5 different smoothers makes the plot difficult to read. If we just want one line but keep the colored points we can map the aesthetics we want only the `geom_` functions that we want them to apply to:
+
+```{r, eval = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp))
+p + geom_point(mapping = aes(color = continent)) + 
+  geom_smooth() + 
+  scale_x_log10()
+```
+
+## Aesthetic mappings per geom
+
+```{r, echo = FALSE, message = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = gdpPercap,
+                          y = lifeExp))
+p + geom_point(mapping = aes(color = continent)) + 
+  geom_smooth() + 
+  scale_x_log10()
+```
+
+## Group, facet, transform
+
+There are a number of additional functions in `ggplot` that are frequently used to plot data. `group`, for examples, allows to learn more about the internal structure of your data (). Let's say we wanted to plot the trajectory of economic development over time for each country. How would we do that?  
+
+
+## Group
+
+What's gone wrong here?
+
+```{r, fig.width= 5, fig.height = 2.3}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = year,
+                          y = gdpPercap))
+p + geom_line()
+```
+
+## Group
+
+`ggplot` does not know that the yearly observations in the data are grouped by country. We have to tell it:
+
+```{r, fig.width= 5, fig.height = 2.3}
+p + geom_line(aes(group = country))
+```
+
+## Facet
+
+The plot we just made looks a little messy. To make the trend clearly we could _facet_ the data by a third variable and plot the results in separate panels. We use `facet_wrap()` to split our plot by `continent`:
+
+```{r, eval = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = year,
+                          y = gdpPercap))
+p + geom_line(aes(group = country)) + 
+  facet_wrap(~ continent)
+```
+
+## Facet
+
+```{r, echo = FALSE}
+p <- ggplot(data = gapminder,
+            mapping = aes(x = year,
+                          y = gdpPercap))
+p + geom_line(aes(group = country)) + 
+  facet_wrap(~ continent)
+```
+
+## Facet
+
+We can also use the `ncol` argument to `facet_wrap()` to control the number of columns. We can add a smoother and a few cosmetic enhancements that make the graph a little more effective. Any geom that we include will be layered within each facet:
+
+```{r, eval = FALSE}
+p + geom_line(color="gray70", aes(group = country)) +
+    geom_smooth(size = 1.1, method = "loess", se = FALSE) +
+    scale_y_log10(labels=scales::dollar) +
+    facet_wrap(~ continent, ncol = 3) +
+    labs(x = "Year",
+         y = "GDP per capita",
+         title = "GDP per capita on Five Continents")
+```
+
+
+## Facet
+
+```{r, echo = FALSE}
+p + geom_line(color="gray70", aes(group = country)) +
+    geom_smooth(size = 1.1, method = "loess", se = FALSE) +
+    scale_y_log10(labels=scales::dollar) +
+    facet_wrap(~ continent, ncol = 3) +
+    labs(x = "Year",
+         y = "GDP per capita",
+         title = "GDP per capita on Five Continents")
+```
+
+## Facet
+
+`facet_wrap()` is best used when you want a series of small multiples based on a single categorical variable. If you want to cross-classify some data by two categorical variables you should try `facet_grid()` instead.
+
+## Plotting Distributions: Distributions of categorical data
+
+```{r, fig.width= 5, fig.height = 2.3}
+ggplot(data=diamonds) +
+  geom_bar(mapping = aes(x = cut))
+```
+
+## Plotting Distributions: Distributions of continuous data
+
+```{r, fig.width= 5, fig.height = 2.3}
+ggplot(data=diamonds) +
+  geom_histogram(mapping = aes(x = carat), 
+                 binwidth = 0.5)
+```
+
+## Plotting Distributions: Boxplot
+
+We can use `geom_boxplot()` to plot covariation between continuous and catagorical variables
+
+```{r, fig.width= 5, fig.height = 2.3}
+ggplot(data = mpg, aes(x = class, y = hwy, fill = class)) +
+  geom_boxplot(aes(x=reorder(class, hwy,FUN = median), 
+                   y = hwy)) +
+  theme(legend.position = "none")
+```
+
+## Plotting Distributions: Tile Plot
+
+We can use `geom_tile` to plot the covariation between two categorical variables
+
+```{r, fig.width= 5, fig.height = 2.3}
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(mapping = aes(x = color, y = cut)) +
+    geom_tile(mapping = aes(fill = n))
+```
+
+## Plotting Distributions: Scatter Plots
+
+The easiest way to visualize the covariation between two continuous variables is to draw a scatterplot with `geom_point()`.
+
+```{r, fig.width= 5, fig.height = 2.3}
+p <- ggplot(data=gapminder, mapping = aes(x = gdpPercap, 
+                                          y = lifeExp)) +
+  geom_point() +
+  scale_x_log10(labels = scales::dollar) +
+  labs(x = "GDP Per Capita",
+       y = "Life Expectancy in Years",
+       title = "Economic Growth and Life Expectancy",
+       subtitle = "Data points are country-years",
+       caption = "Source: Gapminder.")
+```
+
+## Plotting Distributions: Scatter Plots
+
+```{r, fig.width= 5, fig.height = 2.3}
+p
+```
+
+
+## Saving and exporting ggplot objects
+
+`ggsave()` is a convenient function for saving the last plot that you displayed. It also guesses the type of graphics device from the extension. This means the only argument you need to supply is the filename.
+
+```{r, eval = FALSE}
+ggsave("myplot.pdf") # save as pdf
+ggsave("myplot.png", width = 4, height = 4) # save as png
+
+```
+
+## More theme packages
+
+- [ggpubr](https://rpkgs.datanovia.com/ggpubr/) for publication-ready plots
+- [ggthemes](https://jrnold.github.io/ggthemes/reference/index.html) for additional themes and scales, especially ones that match other software (Tableau)
+- [hrbrthemes](https://github.com/hrbrmstr/hrbrthemes) my personal favorite theme package
+
+## ggplot2 resources
+
+- [General ggplot2 information](https://ggplot2.tidyverse.org/)
+- [R Graphics Cookbook](http://www.cookbook-r.com/Graphs/index.html)
+- [Data Visualization: A Practical Introduction](https://socviz.co/)
+- [ggplot2: Elegant Graphs for Data Analysis](https://ggplot2-book.org/)
+- [RStudio visual data primer](https://rstudio.cloud/learn/primers/3)
+
+# Visualizing text
+
+## Loading & tokenizing Moby Dick
+
+```{r}
+library(readtext)
+moby_dick <- readtext("data/moby_dick.txt")
+moby_dick_tokens <- tokens(moby_dick$text, what = "word", 
+                           remove_punct = TRUE) %>% 
+  tokens_tolower() %>% 
+  tokens_remove(stopwords("english"))
+moby_dfm <- dfm(moby_dick_tokens)
+```
+
+## plot frequent words
+
+To plot the frequency of often used words in the novel you first need to install and load the `quanteda.textstats`library. 
+
+```{r, eval= FALSE}
+library(quanteda.textstats)
+theme_set(theme_minimal())
+textstat_frequency(moby_dfm, n = 20) %>% 
+  ggplot(aes(x = reorder(feature, -rank), y = frequency)) +
+  geom_point() + 
+  labs(x = "", y = "Term Frequency")
+```
+
+## plot frequent words
+
+```{r, echo= FALSE}
+library(quanteda.textstats)
+theme_set(theme_minimal())
+textstat_frequency(moby_dfm, n = 20) %>% 
+  ggplot(aes(x = reorder(feature, -rank), y = frequency)) +
+  geom_point() + 
+  labs(x = "", y = "Term Frequency")
+```
+
+## plot relative word frequencies
+
+The total number of occurrences of a word is not very useful. To plot the frequency as a percentage instead we first need to created a new dfm with the `dfm_weight` function and `scheme = "prop"`.
+
+```{r}
+moby_dfm_pct <- dfm_weight(moby_dfm, scheme = "prop")
+```
+
+
+```{r, eval = FALSE}
+textstat_frequency(moby_dfm_pct, n = 10) %>% 
+  ggplot(aes(x = reorder(feature, -rank), y = frequency)) +
+  geom_col() + coord_flip() + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "", y = "Relative Term Frequency") 
+```
+
+## plot relative word frequencies
+
+```{r, echo = FALSE}
+textstat_frequency(moby_dfm_pct, n = 10) %>% 
+  ggplot(aes(x = reorder(feature, -rank), y = frequency)) +
+  geom_col() + coord_flip() + 
+  scale_y_continuous(labels = scales::percent) +
+  labs(x = "", y = "Relative Term Frequency") 
+```
+
+## Lexical dispersion
+
+Quanteda also has a number of plotting functions that are based on ggplot2 and are contained inside the `quanteda.textplots` package.
+
+For example, to visualize the occurrences of certain words throughout the novel we can create a dispersion plot. The great thing is that we can create the plot directly from the object returned by the `kwic()` function.
+
+```{r, eval = FALSE}
+library("quanteda.textplots")
+textplot_xray(kwic(moby_dick_tokens, pattern = "whale")) + 
+    ggtitle("Lexical dispersion")
+```
+
+## Lexical dispersion 
+
+```{r, echo = FALSE}
+library("quanteda.textplots")
+textplot_xray(kwic(moby_dick_tokens, pattern = "whale")) + 
+    ggtitle("Lexical dispersion")
+```
+
+## Lexical dispersion
+
+We can also create dispersion plots for multiple words:
+
+```{r, eval=FALSE}
+textplot_xray(
+    kwic(moby_dick_tokens, pattern = "whale"),
+    kwic(moby_dick_tokens, pattern = "Ahab")) + 
+    ggtitle("Lexical dispersion")
+```
+
+## Lexical dispersion
+
+```{r, echo=FALSE}
+textplot_xray(
+    kwic(moby_dick_tokens, pattern = "whale"),
+    kwic(moby_dick_tokens, pattern = "Ahab")) + 
+    ggtitle("Lexical dispersion")
+```
+
+## Analyzing chapters
+
+If we are interested in analyzing the book's individual chapters in more detail we first need to create a corpus object and supply them as document names.
+
+```{r}
+moby_chapter <- corpus(moby_dick) %>%
+  corpus_segment(pattern = "CHAPTER \\d+", valuetype = "regex") 
+docnames(moby_chapter) <- docvars(moby_chapter, "pattern")
+moby_chapter_tokens <- tokens(moby_chapter, remove_punct = TRUE) %>% 
+  tokens_tolower() %>% 
+  tokens_remove(stopwords("english"))
+```
+
+## Analyzing chapters
+
+```{r, eval = FALSE}
+textplot_xray(
+    kwic(moby_chapter_tokens[1:10], pattern = "Ishmael"),
+    kwic(moby_chapter_tokens[1:10], pattern = "whale")) +
+  aes(color = keyword) +  theme(legend.position = "none")
+```
+
+## Analyzing chapters
+
+```{r, echo = FALSE}
+textplot_xray(
+    kwic(moby_chapter_tokens[1:10], pattern = "Ishmael"),
+    kwic(moby_chapter_tokens[1:10], pattern = "whale")) +
+  aes(color = keyword) +  theme(legend.position = "none")
+```
+
+## Plotting word clouds
+
+Although there are a lot of things wrong with wordclouds you can easily create them with the `textplot_wordcloud` function.
+
+```{r, eval = FALSE}
+textplot_wordcloud(moby_dfm, min_count = 50, random_order = FALSE,
+                   rotation = .25, 
+                   color = RColorBrewer::brewer.pal(8,"Dark2"))
+```
+
+## Plotting word clouds
+
+```{r, echo = FALSE}
+textplot_wordcloud(moby_dfm, min_count = 50, random_order = FALSE,
+                   rotation = .25, 
+                   color = RColorBrewer::brewer.pal(8,"Dark2"))
+```
+
+## Plotting word clouds
+
+You can even create grouped wordclouds using `dfm_group`.
+
+```{r, eval = FALSE}
+moby_chapter_tokens[1:3] %>% 
+  dfm() %>% 
+  dfm_group(groups = pattern) %>%
+  dfm_trim(min_termfreq = 5, verbose = FALSE) %>%
+  textplot_wordcloud(comparison = TRUE)
+```
+
+
+## Plotting word clouds
+
+```{r, echo = FALSE}
+moby_chapter_tokens[1:3] %>% 
+  dfm() %>% 
+  dfm_group(groups = pattern) %>%
+  dfm_trim(min_termfreq = 5, verbose = FALSE) %>%
+  textplot_wordcloud(comparison = TRUE)
+```
+
+# Wrapping up
+
+## Questions?
+
+## Outlook for our next session
+
+- Next week we'll learn how to create custom dictionaries to label and cluster texts.
+
+## That's it for today
+
+Thanks for your attention!
