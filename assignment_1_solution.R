@@ -42,7 +42,7 @@ str_split(string = addresses, pattern = "(?<=[:digit:].) |, ", simplify = T)
 str_extract_all(string = sentences, pattern = "[A-z]+t\\.$")
 
 #Extract the first 30 characters from each sentence
-str_trunc(string = sentences, width = 30, ellipsis = "...")
+str_trunc(string = sentences, width = 30, ellipsis = "")
 
 #replace all underscores in field_names with spaces and capitalize the first letter of each word
 str_replace_all(string = field_names, pattern = "_", replacement = " ") %>% 
