@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-11-03" />
+  <title>Text as Data: Week 8</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_08_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_08_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_08_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_08_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_08_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 8</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">03 November 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Dictionary approaches</li>
+<li class="fragment">Dictionaries in quanteda</li>
+<li class="fragment">Sentiment analysis</li>
+</ul>
+</section></section>
+<section>
+<section id="dictionary-approaches" class="title-slide slide level1">
+<h1>Dictionary approaches</h1>
+
+</section>
+<section id="dictionary-approaches-1" class="slide level2">
+<h2>Dictionary approaches</h2>
+<ul>
+<li class="fragment"><p>Dictionaries help classifying texts to categories or determine their content of a known concept</p></li>
+<li class="fragment"><p>They are a hybrid between qualitative and quantitative classification.</p></li>
+<li class="fragment"><p>Dictionary construction involves a lot of contextual interpretation and qualitative judgment.</p>
+<ul>
+<li class="fragment">Which text pertain to which categories?</li>
+<li class="fragment">Which texts contain how much of a concept?</li>
+</ul></li>
+<li class="fragment"><p>Dictionaries are perfectly reliable because there is no human decision making as part of the text analysis procedure</p></li>
+</ul>
+</section>
+<section id="dictionary-approaches-2" class="slide level2">
+<h2>Dictionary approaches</h2>
+<ul>
+<li class="fragment">Rather than count words that occur, pre-define words associated with specific meanings</li>
+<li class="fragment">Dictionaries consist of keys and values, where the “key” is a category such as “positive” or “negative”, and the “values” consist of the patterns assigned to each key that will be counted as occurrences of those keys</li>
+<li class="fragment">Dictionaries often require lemmatization rather than stemming</li>
+</ul>
+</section>
+<section id="dictionary-approaches-3" class="slide level2">
+<h2>Dictionary approaches</h2>
+<ul>
+<li class="fragment">A dictionary is basically just a list of words that is related to a common concept</li>
+<li class="fragment">Applying them to a corpus of texts simply requires counting the number of times each word in the list occurs in each text and summing them</li>
+</ul>
+</section>
+<section id="advantages-of-dictionaries-implementations" class="slide level2">
+<h2>Advantages of dictionaries: Implementations</h2>
+<ul>
+<li class="fragment">There are many different implementations of dictionaries for all types of contexts</li>
+<li class="fragment">Take for example the Linquistic Inquiry and Word Count project craeted by Pennebaker et al: <a href="http://www.liwc.net" class="uri">http://www.liwc.net</a></li>
+<li class="fragment">Consists of about 4,500 words and word stems, each defining one or more word categories or sub-dictionaries</li>
+<li class="fragment">For example, the word <em>cried</em> is part of five word categories: sadness, negative emotion, overall affect, verb, and past tense verb</li>
+<li class="fragment">Hierarchical: so “anger” are part of an emotion category and a negative emotion subcategory</li>
+<li class="fragment">You can buy it here: <a href="https://liwcsoftware.onfastspring.com/" class="uri">https://liwcsoftware.onfastspring.com/</a></li>
+</ul>
+</section>
+<section id="example-1-terrorist-speech" class="slide level2">
+<h2>Example 1: Terrorist speech</h2>
+<p>An analysis of terrorist speech (Pennebaker &amp; Chung 2009)</p>
+<p><img src="img/10-1.png" width="600px" /></p>
+</section>
+<section id="examples-2-happiness-in-song-lyrics" class="slide level2">
+<h2>Examples 2: Happiness in song lyrics</h2>
+<p>Valence time series for song titles broken down by representative genres (Dodds &amp; Danforth 2009)</p>
+<p><img src="img/10-2.png" width="700px" /></p>
+</section>
+<section id="examples-3-happiness-in-blogs" class="slide level2">
+<h2>Examples 3: Happiness in blogs</h2>
+<p>Time series of average monthly valence for blog sentences starting with “I feel…” (Dodds &amp; Danforth 2009)</p>
+<p><img src="img/10-3.png" width="700px" /></p>
+</section>
+<section id="advantages-of-dictionaries-multi-lingual" class="slide level2">
+<h2>Advantages of dictionaries: Multi-lingual</h2>
+<p>Dictionaries exist for lots of different languages.</p>
+<p><img src="img/10-4.png" width="600px" /></p>
+</section>
+<section id="advantages-of-dictionaries-fast-to-apply" class="slide level2">
+<h2>Advantages of dictionaries: Fast to apply</h2>
+<p>Dictionaries can by easily applied to thousands of texts in a matter of seconds allowing us to quickly analyze texts</p>
+<p><img src="img/10-5.png" width="700px" /></p>
+</section>
+<section id="diadvantage-highly-specific-to-context" class="slide level2">
+<h2>Diadvantage: Highly specific to context</h2>
+<ul>
+<li class="fragment">Dictionaries have problems with words that are polysemes i.e. words that have multiple meanings in different contexts</li>
+<li class="fragment">Dictionaries might miss words that are important to the concept or the tone of a document</li>
+<li class="fragment">They do not typically capture modifiers (e.g. “not good”)</li>
+<li class="fragment">They often fail to capture synonyms</li>
+</ul>
+</section>
+<section id="creating-dictionaries" class="slide level2">
+<h2>Creating dictionaries</h2>
+<ul>
+<li class="fragment"><p>Collect the words that discriminate between categories/concepts, i.e. create a dictionary</p>
+<ul>
+<li class="fragment">Existing dictionaries</li>
+<li class="fragment">Creating a dictionary</li>
+</ul></li>
+<li class="fragment"><p>Quantify the occurrence of these words in texts</p></li>
+<li class="fragment"><p>Validate</p></li>
+<li class="fragment"><p>Be careful: Applying dictionaries outside the domain for which they were developed can lead to errors</p></li>
+</ul>
+</section></section>
+<section>
+<section id="dictionaries-in-quanteda" class="title-slide slide level1">
+<h1>Dictionaries in quanteda</h1>
+
+</section>
+<section id="creating-a-simple-dictionary" class="slide level2">
+<h2>Creating a simple dictionary</h2>
+<p>To create a simple dictionary of parts of speech, for instance we could define a dictionary consisting of articles and conjunctions, using:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pos_dict <span class="ot">&lt;-</span> <span class="fu">dictionary</span>(<span class="fu">list</span>(<span class="at">articles =</span> <span class="fu">c</span>(<span class="st">&quot;the&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;and&quot;</span>),</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">conjunctions =</span> <span class="fu">c</span>(<span class="st">&quot;and&quot;</span>, <span class="st">&quot;but&quot;</span>, <span class="st">&quot;or&quot;</span>, <span class="st">&quot;nor&quot;</span>, <span class="st">&quot;for&quot;</span>, <span class="st">&quot;yet&quot;</span>, <span class="st">&quot;so&quot;</span>)))</span></code></pre></div>
+</section>
+<section id="creating-a-simple-dictionary-1" class="slide level2">
+<h2>Creating a simple dictionary</h2>
+<p>We can use this dictionary when we create a <code>dfm</code> to let this define a set of features:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pos_dfm <span class="ot">&lt;-</span> data_corpus_inaugural <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">remove_punct =</span> <span class="cn">TRUE</span>, <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(pos_dict)</span></code></pre></div>
+</section>
+<section id="creating-a-simple-dictionary-2" class="slide level2">
+<h2>Creating a simple dictionary</h2>
+<p>Let’s recreate the dfm but weight it by document length and compute the share of of articles and conjunctions in each speech:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>pos_dfm_wgt <span class="ot">&lt;-</span> data_corpus_inaugural <span class="sc">%&gt;%</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens</span>(<span class="at">remove_punct =</span> <span class="cn">TRUE</span>, <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_weight</span>(<span class="at">scheme =</span> <span class="st">&quot;prop&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm_lookup</span>(pos_dict)</span></code></pre></div>
+</section>
+<section id="creating-a-simple-dictionary-3" class="slide level2">
+<h2>Creating a simple dictionary</h2>
+<p>Let’s plot the trends over time. Before we can do that we need to convert the dfm to a data frame and tidy it up a bit.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pos_df_wgt <span class="ot">&lt;-</span> pos_dfm_wgt <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">convert</span>(<span class="at">to =</span> <span class="st">&quot;data.frame&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(<span class="fu">docvars</span>(pos_dfm_wgt)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">gather</span>(pos, share, articles<span class="sc">:</span>conjunctions)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>pos_df_wgt <span class="sc">%&gt;%</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> share, <span class="at">color =</span> pos)) <span class="sc">+</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Share of Document&quot;</span>) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span></code></pre></div>
+</section>
+<section id="creating-a-simple-dictionary-4" class="slide level2">
+<h2>Creating a simple dictionary</h2>
+<p><img src="Week_08_Slides_files/figure-revealjs/unnamed-chunk-10-1.png" width="768" /></p>
+</section>
+<section id="exercise" class="slide level2">
+<h2>Exercise</h2>
+<p>Create a new dictionary with a concept of your own choosing and apply it to the inaugural speeches. Plot the prevalence of that concept in the speeches (e.g. over time or between different speakers). Paste your results into the chat.</p>
+<p>Take about 10-15 minutes.</p>
+</section></section>
+<section>
+<section id="sentiment-analysis" class="title-slide slide level1">
+<h1>Sentiment analysis</h1>
+
+</section>
+<section id="sentiment-analysis-with-quanteda" class="slide level2">
+<h2>Sentiment analysis with quanteda</h2>
+<p>Perhaps the most popular type of dictionary are sentiment dictionaries used to assess the valence of a text by searching for words that describe opinions.</p>
+<p>There is a new, still somewhat experimental, quanteda package called <code>quanteda.sentiment</code> that extends the quanteda package with functions for computing sentiment on text. You need to install it directly from github</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#devtools::install_github(&quot;quanteda/quanteda.sentiment&quot;)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.sentiment)</span></code></pre></div>
+</section>
+<section id="quanteda.sentiment" class="slide level2">
+<h2><code>quanteda.sentiment</code></h2>
+<p><code>quanteda.sentiment</code> has two main functions: <code>textstat_polarity()</code> to compute <em>polarity-based sentiments</em> (i.e. polar opposites such as republican vs. democrat or negative vs. positive) and <code>textstat_valence()</code> to compute <em>valence-based sentiments</em> for continuous degrees of sentiments.</p>
+<p>The package comes with the following built-in dictionaries:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 54%" />
+<col style="width: 8%" />
+<col style="width: 7%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: center;">Polarity</th>
+<th style="text-align: center;">Valence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">data_dictionary_AFINN</td>
+<td style="text-align: left;">Nielsen’s (2011) ‘new ANEW’ valenced word list</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">data_dictionary_ANEW</td>
+<td style="text-align: left;">Affective Norms for English Words (ANEW)</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">✔</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">data_dictionary_geninqposneg</td>
+<td style="text-align: left;">Augmented General Inquirer <em>Positiv</em> and <em>Negativ</em> dictionary</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">data_dictionary_HuLiu</td>
+<td style="text-align: left;">Positive and negative words from Hu and Liu (2004)</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">data_dictionary_LoughranMcDonald</td>
+<td style="text-align: left;">Loughran and McDonald Sentiment Word Lists</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">data_dictionary_LSD2015</td>
+<td style="text-align: left;">Lexicoder Sentiment Dictionary (2015)</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">data_dictionary_NRC</td>
+<td style="text-align: left;">NRC Word-Emotion Association Lexicon</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">data_dictionary_Rauh</td>
+<td style="text-align: left;">Rauh’s German Political Sentiment Dictionary</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">data_dictionary_sentiws</td>
+<td style="text-align: left;">SentimentWortschatz (SentiWS)</td>
+<td style="text-align: center;">✔</td>
+<td style="text-align: center;">✔</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="exploring-built-in-dictionaries" class="slide level2">
+<h2>Exploring built-in dictionaries</h2>
+<p>You can view the content of those dictionaries by using the <code>print()</code> function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(data_dictionary_geninqposneg, <span class="at">max_nval =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## Dictionary object with 2 key entries.
+## Polarities: pos = &quot;positive&quot;; neg = &quot;negative&quot; 
+## - [positive]:
+##   - abide, ability, able, abound, absolve [ ... and 1,648 more ]
+## - [negative]:
+##   - abandon, abandonment, abate, abdicate, abhor [ ... and 2,005 more ]</code></pre>
+</section>
+<section id="applying-a-polarity-based-sentiment-dictionary" class="slide level2">
+<h2>Applying a polarity-based sentiment dictionary</h2>
+<p>To compute the polarity-based sentiment scores for the most recent inaugural speeches we can simply apply the <code>textstat_polarity()</code>function to our corpus and specify the dictionary we wish to use.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(data_corpus_inaugural, <span class="at">package =</span> <span class="st">&quot;quanteda&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>sent_pres <span class="ot">&lt;-</span> data_corpus_inaugural <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">corpus_subset</span>(Year <span class="sc">&gt;</span> <span class="dv">1980</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_polarity</span>(<span class="at">dictionary =</span> data_dictionary_LSD2015)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(sent_pres)</span></code></pre></div>
+<pre><code>##        doc_id sentiment
+## 6   2001-Bush 0.8826607
+## 7   2005-Bush 0.8987976
+## 8  2009-Obama 0.4903646
+## 9  2013-Obama 0.8262646
+## 10 2017-Trump 0.9848534
+## 11 2021-Biden 0.4660002</code></pre>
+</section>
+<section id="applying-a-polarity-based-sentiment-dictionary-1" class="slide level2">
+<h2>Applying a polarity-based sentiment dictionary</h2>
+<p>Of course we could then also plot the results</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sent_pres <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> sentiment, <span class="at">y =</span> <span class="fu">reorder</span>(doc_id, sentiment))) <span class="sc">+</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="Week_08_Slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" /></p>
+</section>
+<section id="applying-a-valence-based-sentiment-dictionary" class="slide level2">
+<h2>Applying a valence-based sentiment dictionary</h2>
+<p>If we want to apply a valence-based dictionary instead we would use the <code>textstat_valence()</code> function. For example to compute the valence scores using Nielsen’s (2011) ‘new ANEW’ valenced word list:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(data_corpus_inaugural) <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">textstat_valence</span>(<span class="at">dictionary =</span> data_dictionary_AFINN)</span></code></pre></div>
+<pre><code>##       doc_id sentiment
+## 1  2001-Bush 0.6578947
+## 2  2005-Bush 0.7461140
+## 3 2009-Obama 0.3586957
+## 4 2013-Obama 0.5732484
+## 5 2017-Trump 1.0341880
+## 6 2021-Biden 0.4739884</code></pre>
+</section>
+<section id="exercise-1" class="slide level2">
+<h2>Exercise</h2>
+<p>Install the package <code>quanteda.corpora</code> from github using the <code>install_github</code> function from the <code>devtools</code>or <code>remotes</code> package:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#remotes::install_github(&quot;quanteda/quanteda.corpora&quot;)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.corpora)</span></code></pre></div>
+<p>Download the corpus of 6,000 Guardian news articles using <code>download("data_corpus_guardian")</code> and create a plot showing how the sentiment score has changed over time. Paste your results into the chat.</p>
+<p>Take about 10-15 Minutes.`</p>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<p>Next week we will continue our session on text classification by looking into scaling methods</p>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_08_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_08_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_08_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_08_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_08_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
