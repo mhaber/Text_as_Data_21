@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-11-10" />
+  <title>Text as Data: Week 9</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_09_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_09_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_09_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_09_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_09_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 9</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">10 November 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Scaling Models with Wordscores</li>
+<li class="fragment">Scaling Models with Wordfish</li>
+</ul>
+</section></section>
+<section>
+<section id="wordscores" class="title-slide slide level1">
+<h1>Wordscores</h1>
+
+</section>
+<section id="wordscores-1" class="slide level2">
+<h2>Wordscores</h2>
+<p>Wordscores compares the word frequencies of texts at hand to the word frequencies of so called reference texts with known (or assumed) positions and assigns document scores based on the similarity of these references.</p>
+<ul>
+<li class="fragment">Highly automated, (nearly) no language knowledge needed</li>
+</ul>
+</section>
+<section id="wordscores-concept" class="slide level2">
+<h2>Wordscores concept</h2>
+<p><strong>The idea</strong></p>
+<ul>
+<li class="fragment"><p>Each word has a policy position (word score)</p></li>
+<li class="fragment"><p>Some reference document positions are known</p></li>
+<li class="fragment"><p>Document positions are average of its words’ positions</p></li>
+<li class="fragment"><p>1st step: Derive wordscores from reference texts</p></li>
+<li class="fragment"><p>2nd step: Apply wordscores to virgin texts</p></li>
+</ul>
+</section>
+<section id="wordscores-illustrative-example" class="slide level2">
+<h2>Wordscores: illustrative example</h2>
+<ul>
+<li class="fragment">Consider two reference texts A and B</li>
+<li class="fragment">The word “choice” is used 10 times per 10,000 words in text A and 30 times per 10,000 words in text B</li>
+<li class="fragment">Conditional on observing the “choice”, we are reading text A with probability 0.25 and text B with 0.75</li>
+<li class="fragment">We can compute a “word score” once we assign reference values to the reference texts</li>
+<li class="fragment">Suppose reference text A has position -1, and text B position +1</li>
+<li class="fragment">then the score of word “choice” is:</li>
+<li class="fragment"><span class="math inline">\(0.25(-1.0)+0.75(1.0)=-0.25+0.75=0.5\)</span></li>
+</ul>
+</section>
+<section id="wordscores-procedure" class="slide level2">
+<h2>Wordscores Procedure</h2>
+<p><img src="img/10-6.png" width="500px" /></p>
+</section>
+<section id="wordscores-procedure-1" class="slide level2">
+<h2>Wordscores Procedure</h2>
+<p><img src="img/10-7.png" width="500px" /></p>
+</section>
+<section id="wordscores-procedure-2" class="slide level2">
+<h2>Wordscores Procedure</h2>
+<p><img src="img/10-8.png" width="500px" /></p>
+</section>
+<section id="estimating-policy-positions-from-political-texts" class="slide level2">
+<h2>Estimating Policy Positions from Political Texts</h2>
+<p><strong>Laver &amp; Garry</strong></p>
+<ul>
+<li class="fragment"><p>Goal: Generating party positions for British and Irish manifestos</p></li>
+<li class="fragment"><p>Coding scheme similar to the CMP’s</p>
+<ul>
+<li class="fragment">More hierachical, larger number of categories</li>
+<li class="fragment">Each category has a pro-, con- and neutral variant</li>
+</ul></li>
+</ul>
+</section>
+<section id="estimating-policy-positions-from-political-texts-1" class="slide level2">
+<h2>Estimating Policy Positions from Political Texts</h2>
+<p>Assumptions:</p>
+<ol type="1">
+<li class="fragment">Manifesto content is related to party policy positions</li>
+<li class="fragment">Word usage is realted to policy positions</li>
+<li class="fragment">Word usage is contant over time</li>
+<li class="fragment">All relevant words are coverered in the reference texts</li>
+</ol>
+</section>
+<section id="estimating-policy-positions-from-political-texts-2" class="slide level2">
+<h2>Estimating Policy Positions from Political Texts</h2>
+<p><strong>1st step: Training set</strong></p>
+<ul>
+<li class="fragment"><p>Manifestos of Labour and Cons (UK) in 1992</p>
+<ul>
+<li class="fragment">Pool of ‘keywords’</li>
+<li class="fragment"><span class="math inline">\(N_{L} \geq 2N_{R}=&gt;\)</span> Dictionary element left</li>
+<li class="fragment"><span class="math inline">\(N_{R} \geq 2N_{L}=&gt;\)</span> Dictionary element right</li>
+</ul></li>
+<li class="fragment"><p>Allocate selected words to the coding scheme’s categories</p></li>
+</ul>
+</section>
+<section id="estimating-policy-positions-from-political-texts-3" class="slide level2">
+<h2>Estimating Policy Positions from Political Texts</h2>
+<p><strong>2nd step: Count occurence of elements in the dictionary in manifestos</strong></p>
+<ul>
+<li class="fragment"><p>Britain (1992 &amp; 1997)</p></li>
+<li class="fragment"><p>Ireland (1992 &amp; 1997)</p></li>
+<li class="fragment"><p>Left-right-scaling: <span class="math inline">\(\frac{R-L}{R+L}\)</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\(Econ_{LR}\)</span></li>
+<li class="fragment"><span class="math inline">\(Soc_{LR}\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="estimating-policy-positions-from-political-texts-4" class="slide level2">
+<h2>Estimating Policy Positions from Political Texts</h2>
+<p><strong>Test-Set: Crossvalidation</strong></p>
+<ul>
+<li class="fragment">Expert Surveys</li>
+<li class="fragment">CMP Coding/Revised CMP Coding</li>
+</ul>
+<p><img src="img/10-5.png" width="500px" /></p>
+</section>
+<section id="wordscores-and-dictionaries" class="slide level2">
+<h2>Wordscores and Dictionaries</h2>
+<ul>
+<li class="fragment"><p>Conceptually, the two steps do the same in both approaches:</p>
+<ul>
+<li class="fragment">1st step derives a position of a word from texts with known properties</li>
+<li class="fragment">2nd step weighs the words in the unknown texts with this information</li>
+</ul></li>
+<li class="fragment"><p>Information in dictionary is often binary, wordscores in wordscore are scale</p></li>
+</ul>
+</section>
+<section id="selecting-reference-texts" class="slide level2">
+<h2>Selecting reference texts</h2>
+<ul>
+<li class="fragment">Reference texts should use the same vocabulary in the same context</li>
+<li class="fragment">Reference texts need to span the full dimension</li>
+<li class="fragment">Set of reference text should contain as many words as possible</li>
+<li class="fragment">Estimates of the positions (reference scores) need to be well grounded and/or very conservative</li>
+</ul>
+</section>
+<section id="st-step---obtaining-wordscores" class="slide level2">
+<h2>1st step - Obtaining wordscores</h2>
+<ul>
+<li class="fragment"><p>Start out from the observed word frequencies in reference texts:</p></li>
+<li class="fragment"><p><span class="math inline">\(F_{wr}\)</span>: Relative frequency of word <span class="math inline">\(w\)</span> in reference-text <span class="math inline">\(r\)</span></p></li>
+<li class="fragment"><p>Conditional probabilities: Given we are observing word <span class="math inline">\(w\)</span>, what is the probability that we are reading text <span class="math inline">\(r\)</span>?</p></li>
+<li class="fragment"><p><span class="math inline">\(P_{wr} = \frac{F_{wr}}{\sum{_r}F_{wr}}\)</span></p></li>
+<li class="fragment"><p><span class="math inline">\(S_{w} = \sum{_r}(P_{wr}*A_{r})\)</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\(A_{r}\)</span> is the a priori score for reference text r</li>
+<li class="fragment"><span class="math inline">\(S_{w}\)</span> is the actual wordscore for word w</li>
+</ul></li>
+</ul>
+</section>
+<section id="nd-step-applying-the-wordscores" class="slide level2">
+<h2>2nd step – Applying the wordscores</h2>
+<ul>
+<li class="fragment"><p><span class="math inline">\(S_{v} = \sum{_w}(F_{wv}*S_w)\)</span></p>
+<ul>
+<li class="fragment"><span class="math inline">\(F_{wv}\)</span> is analogous to <span class="math inline">\(F_{wr}\)</span></li>
+<li class="fragment"><span class="math inline">\(S_v\)</span> is the weighted mean score of the words in text <span class="math inline">\(v\)</span></li>
+</ul></li>
+<li class="fragment"><p>Variance is the basis for calculating uncertainty</p>
+<ul>
+<li class="fragment">Summary for the consensus of the scores of each word in the virgin text</li>
+<li class="fragment">Higher consensus -&gt; lower variance -&gt; less uncertainty</li>
+</ul></li>
+</ul>
+</section>
+<section id="wordscores-practical-considerations" class="slide level2">
+<h2>Wordscores – Practical considerations</h2>
+<ul>
+<li class="fragment"><p>What about scaling things other than manifestos?</p></li>
+<li class="fragment"><p>E.g. speeches:</p>
+<ul>
+<li class="fragment">Use reference texts from other context (e.g. manifesto)?</li>
+<li class="fragment">What scores to use?</li>
+<li class="fragment">Length of the reference texts?</li>
+</ul></li>
+</ul>
+</section>
+<section id="comparing-wordscores-and-cmp" class="slide level2">
+<h2>Comparing wordscores and CMP</h2>
+<ul>
+<li class="fragment">Laver, Garry &amp; Benoit use Irish and British manifestos to demonstrate/validate</li>
+<li class="fragment">CMP data offers information for many countries and over long periods</li>
+<li class="fragment">How do wordscores results compare across countries?</li>
+</ul>
+</section>
+<section id="comparing-wordscores-and-cmp-1" class="slide level2">
+<h2>Comparing wordscores and CMP</h2>
+<ul>
+<li class="fragment">Bräuninger, Debus &amp; Müller (2013) compare wordscores results for 13 countries between 1980 and 2000</li>
+<li class="fragment">Reference texts are the manifestos in the latest elections</li>
+<li class="fragment">Reference scores are the Rile scores from CMP</li>
+<li class="fragment">Essentially ‘replicate’ CMP scores using wordscores</li>
+</ul>
+</section>
+<section id="comparing-wordscores-and-cmp-2" class="slide level2">
+<h2>Comparing wordscores and CMP</h2>
+<p><img src="img/10-9.png" width="700px" /></p>
+</section>
+<section id="comparing-wordscores-and-cmp-3" class="slide level2">
+<h2>Comparing wordscores and CMP</h2>
+<p><img src="img/10-10.png" width="700px" /></p>
+</section>
+<section id="comparing-wordscores-and-cmp-4" class="slide level2">
+<h2>Comparing wordscores and CMP</h2>
+<ul>
+<li class="fragment"><p>Wordscores replicates CMP better whew</p>
+<ul>
+<li class="fragment">reference texts cover the full range of a dimension</li>
+<li class="fragment">the percentage of scored words is high</li>
+</ul></li>
+<li class="fragment"><p>Cross-check results from wordscores before using them in an analysis</p></li>
+</ul>
+</section>
+<section id="wordscores-exercise-load-data-and-create-corpus" class="slide level2">
+<h2>Wordscores exercise: Load data and create corpus</h2>
+<p>In the wordscores exercise we’ll be looking at annual budget speeches held in the Irish Parliament from 2008 - 2012. Let’s load the data, tokenize it and create a dfm.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textmodels)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(data_corpus_irishbudget2010, <span class="at">package =</span> <span class="st">&quot;quanteda.textmodels&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>budget_dfm <span class="ot">&lt;-</span> <span class="fu">dfm</span>(<span class="fu">tokens</span>(data_corpus_irishbudget2010))</span></code></pre></div>
+</section>
+<section id="wordscores-exercise-load-data-and-create-corpus-1" class="slide level2">
+<h2>Wordscores exercise: Load data and create corpus</h2>
+<p>As we just learned wordscores requires us to assign a set of known scores to so called reference texts to identify the positions of new documents. Let’s create some reference scores for the 5th and 6th document.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>refscores <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">4</span>), <span class="dv">1</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">8</span>))</span></code></pre></div>
+</section>
+<section id="wordscores-exercise-predict-word-positions" class="slide level2">
+<h2>Wordscores exercise: Predict word positions</h2>
+<p>We can use the <code>textmodel_wordscores()</code> function from the <code>quanteda.textmodels</code> package to estimate the document positions based on the positions of the reference texts.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>ws <span class="ot">&lt;-</span> <span class="fu">textmodel_wordscores</span>(budget_dfm, <span class="at">y =</span> refscores, <span class="at">smooth =</span> <span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">coef</span>(ws))</span></code></pre></div>
+<pre><code>##          when             i     presented           the supplementary 
+##   -0.53014011   -0.28805749   -0.42939762    0.01670114   -0.42939762 
+##        budget 
+##   -0.15483456</code></pre>
+</section>
+<section id="wordscores-exercise-plot-word-positions" class="slide level2">
+<h2>Wordscores exercise: Plot word positions</h2>
+<p>We can use the <code>textplot_scale1d()</code> function from the <code>quanteda.textplots</code> package to plot word positions.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textplots)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_scale1d</span>(ws,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">highlighted =</span> <span class="fu">c</span>(<span class="st">&quot;cut&quot;</span>, <span class="st">&quot;minister&quot;</span>, <span class="st">&quot;welfare&quot;</span>, <span class="st">&quot;economy&quot;</span>, <span class="st">&quot;budget&quot;</span>), </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">highlighted_color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+</section>
+<section id="wordscores-exercise-plot-word-positions-1" class="slide level2">
+<h2>Wordscores exercise: Plot word positions</h2>
+<p><img src="Week_09_Slides_files/figure-revealjs/unnamed-chunk-11-1.png" width="768" /></p>
+</section>
+<section id="wordscores-exercise-predict-document-positions" class="slide level2">
+<h2>Wordscores exercise: Predict document positions</h2>
+<p>We can extract the estimated speaker positions using the <code>precict()</code> function as if this were a regular fitted regression model.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ws_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(ws, <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ws_pred</span></code></pre></div>
+<pre><code>## $fit
+##                                    fit          lwr          upr
+## Lenihan, Brian (FF)        0.116362873  0.110173633  0.122552114
+## Bruton, Richard (FG)       0.003318195 -0.005228996  0.011865387
+## Burton, Joan (LAB)        -0.004696791 -0.011996402  0.002602821
+## Morgan, Arthur (SF)        0.019334198  0.012308623  0.026359774
+## Cowen, Brian (FF)          0.213090960  0.206424497  0.219757423
+## Kenny, Enda (FG)          -0.136776116 -0.146311207 -0.127241025
+## ODonnell, Kieran (FG)     -0.008132150 -0.020643605  0.004379306
+## Gilmore, Eamon (LAB)       0.013988095  0.004862201  0.023113990
+## Higgins, Michael (LAB)    -0.019145477 -0.035788594 -0.002502360
+## Quinn, Ruairi (LAB)       -0.027387712 -0.043704917 -0.011070506
+## Gormley, John (Green)      0.085698169  0.067187907  0.104208431
+## Ryan, Eamon (Green)        0.056610204  0.042201917  0.071018490
+## Cuffe, Ciaran (Green)      0.072391730  0.055483988  0.089299472
+## OCaolain, Caoimhghin (SF)  0.016769698  0.007557775  0.025981621</code></pre>
+</section>
+<section id="wordscores-exercise-plot-speaker-positions" class="slide level2">
+<h2>Wordscores exercise: Plot speaker positions</h2>
+<p>And then plot the results using the same <code>textplot_scale1d()</code> function and grouping by party.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_scale1d</span>(ws_pred, <span class="at">margin =</span> <span class="st">&quot;documents&quot;</span>,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">groups =</span> <span class="fu">docvars</span>(data_corpus_irishbudget2010, <span class="st">&quot;party&quot;</span>))</span></code></pre></div>
+</section>
+<section id="wordscores-exercise-plot-speaker-positions-1" class="slide level2">
+<h2>Wordscores exercise: Plot speaker positions</h2>
+<p><img src="Week_09_Slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" /></p>
+</section></section>
+<section>
+<section id="wordfish" class="title-slide slide level1">
+<h1>Wordfish</h1>
+
+</section>
+<section id="wordscores-vs.-wordfish" class="slide level2">
+<h2>Wordscores vs. Wordfish</h2>
+<ul>
+<li class="fragment"><p>Wordscores derives and ‘transfers’ known properties of words, i.e. the wordscores between texts.</p></li>
+<li class="fragment"><p>Wordfish builds a statistical model that explains the occurence of each word: Poisson regression</p></li>
+</ul>
+</section>
+<section id="wordscores-vs.-wordfish-1" class="slide level2">
+<h2>Wordscores vs. Wordfish</h2>
+<ul>
+<li class="fragment"><p>Advantages from a practical perspective</p>
+<ul>
+<li class="fragment">No reference texts needed; Anchor points instead</li>
+<li class="fragment">Statistically models all words in a text</li>
+<li class="fragment">Absolute minimum of input from the user; Versatile and well suited for smaller projects</li>
+</ul></li>
+<li class="fragment"><p>The statistical model replaces the need for reference texts</p>
+<ul>
+<li class="fragment">Mathematical complexity of the model</li>
+</ul></li>
+</ul>
+</section>
+<section id="poisson-model" class="slide level2">
+<h2>Poisson model</h2>
+<ul>
+<li class="fragment"><p>Dependent variables of interest may be counts, e.g.</p>
+<ul>
+<li class="fragment">Occurence of conflict/wars, casualties in conflicts; Number of bills brought forward in a term; Number of hospitalizations, sicknesses etc.</li>
+<li class="fragment"><strong>Word count in a document</strong></li>
+</ul></li>
+<li class="fragment"><p>A dependent count variable <span class="math inline">\(\gamma\)</span></p>
+<ul>
+<li class="fragment">bound between 0 and <span class="math inline">\(\infty\)</span></li>
+<li class="fragment">takes only discrete values (0,1,2,3,…)</li>
+</ul></li>
+</ul>
+</section>
+<section id="poisson-model-1" class="slide level2">
+<h2>Poisson model</h2>
+<p><strong>Poisson distribution</strong></p>
+<p><span class="math display">\[\gamma_i = Possion(\lambda_i)\]</span></p>
+<ul>
+<li class="fragment">Poisson distribution: Repeated Bernoulli-Experiments (0/1)</li>
+<li class="fragment">Generally used in count data (poisson regression)</li>
+<li class="fragment">Has only one parameter: ‘Event occurrence rate’</li>
+<li class="fragment">No contagion effects; the event rate remains constant</li>
+</ul>
+</section>
+<section id="wordfish-model" class="slide level2">
+<h2>Wordfish model</h2>
+<p><span class="math display">\[\gamma_{ij} \sim Poisson(\lambda_{ij})\]</span> <span class="math display">\[\lambda_{ij} = exp(\alpha_i + \psi_j + \beta_j * \omega_i)\]</span></p>
+<ul>
+<li class="fragment"><p><span class="math inline">\(i\)</span> = document (e.g. party manifesto)</p></li>
+<li class="fragment"><p><span class="math inline">\(j\)</span> = unique word</p></li>
+<li class="fragment"><p><span class="math inline">\(\alpha_i\)</span> = document fixed effect</p></li>
+<li class="fragment"><p><span class="math inline">\(\psi_j\)</span> = word fixed effect</p></li>
+<li class="fragment"><p><span class="math inline">\(\beta_j\)</span> = word specific weight (sign representing the ideological direction)</p></li>
+<li class="fragment"><p><span class="math inline">\(\omega_i\)</span> = document position</p></li>
+</ul>
+</section>
+<section id="wordfish-estimation" class="slide level2">
+<h2>Wordfish estimation</h2>
+<ul>
+<li class="fragment"><p>Regression without independent variables</p>
+<ul>
+<li class="fragment">Solution: Maximum Likelihood Estimation</li>
+</ul></li>
+</ul>
+<ol type="1">
+<li class="fragment"><p>Estimate party parameters conditional on the expectation for the word parameters (in first iteration the starting values)</p></li>
+<li class="fragment"><p>Estimate word parameters conditional on party parameters obtained in previous step</p></li>
+<li class="fragment"><p>Go back and forth until a convergence criterion is met and the likelihoods do not change anymore</p></li>
+</ol>
+</section>
+<section id="wordfish-estimation-1" class="slide level2">
+<h2>Wordfish estimation</h2>
+<p><strong>Likelihood function</strong></p>
+<p><span class="math display">\[\sum^m_j \sum^n_i - exp(\alpha_i + \psi_j + \beta_j * \omega_i) + ln(exp(\alpha_{it} + \psi_j + \beta_j * \omega_i)) * \gamma_{ij} \]</span></p>
+<p>Without fixing some parameters, there are infinite combinations of <span class="math inline">\(\omega\)</span> and <span class="math inline">\(\beta\)</span>, which could provide the same likelihood.</p>
+<ul>
+<li class="fragment"><p>Document positions: mean of all positions <span class="math inline">\(\omega\)</span> across all elections is set to 0, and standard deviation to 1.</p></li>
+<li class="fragment"><p>Set directionality (e.g. document A always has a smaller valuer than document B).</p></li>
+<li class="fragment"><p>Set document fixed effect: first document <span class="math inline">\(\alpha\)</span> is set to 0.</p></li>
+</ul>
+</section>
+<section id="wordfish-estimation-2" class="slide level2">
+<h2>Wordfish estimation</h2>
+<p>This means that you <strong>cannot directly compare estimates ACROSS different estimations</strong> (for example, in secondary analysis). This is the case for ALL scaling models (e.g. Nominate), and also for Wordscores.</p>
+<ul>
+<li class="fragment"><p>Think to what extent position estimates are actually comparable…</p>
+<ul>
+<li class="fragment">… across countries</li>
+<li class="fragment">… over time</li>
+<li class="fragment">… between documents</li>
+</ul></li>
+</ul>
+</section>
+<section id="wordfish-estimation-3" class="slide level2">
+<h2>Wordfish estimation</h2>
+<ul>
+<li class="fragment"><p>Dimension of the scaling is created ex post (as compared to Wordscores)</p>
+<ul>
+<li class="fragment">What is the dimension identified?</li>
+<li class="fragment">More validation required</li>
+<li class="fragment">Creation of alternative dimensions via subsetting texts only</li>
+</ul></li>
+</ul>
+</section>
+<section id="wordfish-output" class="slide level2">
+<h2>Wordfish output</h2>
+<p><img src="img/wordfish1.png" width="520px" /></p>
+</section>
+<section id="wordfish-output-1" class="slide level2">
+<h2>Wordfish output</h2>
+<p><img src="img/wordfish2.png" width="520px" /></p>
+</section>
+<section id="wordfish-multilingual" class="slide level2">
+<h2>Wordfish: Multilingual?</h2>
+<p>Does it work in different languages? What are some reasons for doubting it?</p>
+<ul>
+<li class="fragment">Ideal case: get the exact same political texts in high quality translations</li>
+<li class="fragment">Estimate Wordfish and compare across different languages</li>
+<li class="fragment">This is possible: European Parliament speeches (translated into all official languages)</li>
+</ul>
+</section>
+<section id="wordfish-speeches-in-eu-parliament" class="slide level2">
+<h2>Wordfish: Speeches in EU Parliament</h2>
+<p><img src="img/wordfish3.png" width="700px" /></p>
+</section>
+<section id="instability-of-the-political-lexicon" class="slide level2">
+<h2>(In)stability of the political lexicon</h2>
+<ul>
+<li class="fragment"><p>What if the political lexicon is unstable over time?</p>
+<ul>
+<li class="fragment">New issues appear, old issues disappear</li>
+</ul></li>
+<li class="fragment"><p>If this happens frequently, then scaling algorithms will pick up shifts in the policy agenda – rather than shifts in party positions.</p></li>
+<li class="fragment"><p>In fact, this is one assumption: that word usage reflects ideology.</p>
+<ul>
+<li class="fragment">For example, it becomes seriously problematic when all parties start talking about the “issue” of the day. Then we can distinguish between elections, but not very well between parties</li>
+</ul></li>
+</ul>
+</section>
+<section id="policy-dimensionality" class="slide level2">
+<h2>Policy dimensionality</h2>
+<ul>
+<li class="fragment"><p>In the original Wordscores article, the authors assumed the policy dimensions can be chosen by using different reference scores from known policy scales (expert surveys)</p>
+<ul>
+<li class="fragment">“Economic policy” and a “social policy” for the UK in 1997</li>
+<li class="fragment">Reference texts: 3 manifestos from 1992 (same for BOTH dimensions)</li>
+</ul></li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Reference Scores</th>
+<th>Lib Dems</th>
+<th>Labour</th>
+<th>Cons.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Economic Policy</td>
+<td>8.21</td>
+<td>5.35</td>
+<td>17.21</td>
+</tr>
+<tr class="even">
+<td>Social Policy</td>
+<td>6.87</td>
+<td>6.53</td>
+<td>15.34</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="policy-dimensionality-1" class="slide level2">
+<h2>Policy dimensionality</h2>
+<ul>
+<li class="fragment"><p>This means that estimates across dimensions vary only because different expert evaluations are used to anchor the texts, not because the text input varies according to the policy area of interest</p>
+<ul>
+<li class="fragment">This is not a necessary assumption. There is no reason why one cannot run analysis of sort of a policy dictionary.</li>
+<li class="fragment">One possibility is to preserve as much of the context as possible and parse the sections of manifestos into policy areas and then estimate positions on those sections only (Proksch and Slapin 2006, Slapin and Proksch 2008)</li>
+</ul></li>
+</ul>
+</section>
+<section id="wordfish-exercise-load-data" class="slide level2">
+<h2>Wordfish Exercise: Load data</h2>
+<p>We will take a look at the US Senate debate on partial birth abortion.</p>
+<p>First let’s load the data into R and take a look at the corpus:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/corpus_us_debate_speaker.rda&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(corpus_us_debate_speaker)</span></code></pre></div>
+<pre><code>## Corpus consisting of 23 documents, showing 23 documents:
+## 
+##        Text Types Tokens Sentences party    speaker
+##      ALLARD   400   1165        53     R     ALLARD
+##        BOND   129    232         9     R       BOND
+##       BOXER  2231  18527       886     D      BOXER
+##   BROWNBACK   646   2884       168     R  BROWNBACK
+##     BUNNING   281    593        32     R    BUNNING
+##    CANTWELL   395   1114        55     D   CANTWELL
+##      DeWINE   463   1438        75     R     DeWINE
+##    DOMENICI   203    479        27     R   DOMENICI
+##      DURBIN   520   1874        89     D     DURBIN
+##      ENSIGN   410   1235        66     R     ENSIGN
+##    FEINGOLD   213    414        19     D   FEINGOLD
+##   FEINSTEIN  1348   6112       284     D  FEINSTEIN
+##       FRIST   222    501        25     R      FRIST
+##      HARKIN   655   2612       145     D     HARKIN
+##       HATCH   451   1173        60     R      HATCH
+##  LAUTENBERG   678   2131       123     D LAUTENBERG
+##    MIKULSKI   260    631        42     D   MIKULSKI
+##       NELSO   155    328        17     D      NELSO
+##     NICKLES   280    568        26     R    NICKLES
+##        REID    38     59         4     D       REID
+##    SANTORUM  1593  10507       458     R   SANTORUM
+##    SESSIONS   653   2174       111     R   SESSIONS
+##   VOINOVICH   186    363        19     R  VOINOVICH</code></pre>
+</section>
+<section id="wordfish-exercise-tokenize-and-dfm" class="slide level2">
+<h2>Wordfish Exercise: Tokenize and dfm</h2>
+<p>Now we’ll tokenize the text and create a document term matrix.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>stops <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">setdiff</span>(<span class="fu">stopwords</span>(),  </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">c</span>(<span class="st">&quot;her&quot;</span>, <span class="st">&quot;she&quot;</span>, <span class="st">&quot;hers&quot;</span>, <span class="st">&quot;he&quot;</span>, <span class="st">&quot;his&quot;</span>, <span class="st">&quot;him&quot;</span>)),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;bill&quot;</span>, <span class="st">&quot;can&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>toks <span class="ot">&lt;-</span> <span class="fu">tokens</span>(corpus_us_debate_speaker,  </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">remove_symbols =</span> <span class="cn">TRUE</span>,  </span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(stops) <span class="sc">|&gt;</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_tolower</span>()</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>senate_dfm <span class="ot">&lt;-</span> <span class="fu">dfm</span>(toks)</span></code></pre></div>
+</section>
+<section id="wordfish-exercise-run-the-wordfish-model" class="slide level2">
+<h2>Wordfish Exercise: Run the wordfish model</h2>
+<p>Let’s run the one-dimensional scaling model known as wordfish using the <code>textmodel_wordfish</code> function from the <code>quanteda.textmodels</code> package.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textmodels)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">&lt;-</span> <span class="fu">textmodel_wordfish</span>(senate_dfm, <span class="at">dir =</span> <span class="fu">c</span>(<span class="dv">3</span>, <span class="dv">21</span>))</span></code></pre></div>
+<p>We use the <code>dir</code> argument to set the polar opposites of the scale. In this case we assume that that the 3rd speaker Barbara Boxer, is to the left of the 21st speaker Rick Santorum.</p>
+</section>
+<section id="wordfish-exercise-investigate-the-output" class="slide level2">
+<h2>Wordfish Exercise: Investigate the output</h2>
+<p>Let’s take a look at the components of the fitted model.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>wf_coef <span class="ot">&lt;-</span> <span class="fu">coef</span>(wf)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(wf_coef)</span></code></pre></div>
+<pre><code>## [1] &quot;documents&quot; &quot;features&quot;</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wf_coef<span class="sc">$</span>documents)</span></code></pre></div>
+<pre><code>##                 theta       alpha
+## ALLARD     0.02165274  0.21348639
+## BOND      -0.08693357 -1.29227632
+## BOXER     -1.05777079  2.76206193
+## BROWNBACK  2.38269597  0.12975044
+## BUNNING    0.81776695 -0.48868033
+## CANTWELL  -1.25634814 -0.07911048</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wf_coef<span class="sc">$</span>features)</span></code></pre></div>
+<pre><code>##                     beta        psi
+## mr            0.06468449  0.8700898
+## president     0.05462191  1.5038171
+## commend      -0.02595502 -2.0448676
+## senator       0.06740927  1.8584309
+## pennsylvania -0.13413832 -0.6192956
+## santorum      0.12538330 -0.4688482</code></pre>
+</section>
+<section id="wordfish-exercise-investigate-the-output-1" class="slide level2">
+<h2>Wordfish Exercise: Investigate the output</h2>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(wf_coef<span class="sc">$</span>features)</span></code></pre></div>
+<pre><code>##                     beta        psi
+## mr            0.06468449  0.8700898
+## president     0.05462191  1.5038171
+## commend      -0.02595502 -2.0448676
+## senator       0.06740927  1.8584309
+## pennsylvania -0.13413832 -0.6192956
+## santorum      0.12538330 -0.4688482</code></pre>
+</section>
+<section id="wordfish-exercise-estimate-speaker-positions" class="slide level2">
+<h2>Wordfish Exercise: Estimate speaker positions</h2>
+<p>We can extract the estimated speaker positions using the <code>precict()</code> function just as with wordscores.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>preds  <span class="ot">&lt;-</span> <span class="fu">predict</span>(wf, <span class="at">interval =</span> <span class="st">&quot;confidence&quot;</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>preds</span></code></pre></div>
+<pre><code>## $fit
+##                    fit         lwr        upr
+## ALLARD      0.02165274 -0.10190180  0.1452073
+## BOND       -0.08693357 -0.34076934  0.1669022
+## BOXER      -1.05777079 -1.07929641 -1.0362452
+## BROWNBACK   2.38269597  2.28117382  2.4842181
+## BUNNING     0.81776695  0.62356627  1.0119676
+## CANTWELL   -1.25634814 -1.33174776 -1.1809485
+## DeWINE      1.38728909  1.25204737  1.5225308
+## DOMENICI    0.32865152  0.12357508  0.5337280
+## DURBIN     -0.25969664 -0.35154658 -0.1678467
+## ENSIGN      0.83658945  0.68738863  0.9857903
+## FEINGOLD   -1.20437761 -1.32919832 -1.0795569
+## FEINSTEIN  -1.59354288 -1.61938317 -1.5677026
+## FRIST       0.83880779  0.61988997  1.0577256
+## HARKIN     -0.79094571 -0.85650252 -0.7253889
+## HATCH       0.97739715  0.83244576  1.1223485
+## LAUTENBERG -0.65712119 -0.73253786 -0.5817045
+## MIKULSKI   -1.22625771 -1.32530022 -1.1272152
+## NELSO      -1.10229306 -1.25803199 -0.9465541
+## NICKLES     0.13603646 -0.03471560  0.3067885
+## REID        0.20834388 -0.33636489  0.7530527
+## SANTORUM    0.48881739  0.44242432  0.5352105
+## SESSIONS    0.62231611  0.52012750  0.7245047
+## VOINOVICH   0.18892279 -0.03352536  0.4113709</code></pre>
+</section>
+<section id="wordfish-exercise-create-a-nice-data-frame" class="slide level2">
+<h2>Wordfish Exercise: Create a nice data frame</h2>
+<p>If we want to we can extract the estimated speaker positions into a data frame and merge in the docvars.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>speaker_pos <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(preds<span class="sc">$</span>fit, </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                          <span class="at">speaker =</span> <span class="fu">row.names</span>(preds<span class="sc">$</span>fit)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(<span class="fu">docvars</span>(senate_dfm)) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(fit)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(speaker_pos)</span></code></pre></div>
+<pre><code>##         fit       lwr        upr   speaker party
+## 1 -1.593543 -1.619383 -1.5677026 FEINSTEIN     D
+## 2 -1.256348 -1.331748 -1.1809485  CANTWELL     D
+## 3 -1.226258 -1.325300 -1.1272152  MIKULSKI     D
+## 4 -1.204378 -1.329198 -1.0795569  FEINGOLD     D
+## 5 -1.102293 -1.258032 -0.9465541     NELSO     D
+## 6 -1.057771 -1.079296 -1.0362452     BOXER     D</code></pre>
+</section>
+<section id="wordfish-exercise-lets-plot-the-speaker-positions" class="slide level2">
+<h2>Wordfish Exercise: Let’s plot the speaker positions</h2>
+<p>We can use the <code>textplot_scale1d()</code> function from the <code>quanteda.textplots</code> package to plot speaker positions.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda.textplots)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_scale1d</span>(wf, <span class="at">groups =</span> corpus_us_debate_speaker<span class="sc">$</span>party)</span></code></pre></div>
+</section>
+<section id="wordfish-exercise-lets-plot-the-speaker-positions-1" class="slide level2">
+<h2>Wordfish Exercise: Let’s plot the speaker positions</h2>
+<p><img src="Week_09_Slides_files/figure-revealjs/unnamed-chunk-26-1.png" width="768" /></p>
+</section>
+<section id="wordfish-exercise-lets-plot-the-word-positions" class="slide level2">
+<h2>Wordfish Exercise: Let’s plot the word positions</h2>
+<p>Similarly, we can use the same function to plot the estimated positions of each word.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_scale1d</span>(wf, <span class="at">margin =</span> <span class="st">&quot;features&quot;</span>,  <span class="at">alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">highlighted =</span> <span class="fu">c</span>(<span class="st">&quot;life&quot;</span>, <span class="st">&quot;choice&quot;</span>, <span class="st">&quot;womb&quot;</span>, <span class="st">&quot;her&quot;</span>, <span class="st">&quot;woman&quot;</span>, <span class="st">&quot;health&quot;</span>,</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;born&quot;</span>, <span class="st">&quot;baby&quot;</span>, <span class="st">&quot;gruesome&quot;</span>, <span class="st">&quot;kill&quot;</span>, <span class="st">&quot;roe&quot;</span>, <span class="st">&quot;wade&quot;</span>,</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;medical&quot;</span>, <span class="st">&quot;her&quot;</span>, <span class="st">&quot;his&quot;</span>, <span class="st">&quot;child&quot;</span>, <span class="st">&quot;religion&quot;</span>,<span class="st">&quot;doctor&quot;</span>),</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">highlighted_color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+</section>
+<section id="wordfish-exercise-lets-plot-the-word-positions-1" class="slide level2">
+<h2>Wordfish Exercise: Let’s plot the word positions</h2>
+<p><img src="Week_09_Slides_files/figure-revealjs/unnamed-chunk-28-1.png" width="768" /></p>
+</section>
+<section id="wordfish-exercise-lets-plot-the-word-positions-2" class="slide level2">
+<h2>Wordfish Exercise: Let’s plot the word positions</h2>
+<p>We can also use our ggplot syntax to make the plot a bit nicer.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">textplot_scale1d</span>(wf, <span class="at">margin =</span> <span class="st">&quot;features&quot;</span>,  <span class="at">alpha =</span> <span class="fl">0.2</span>,</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">highlighted =</span> <span class="fu">c</span>(<span class="st">&quot;life&quot;</span>, <span class="st">&quot;choice&quot;</span>, <span class="st">&quot;womb&quot;</span>, <span class="st">&quot;her&quot;</span>, <span class="st">&quot;woman&quot;</span>, <span class="st">&quot;health&quot;</span>,</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;born&quot;</span>, <span class="st">&quot;baby&quot;</span>, <span class="st">&quot;gruesome&quot;</span>, <span class="st">&quot;kill&quot;</span>, <span class="st">&quot;roe&quot;</span>, <span class="st">&quot;wade&quot;</span>,</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;medical&quot;</span>, <span class="st">&quot;her&quot;</span>, <span class="st">&quot;his&quot;</span>, <span class="st">&quot;child&quot;</span>, <span class="st">&quot;religion&quot;</span>,<span class="st">&quot;doctor&quot;</span>),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">highlighted_color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Word position&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Word frequency&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">&quot;Estimated word positions for use senate debate on abortion&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div>
+</section>
+<section id="wordfish-exercise-lets-plot-the-word-positions-3" class="slide level2">
+<h2>Wordfish Exercise: Let’s plot the word positions</h2>
+<p><img src="Week_09_Slides_files/figure-revealjs/unnamed-chunk-30-1.png" width="768" /></p>
+</section>
+<section id="homework" class="slide level2">
+<h2>Homework</h2>
+<p>Create a corpus from a number of documents of your own choosing and use either the wordscores or the wordfish approach to estimate the document positions. Plot your results and share them in class next week.</p>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<p>Next week we will look at different ways of generating topics from text.</p>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_09_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_09_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_09_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_09_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_09_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>

@@ -133,7 +133,7 @@ knitr::include_graphics("img/10-5.png")
 To create a simple dictionary of parts of speech, for instance we could define a dictionary consisting of articles and conjunctions, using:
 
 ```{r}
-pos_dict <- dictionary(list(articles = c("the", "a", "and"),
+pos_dict <- dictionary(list(articles = c("the", "a"),
            conjunctions = c("and", "but", "or", "nor", "for", "yet", "so")))
 ```
 
