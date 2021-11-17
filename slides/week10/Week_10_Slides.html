@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-11-17" />
+  <title>Text as Data: Week 10</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_10_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_10_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_10_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_10_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_10_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 10</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">17 November 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li class="fragment">Organizational stuff</li>
+<li class="fragment">Topic models</li>
+</ul>
+</section></section>
+<section>
+<section id="topic-models" class="title-slide slide level1">
+<h1>Topic Models</h1>
+
+</section>
+<section id="topic-models-basic-idea" class="slide level2">
+<h2>Topic models: basic idea</h2>
+<p>We often have collections of documents that we’d like to divide into natural groups so that we can understand them separately. Topic modeling is a method for unsupervised classification of such documents, which finds natural groups of items even when we’re not sure what we’re looking for.</p>
+</section>
+<section id="topic-models-basic-idea-1" class="slide level2">
+<h2>Topic models: basic idea</h2>
+<ul>
+<li class="fragment"><p>Topic models are exploratory probability models that</p>
+<ul>
+<li class="fragment">weaken the contraints required in dictionary based content analysis</li>
+<li class="fragment">have been intensively studied in the computer science literature</li>
+</ul></li>
+<li class="fragment"><p>Topic models work best with large amounts of text with a thematic structure</p></li>
+</ul>
+</section>
+<section id="topic-models-lda" class="slide level2">
+<h2>Topic models: LDA</h2>
+<p>Latent Dirichlet allocation (LDA) is a popular method for fitting a topic model. It treats each document as a mixture of topics, and each topic as a mixture of words.LDA is a method for estimating both of these at the same time: the bag of words associated with each topic, and the bag of topics that describe each document.</p>
+<p><img src="img/lda1.png" width="600px" /></p>
+</section>
+<section id="topic-models-lda-ii" class="slide level2">
+<h2>Topic models: LDA (II)</h2>
+<p>We assume that some number of topics exists for the whole collection of documents. Each document is generated by first choosing a distribution over the topics, then, for each word, choosing a topic assignment and choosing the word from the corresponding topic</p>
+<p><img src="img/lda2.png" width="600px" /></p>
+</section>
+<section id="topic-models-lda-iii" class="slide level2">
+<h2>Topic models: LDA (III)</h2>
+<p><img src="img/lda3.png" width="700px" /></p>
+</section>
+<section id="topic-model-lda-iv" class="slide level2">
+<h2>Topic model: LDA (IV)</h2>
+<ul>
+<li class="fragment"><p>Topic models giveth:</p>
+<ul>
+<li class="fragment">a probabilistic view of the relationship between W, Z and <span class="math inline">\(\theta\)</span></li>
+<li class="fragment">a full statistical framework for learning most aspects of the relationship</li>
+</ul></li>
+<li class="fragment"><p>and taketh away:</p>
+<ul>
+<li class="fragment">substantive control: You do not get to assert what the topics mean (inevitable when the Z and <span class="math inline">\(\theta\)</span> are both unobserved)</li>
+</ul></li>
+</ul>
+</section>
+<section id="topic-model-gibbs-sampling" class="slide level2">
+<h2>Topic model: Gibbs Sampling</h2>
+<ul>
+<li class="fragment">Topic models need to estimate lots of unknowns simultaneously and thus can be quite time consuming to estimate. To estimate the correct weights LDA uses Gibbs sampling, an algorithm for successively sampling conditional distributions of variables.</li>
+</ul>
+<p><img src="img/gibbs.jpeg" width="600px" /></p>
+</section>
+<section id="application-policy-agenda" class="slide level2">
+<h2>Application: policy agenda</h2>
+<ul>
+<li class="fragment">Quinn et al. analyze 118,065 congressional speeches from 1997-2004.</li>
+</ul>
+<p><img src="img/policyAgenda.png" width="500px" /></p>
+</section>
+<section id="outbut-beta" class="slide level2">
+<h2>Outbut <span class="math inline">\(\beta\)</span></h2>
+<p><img src="img/definingTopics.png" width="700px" /></p>
+</section>
+<section id="output-theta" class="slide level2">
+<h2>Output <span class="math inline">\(\theta\)</span></h2>
+<p><img src="img/quinn_theta.png" width="600px" /></p>
+</section>
+<section id="topic-model-evaluation" class="slide level2">
+<h2>Topic Model evaluation</h2>
+<ul>
+<li class="fragment"><p>There are two main modes of evaluation:</p>
+<ul>
+<li class="fragment">Statistical</li>
+<li class="fragment">Human</li>
+</ul></li>
+<li class="fragment"><p>and two natural levels</p>
+<ul>
+<li class="fragment">The model as a whole: model fit, K, and topic relationships</li>
+<li class="fragment">Topic structure: word precision, topic coherence</li>
+</ul></li>
+</ul>
+</section>
+<section id="construct-validity" class="slide level2">
+<h2>Construct validity</h2>
+<p>Procedure: 1. Choose number of topics K 2. Fit Model 3. Label Topics 4. Cluster the <span class="math inline">\(\beta^k\)</span></p>
+<p><img src="img/clustering.png" width="500px" /></p>
+</section>
+<section id="choosing-k" class="slide level2">
+<h2>Choosing K</h2>
+<p>The number of topics assumed a priori has a large effect on the results.</p>
+<p><img src="img/choice_topics.png" width="600px" /></p>
+</section>
+<section id="variations-seeded-lda" class="slide level2">
+<h2>Variations: Seeded LDA</h2>
+<ul>
+<li class="fragment"><p>Seeded LDA is a semi-supervised automated content analysis model and a variant of the standard LDA approach. While standard LDA does not assume the topics to be found a priori, seeded LDA uses “seed words” to weigh the prior distribution of topics before fitting the model.</p></li>
+<li class="fragment"><p>R: <code>install_packages("seededlda")</code> (also comes with great diagnostic functions)</p></li>
+</ul>
+</section>
+<section id="variations-structural-topic-model" class="slide level2">
+<h2>Variations: Structural topic model</h2>
+<p>Structural topic models (STM) are similar to LDA models but allow to include metadata (the information about each document) into the topicmodel.</p>
+<p><img src="img/stm.png" width="400px" /></p>
+<ul>
+<li class="fragment">R: <code>install_packages("stm")</code> (also comes with great diagnostic functions)</li>
+</ul>
+</section>
+<section id="variations-expressed-agenda-model" class="slide level2">
+<h2>Variations: expressed agenda model</h2>
+<p>In a simpler variation on LDA, Grimmer (2009) defines an expressed agenda model as</p>
+<p><img src="img/grimmer.png" width="700px" /></p>
+<ul>
+<li class="fragment"><p>Here there are not multiple topics per press release, but there are observed authors drawn from a population</p></li>
+<li class="fragment"><p>R: <code>install_github("christophergandrud/ExpAgenda")</code></p></li>
+</ul>
+</section>
+<section id="variations-correlated-topic-models" class="slide level2">
+<h2>Variations: correlated topic models</h2>
+<ul>
+<li class="fragment"><p>The Dirichlet multinomial assumptions hide a constraint about topic covariation</p>
+<ul>
+<li class="fragment">LDA cannot represent free covariation of topic proportions</li>
+<li class="fragment">The correlated topic model can</li>
+</ul></li>
+<li class="fragment"><p>Replace the Dirichlet with a Logistic Normal structure (Aitchison, 1986) with arbitrary covariance matrix</p></li>
+<li class="fragment"><p>R: <code>topicmodels</code></p></li>
+</ul>
+</section></section>
+<section>
+<section id="group-excercise" class="title-slide slide level1">
+<h1>Group Excercise</h1>
+
+</section>
+<section id="topic-model-exercise-load-data" class="slide level2">
+<h2>Topic model exercise: Load data</h2>
+<p>We will take another look at the US Senate debate on partial birth abortion.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="st">&quot;data/corpus_us_debate_speaker.rda&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(corpus_us_debate_speaker, <span class="at">n =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## Corpus consisting of 23 documents, showing 5 documents:
+## 
+##       Text Types Tokens Sentences party   speaker
+##     ALLARD   400   1165        53     R    ALLARD
+##       BOND   129    232         9     R      BOND
+##      BOXER  2231  18527       886     D     BOXER
+##  BROWNBACK   646   2884       168     R BROWNBACK
+##    BUNNING   281    593        32     R   BUNNING</code></pre>
+</section>
+<section id="topic-model-exercise-reshape-to-paragraphs" class="slide level2">
+<h2>Topic model exercise: Reshape to paragraphs</h2>
+<p>The 23 speeches are probably too big to cover only one topic. So we’ll reshape them to paragraphs treating each paragraph as a separate document instead. We can use the <code>corpus_reshape()</code> function for that purpose.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>speeches_para <span class="ot">&lt;-</span> <span class="fu">corpus_reshape</span>(corpus_us_debate_speaker, <span class="at">to =</span> <span class="st">&quot;paragraphs&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">summary</span>(speeches_para))</span></code></pre></div>
+<pre><code>##       Text Types Tokens Sentences party speaker
+## 1 ALLARD.1    32     48         3     R  ALLARD
+## 2 ALLARD.2    41     64         4     R  ALLARD
+## 3 ALLARD.3    25     29         1     R  ALLARD
+## 4 ALLARD.4    22     24         1     R  ALLARD
+## 5 ALLARD.5    68    144         3     R  ALLARD
+## 6 ALLARD.6    55     89         3     R  ALLARD</code></pre>
+</section>
+<section id="topic-model-exercise-reshape-to-paragraphs-1" class="slide level2">
+<h2>Topic model exercise: Reshape to paragraphs?</h2>
+<p>The paragraph splitter does not always produce very good results.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">ntoken</span>(speeches_para))</span></code></pre></div>
+<pre><code>## 
+##   0   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20 
+##  15  53  24  57  54  43  62 129 210 211 214 138  77  35  14  12  11   5  13   6 
+##  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40 
+##   6   3   5   5   4   3   4   9   5   8   8   6  10   4   2   7   6   2   4   6 
+##  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60 
+##   8   8   5   3   5  11   1   3   9   4   4   5   4   6   8   3   9   9   7   6 
+##  61  62  63  64  65  66  67  68  69  70  71  72  73  74  75  76  77  78  79  80 
+##   5   9   3   8   6   3  10   7   4   6  13  11   5   3   4   3   9   2  11   8 
+##  81  82  83  84  85  86  87  88  89  90  91  92  93  94  95  96  97  99 100 101 
+##   4   2   5   2   3   6   6   3  11   4   1   5   4   3   4   4   5   6   1   1 
+## 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 
+##   3   3   2   3   3  10   3   2   4   2   3   2   5   1   2   3   3   3   2   1 
+## 122 123 124 125 126 127 128 129 131 132 133 134 135 137 138 139 140 141 142 143 
+##   4   1   3   4   1   2   2   5   2   2   1   2   1   4   4   3   1   1   2   3 
+## 144 145 146 148 151 155 157 158 160 161 165 166 168 169 174 175 182 190 191 197 
+##   2   1   1   2   1   1   1   2   1   1   1   1   1   1   1   1   1   2   1   1 
+## 200 206 209 211 235 259 276 
+##   1   1   1   1   1   1   1</code></pre>
+</section>
+<section id="topic-model-exercise-create-subset-and-dfm" class="slide level2">
+<h2>Topic model exercise: Create subset and dfm</h2>
+<p>We’ll only consider those paragraphs that contain at least 8 words, remove punctuation, numbers, stop words, and tokens with less than 2 characters.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>speeches_para <span class="ot">&lt;-</span> <span class="fu">corpus_subset</span>(speeches_para, <span class="fu">ntoken</span>(speeches_para) <span class="sc">&gt;</span> <span class="dv">7</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>para_tokens <span class="ot">&lt;-</span> <span class="fu">tokens</span>(speeches_para, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">remove_punct =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">remove_numbers =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_remove</span>(<span class="fu">stopwords</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_select</span>(<span class="at">min_nchar =</span> <span class="dv">2</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>para_dfm <span class="ot">&lt;-</span> <span class="fu">dfm</span>(para_tokens)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-lda-topic-model" class="slide level2">
+<h2>Topic model exercise: LDA Topic model</h2>
+<p>Quanteda does not have any built-in topic models but we can load the required functions from the <code>topicmodels</code>, the <code>seedlda</code>, the <code>stm</code>, or similar packages. The packages each support different types of topic models and come with different functions for further analysis. We will run an LDA model with 10 topic categories using the <code>seededlda</code> package.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(seededlda)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>para_lda <span class="ot">&lt;-</span> <span class="fu">textmodel_lda</span>(para_dfm, <span class="at">k =</span> <span class="dv">10</span>)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-investigate-topic-model-output" class="slide level2">
+<h2>Topic model exercise: Investigate topic model output</h2>
+<p>Let’s look at the most important term for each topic</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">terms</span>(para_lda, <span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##       topic1     topic2        topic3    topic4      topic5         
+##  [1,] &quot;people&quot;   &quot;physicians&quot;  &quot;women&quot;   &quot;baby&quot;      &quot;abortion&quot;     
+##  [2,] &quot;just&quot;     &quot;medical&quot;     &quot;health&quot;  &quot;child&quot;     &quot;partial-birth&quot;
+##  [3,] &quot;child&quot;    &quot;physician&quot;   &quot;want&quot;    &quot;procedure&quot; &quot;ban&quot;          
+##  [4,] &quot;like&quot;     &quot;induction&quot;   &quot;say&quot;     &quot;can&quot;       &quot;abortions&quot;    
+##  [5,] &quot;think&quot;    &quot;patient&quot;     &quot;woman&quot;   &quot;fetus&quot;     &quot;birth&quot;        
+##  [6,] &quot;us&quot;       &quot;best&quot;        &quot;going&quot;   &quot;mother&quot;    &quot;procedure&quot;    
+##  [7,] &quot;children&quot; &quot;used&quot;        &quot;side&quot;    &quot;living&quot;    &quot;procedures&quot;   
+##  [8,] &quot;know&quot;     &quot;medicine&quot;    &quot;think&quot;   &quot;baby&#39;s&quot;    &quot;term&quot;         
+##  [9,] &quot;see&quot;      &quot;appropriate&quot; &quot;believe&quot; &quot;pregnancy&quot; &quot;bill&quot;         
+## [10,] &quot;life&quot;     &quot;procedures&quot;  &quot;doctors&quot; &quot;born&quot;      &quot;partial&quot;      
+##       topic6      topic7       topic8         topic9       topic10           
+##  [1,] &quot;procedure&quot; &quot;roe&quot;        &quot;women&quot;        &quot;senator&quot;    &quot;court&quot;           
+##  [2,] &quot;life&quot;      &quot;wade&quot;       &quot;health&quot;       &quot;president&quot;  &quot;bill&quot;            
+##  [3,] &quot;health&quot;    &quot;senate&quot;     &quot;right&quot;        &quot;time&quot;       &quot;supreme&quot;         
+##  [4,] &quot;medical&quot;   &quot;abortion&quot;   &quot;women&#39;s&quot;      &quot;mr&quot;         &quot;health&quot;          
+##  [5,] &quot;necessary&quot; &quot;law&quot;        &quot;choose&quot;       &quot;debate&quot;     &quot;exception&quot;       
+##  [6,] &quot;mother&quot;    &quot;states&quot;     &quot;rights&quot;       &quot;senate&quot;     &quot;legislation&quot;     
+##  [7,] &quot;medically&quot; &quot;bill&quot;       &quot;woman&#39;s&quot;      &quot;minutes&quot;    &quot;said&quot;            
+##  [8,] &quot;never&quot;     &quot;decision&quot;   &quot;care&quot;         &quot;california&quot; &quot;case&quot;            
+##  [9,] &quot;protect&quot;   &quot;right&quot;      &quot;reproductive&quot; &quot;first&quot;      &quot;unconstitutional&quot;
+## [10,] &quot;pregnancy&quot; &quot;conference&quot; &quot;decisions&quot;    &quot;floor&quot;      &quot;state&quot;</code></pre>
+</section>
+<section id="topic-model-exercise-plot-most-important-terms" class="slide level2">
+<h2>Topic model exercise: Plot most important terms</h2>
+<p>We can extract the beta coefficients for each word from the model output into a data frame and tidy them up a bit to plot the key words for each topic.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>terms_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(para_lda<span class="sc">$</span>phi) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">topic =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(term, beta, <span class="sc">-</span>topic) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_max</span>(beta, <span class="at">n =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(topic, <span class="sc">-</span>beta)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-plot-most-important-terms-1" class="slide level2">
+<h2>Topic model exercise: Plot most important terms</h2>
+<p>Then we can plot them using our familiar ggplot syntax.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>terms_df <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">term =</span> <span class="fu">reorder_within</span>(term, beta, topic)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(<span class="fu">aes</span>(beta, term, <span class="at">fill =</span> <span class="fu">factor</span>(topic))) <span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="sc">~</span> topic, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_reordered</span>()</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-plot-most-important-terms-2" class="slide level2">
+<h2>Topic model exercise: Plot most important terms</h2>
+<p><img src="Week_10_Slides_files/figure-revealjs/unnamed-chunk-20-1.png" width="768" /></p>
+</section>
+<section id="topic-model-exercise-assign-topics-to-documents" class="slide level2">
+<h2>Topic model exercise: Assign topics to documents</h2>
+<p>We can use the <code>topics()</code> function from the <code>seedlda</code> package to obtain the most likely topic for each document and assign them as a new document-level variable.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>para_dfm<span class="sc">$</span>topic <span class="ot">&lt;-</span> <span class="fu">topics</span>(para_lda)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-create-topic-labels" class="slide level2">
+<h2>Topic model exercise: Create topic labels</h2>
+<p>We can use the most important terms to create a label for each topic that helps us to differentiate between them.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>top_terms <span class="ot">&lt;-</span> <span class="fu">terms</span>(para_lda, <span class="dv">4</span>) </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>topic_names <span class="ot">&lt;-</span> <span class="fu">apply</span>(top_terms, <span class="dv">2</span>, paste, <span class="at">collapse=</span><span class="st">&quot;_&quot;</span>)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-create-topic-labels-1" class="slide level2">
+<h2>Topic model exercise: Create topic labels</h2>
+<pre><code>##                                   topic1 
+##                 &quot;people_just_child_like&quot; 
+##                                   topic2 
+## &quot;physicians_medical_physician_induction&quot; 
+##                                   topic3 
+##                  &quot;women_health_want_say&quot; 
+##                                   topic4 
+##               &quot;baby_child_procedure_can&quot; 
+##                                   topic5 
+##   &quot;abortion_partial-birth_ban_abortions&quot; 
+##                                   topic6 
+##          &quot;procedure_life_health_medical&quot; 
+##                                   topic7 
+##               &quot;roe_wade_senate_abortion&quot; 
+##                                   topic8 
+##             &quot;women_health_right_women&#39;s&quot; 
+##                                   topic9 
+##              &quot;senator_president_time_mr&quot; 
+##                                  topic10 
+##              &quot;court_bill_supreme_health&quot;</code></pre>
+</section>
+<section id="topic-model-exercise-plot-topic-distribution" class="slide level2">
+<h2>Topic model exercise: Plot topic distribution</h2>
+<p>Similar to how we plotted the most important words per topic we can also extract the gamma coefficients of the model to plot the prevalence of topics across all documents.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>topic_names_df <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>(topic_names) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(topic, names)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>topics_df <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(para_lda<span class="sc">$</span>theta) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">document =</span> <span class="fu">rownames</span>(.)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gather</span>(topic, gamma, <span class="sc">-</span>document) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(topic) <span class="sc">%&gt;%</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gamma =</span> <span class="fu">mean</span>(gamma)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(gamma)) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(topic_names_df, <span class="at">by =</span> <span class="st">&quot;topic&quot;</span>)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-plot-most-important-terms-3" class="slide level2">
+<h2>Topic model exercise: Plot most important terms</h2>
+<p>Then we can plot them using our familiar ggplot syntax.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>topics_df <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="fu">reorder</span>(topic, gamma), gamma, <span class="at">label =</span> names, <span class="at">fill =</span> topic)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">show.legend =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">nudge_y =</span> <span class="fl">0.0005</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_flip</span>() <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">expand =</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">0.2</span>),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>()) <span class="sc">+</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="fu">expression</span>(gamma),</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">&quot;Topic Prevalence&quot;</span>,</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;With the top words that contribute to each topic&quot;</span>)</span></code></pre></div>
+</section>
+<section id="topic-model-exercise-plot-most-important-terms-4" class="slide level2">
+<h2>Topic model exercise: Plot most important terms</h2>
+<p><img src="Week_10_Slides_files/figure-revealjs/unnamed-chunk-26-1.png" width="768" /></p>
+</section></section>
+<section>
+<section id="assignment-2" class="title-slide slide level1">
+<h1>Assignment 2</h1>
+
+</section>
+<section id="assignment-2-1" class="slide level2">
+<h2>Assignment 2</h2>
+<p>So far, we have looked only at one variant of the topic model. For the 2nd assignment you will explore the structural topic model from the <code>stm</code> package along with various diagnostic functions. You find the instructions for the assignment on GitHub and Moodle.</p>
+<p>Due date: 30 November 2021 Submission form: RMarkdown document</p>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<p>Next week we will look at the very powerful <code>spacyr</code> package.</p>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_10_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_10_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_10_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_10_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_10_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
