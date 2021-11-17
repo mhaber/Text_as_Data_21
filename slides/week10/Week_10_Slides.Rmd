@@ -324,7 +324,7 @@ topics_df <- as_tibble(para_lda$theta) %>%
   left_join(topic_names_df, by = "topic")
 ```
 
-## Topic model exercise: Plot most important terms
+## Topic model exercise: Plot topic prevalence
 
 Then we can plot them using our familiar ggplot syntax.
 
@@ -342,7 +342,7 @@ topics_df %>%
        subtitle = "With the top words that contribute to each topic")
 ```
 
-## Topic model exercise: Plot most important terms
+## Topic model exercise: Plot topic prevalence
 
 ```{r, echo = FALSE}
 topics_df %>%
