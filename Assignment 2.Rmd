@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Load and Prepare the data set
 
-1. Load the `corpus_us_debate_speaker` from the data folder on the course's github repository main site, reshape the corpus into paragraphs and select only those paragraphs with at least 8 words in them. Create a tokens object in which words are converted to lower case and remove numbers, punctuation, common stop words, and tokens with less than two characters. Convert the tokens object to a dfm and trim it to include only tokens that appear at least in 7.5% of the documents and at most in 90% of the documents.
+1. Load the `corpus_us_debate_speaker` from the data folder on the course's github repository main site, reshape the corpus into paragraphs and select only those paragraphs with at least 8 words in them. Create a tokens object in which words are converted to lower case and remove numbers, punctuation, common stop words, and tokens with less than two characters. Convert the tokens object to a dfm.
 
 2. Use the `convert()` function from `quanteda` to convert the dfm to an stm.
 

@@ -171,7 +171,7 @@ pre code {
 <div id="load-and-prepare-the-data-set" class="section level2">
 <h2>Load and Prepare the data set</h2>
 <ol style="list-style-type: decimal">
-<li><p>Load the <code>corpus_us_debate_speaker</code> from the data folder on the course’s github repository main site, reshape the corpus into paragraphs and select only those paragraphs with at least 8 words in them. Create a tokens object in which words are converted to lower case and remove numbers, punctuation, common stop words, and tokens with less than two characters. Convert the tokens object to a dfm and trim it to include only tokens that appear at least in 7.5% of the documents and at most in 90% of the documents.</p></li>
+<li><p>Load the <code>corpus_us_debate_speaker</code> from the data folder on the course’s github repository main site, reshape the corpus into paragraphs and select only those paragraphs with at least 8 words in them. Create a tokens object in which words are converted to lower case and remove numbers, punctuation, common stop words, and tokens with less than two characters. Convert the tokens object to a dfm.</p></li>
 <li><p>Use the <code>convert()</code> function from <code>quanteda</code> to convert the dfm to an stm.</p></li>
 </ol>
 </div>
