@@ -1,0 +1,257 @@
+---
+title: "Text as Data: Week 11"
+author: "Matthias Haber"
+date: "24 November 2021"
+output:
+    revealjs::revealjs_presentation:
+      theme: moon
+      reveal_plugins: ["notes", "zoom", "chalkboard"]
+      highlight: haddock
+      center: false
+      self_contained: false
+      incremental: false
+      reveal_options:
+        slideNumber: true
+        progress: true
+        previewLinks: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
+library(tidyverse)
+library(tidytext)
+library(readtext)
+library(quanteda)
+theme_set(theme_minimal())
+```
+
+# Goals for Today
+
+## Goals
+
+- Final Assignment
+- spacyr
+
+# Final Assignment
+
+## Final Assignment
+
+- Your final assignment is a presentation of a research project of your own choosing. The only requirement is that the project involves some sort of text analysis akin to the methods we covered in the course (sentiment analysis, scaling, topic models, etc.). Please record your presentation (voice is fine) and submit it together with your RMarkdown file via MS Teams or E-Mail.
+
+- Grading will be determined by the quality of the presentation and the degree to which you manage to apply the skills what you have learned during the course. 
+
+- Deadline: December 17, 2021.
+- Form: RMarkdown file and audio or video file of your recording.
+
+# Advanced NLP with spacyR
+
+## Corpus Linguistics
+
+- Corpus linguistics is the investigation of linguistic research questions that have been framed in terms of the conditional distribution of linguistic phenomena in a linguistic corpus _(Stefanowitch, Anatol. 2019. Corpus Linguistics: A Guide to the Methodology)_
+
+- Statistical properties of language
+
+- Examples: 
+
+    + Do speakers use different phrases in different contexts?
+    + Do speakers of different socio-economic classes talk differently?
+    
+## Advanced NLP with spacyR
+
+- In addition to the techniques introduced in the previous sessions, there are powerful preprocessing techniques that rely on more advanced natural language processing (NLP).
+
+- There are several R packages that provide interfaces for external NLP modules such as the `coreNLP` or the `cleanNLP` package but we'll be focusing `spacyr` the R interface for the popular python moduly `spaCy`. 
+
+- `spacyr` supports English, German, and French and can be used as sort of a swiss-army knive for several NLP tasks such as lemmatization, part-of-speech (POS) tagging, named entity
+recognition (NER), and dependency parsing.
+
+## Installing `spacyr`
+
+- `spacyr` is an interface to Python and thus requires you to have Python installed on your computer. For macOS and Linux-based systems, `spacyr` will install Python via a "miniconda" environment when using the `spacy_install()` function after installing and loading the package. Windows uses will need to install [miniconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) or [Anaconda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) manually.
+
+```{r, eval=FALSE}
+install.packages("spacyr")
+library(spacyr)
+spacy_install()
+spacy_install_virtualenv() #for virtual environment
+```
+
+## Spacyr in action
+
+- `spacy_parse()` is spaCy's main function to tokenize and tag texts. It creates a data.frame with one word on each row, and the columns containing the original word (token), it’s lemma, it’s part-of-speech tag, and it's dependency relationship. The final column identifies named entities, i.e. persons, organizations, and locations.
+
+```{r}
+library(spacyr)
+spacy_initialize() # start spacy with "en_core_web_sm" model
+text <- "Matthias Haber is giving a course at the Hertie School."
+text_pos <- spacy_parse(text, dependency = TRUE)
+text_pos
+```
+
+
+## Lemmatization
+
+- Lemmatization is similar to stemming but uses a dictionary to replace terms with their lemma instead of cutting off their ends. This results in much more accutre normalization of verb forms.
+
+## Part-of-speech tagging
+
+- POS tags are morpho-syntactic categories for words,
+such as nouns, verbs, articles and adjectives. In the example above we saw four proper nouns (PROPN), an auxiliary (AUX), one verb (VERB), two determiner (DET), one noun (NOUN), one adposition (ADP), and punctuation (PUNCT). This information can be used to focus an analysis on certain types of grammar categories.
+
+## Named entity recognition
+
+- Named entity recognition is a technique for identifying whether a word or sequence of words represents an entity such as a person or organization. "Matthias Haber", for example, is recognized as a Person and Hertie School as an Organization. Named entity recognition if often combined with co-reference, a technique for grouping different references to the same entity, such as anaphora (e.g., he, she, the president).
+
+## Dependency parsing
+
+- Dependency parsing provides the syntactic relations between tokens. In the `spacyr` output this information is given in the `head_token_id` and `dep_rel` columns, where the former indicates to what token a token is related to and the latter indicates the type of the relation. In our example, "Matthias" is related to "Haber" as a compound and forms a single entity. "Haber" is also the nominal subject (nsubj) of the verb "giving" and "course" is the direct object, thus indicating that "Haber" is the one that "gave"  something. 
+
+## Entity extraction
+
+- With the `entity_extract()` function we can extract entities from the output of `spacy_parse()`. This ‘merges’ words that form a name together such as "Matthias Haber"
+
+```{r}
+entity_extract(text_pos)
+```
+
+## Consolidating entities
+
+- We can use the `entity_consolidate()` function to compound multi-word entities into single “tokens” and replace the original tokens.
+
+```{r}
+entity_consolidate(text_pos)
+```
+
+## Consolidating noun phrases
+
+- `spacyr` can also extract or concatenate noun phrases using `nounphrase_extract()` and `nounphrase_consolidate()` respectively.
+
+```{r}
+text %>% 
+spacy_parse(nounphrase = TRUE) %>% 
+nounphrase_extract()
+```
+
+## `spacyr` and `quanteda`
+
+- `spacyr` and `quanteda` work very well together (both were developed by the same people). In fact, the data frame returned by spacyr can be directly used in most quanteda functions. 
+
+```{r}
+library(quanteda)
+ndoc(text_pos)
+ntoken(text_pos)
+```
+
+## `spacyr` and `quanteda`
+
+- The `dfm()` function itself does not accept a tokens data frame, but there is an as.tokens function that does:
+
+```{r}
+as.tokens(text_pos, include_pos = "pos") %>% 
+  dfm()
+```
+
+## `spacyr` and `quanteda`
+
+- You can use the `tokens_select()` function from `quanteda` to select certain pos-based patterns using regular expressions:
+
+```{r}
+as.tokens(text_pos, include_pos = "pos") %>% 
+  tokens_select(pattern = "*PROPN")
+```
+
+## Quit spacy
+
+- While running `spacyr` a Python process is always running in the background and causing R to take up a lot of memory (typically over 1.5GB).
+
+- When you are finished with your analysis, run `spacy_finalize()` to terminate the Python process and free up the memory.
+
+```{r, eval=FALSE}
+spacy_finalize()
+```
+
+## Using other language models
+
+- By default, `spacyr` loads an English language model. You also can load other language models by specifying the model option when calling `spacy_initialize()`. Note that the additional language models must first be installed in `spaCy`
+
+```{r}
+spacy_finalize()
+spacy_initialize(model = "de_core_news_sm")
+spacy_parse("Matthias Haber gibt einen Kurs an der Hertie School")
+spacy_finalize()
+```
+
+# `spacyr` group exercise
+
+## Annotate the inaugural speeches
+
+- Now let’s use `spacyr` to analyze the presidential inaugural addresses. This should take about 20-30 seconds given that we need to tag 155,000 tokens
+
+```{r}
+library(quanteda)
+spacy_initialize()
+inaug_pos <- spacy_parse(data_corpus_inaugural) 
+```
+
+## syntactic complexity
+
+- Having annotated our documents, we can now use the POS tags for more advanced analysis. For example, let's say we are interested in comparing the complexity of the language used across the speeches by measuring their _syntactic complexity_. We approximate _syntatic complexity_ using the simple formular: 
+
+- $S = \frac{\text{Number of Verbs}}{\text{Number of Sentences}} x \frac{\text{Number of Words}}{\text{Number of Sentences}}$
+
+```{r}
+syn_com <- inaug_pos %>%
+  group_by(doc_id) %>%
+  summarize(verbs = sum(pos=="VERB"),
+            sents= max(sentence_id),
+            words = n()) %>%
+  mutate(F_C = (verbs/sents)*(words/sents)) %>%
+  ungroup
+```
+
+## syntactic complexity
+
+- Let's plot the results:
+
+```{r, eval = FALSE}
+library(ggplot2)
+syn_com %>% 
+  ggplot(aes(x = doc_id, y = F_C, fill = doc_id)) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(y = "Syntactic Complexty", x = "") +
+  guides(fill = "none")
+```
+
+## syntactic complexity
+
+```{r, echo = FALSE}
+library(ggplot2)
+syn_com %>% 
+  ggplot(aes(x = doc_id, y = F_C, fill = doc_id)) + 
+  geom_col() + 
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(y = "Syntactic Complexty", x = "") +
+  guides(fill = "none")
+```
+
+# `spacyr` individual exercise
+
+## `spacyr` individual exercise
+
+- Load the `data_corpus_moviereviews` corpus from the `quanteda.textmodels` package and use `spacyr` to parse the texts and provide the top 20 adjectives for positive and negative reviews respectively. Adjectives can be any words whose extended pos tags start with "JJ". When computing the word frequencies, please use the lemmas instead of the word forms.
+
+- Time: Take about 15 minutes to complete the task
+
+# Wrapping up
+
+## Questions?
+
+## Outlook for our next session
+
+- Next week we will have our final session and will take a look at some more advanced NLP topics and wrap up the course.
+
+## That's it for today
+
+Thanks for your attention!

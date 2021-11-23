@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-11-24" />
+  <title>Text as Data: Week 11</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_11_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_11_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_11_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_11_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_11_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 11</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">24 November 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li>Final Assignment</li>
+<li>spacyr</li>
+</ul>
+</section></section>
+<section>
+<section id="final-assignment" class="title-slide slide level1">
+<h1>Final Assignment</h1>
+
+</section>
+<section id="final-assignment-1" class="slide level2">
+<h2>Final Assignment</h2>
+<ul>
+<li><p>Your final assignment is a presentation of a research project of your own choosing. The only requirement is that the project involves some sort of text analysis akin to the methods we covered in the course (sentiment analysis, scaling, topic models, etc.). Please record your presentation (voice is fine) and submit it together with your RMarkdown file via MS Teams or E-Mail.</p></li>
+<li><p>Grading will be determined by the quality of the presentation and the degree to which you manage to apply the skills what you have learned during the course.</p></li>
+<li><p>Deadline: December 17, 2021.</p></li>
+<li><p>Form: RMarkdown file and audio or video file of your recording.</p></li>
+</ul>
+</section></section>
+<section>
+<section id="advanced-nlp-with-spacyr" class="title-slide slide level1">
+<h1>Advanced NLP with spacyR</h1>
+
+</section>
+<section id="corpus-linguistics" class="slide level2">
+<h2>Corpus Linguistics</h2>
+<ul>
+<li><p>Corpus linguistics is the investigation of linguistic research questions that have been framed in terms of the conditional distribution of linguistic phenomena in a linguistic corpus <em>(Stefanowitch, Anatol. 2019. Corpus Linguistics: A Guide to the Methodology)</em></p></li>
+<li><p>Statistical properties of language</p></li>
+<li><p>Examples:</p>
+<ul>
+<li>Do speakers use different phrases in different contexts?</li>
+<li>Do speakers of different socio-economic classes talk differently?</li>
+</ul></li>
+</ul>
+</section>
+<section id="advanced-nlp-with-spacyr-1" class="slide level2">
+<h2>Advanced NLP with spacyR</h2>
+<ul>
+<li><p>In addition to the techniques introduced in the previous sessions, there are powerful preprocessing techniques that rely on more advanced natural language processing (NLP).</p></li>
+<li><p>There are several R packages that provide interfaces for external NLP modules such as the <code>coreNLP</code> or the <code>cleanNLP</code> package but we’ll be focusing <code>spacyr</code> the R interface for the popular python moduly <code>spaCy</code>.</p></li>
+<li><p><code>spacyr</code> supports English, German, and French and can be used as sort of a swiss-army knive for several NLP tasks such as lemmatization, part-of-speech (POS) tagging, named entity recognition (NER), and dependency parsing.</p></li>
+</ul>
+</section>
+<section id="installing-spacyr" class="slide level2">
+<h2>Installing <code>spacyr</code></h2>
+<ul>
+<li><code>spacyr</code> is an interface to Python and thus requires you to have Python installed on your computer. For macOS and Linux-based systems, <code>spacyr</code> will install Python via a “miniconda” environment when using the <code>spacy_install()</code> function after installing and loading the package. Windows uses will need to install <a href="https://conda.io/projects/conda/en/latest/user-guide/install/index.html">miniconda</a> or <a href="https://conda.io/projects/conda/en/latest/user-guide/install/index.html">Anaconda</a> manually.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">&quot;spacyr&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spacyr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_install</span>()</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_install_virtualenv</span>() <span class="co">#for virtual environment</span></span></code></pre></div>
+</section>
+<section id="spacyr-in-action" class="slide level2">
+<h2>Spacyr in action</h2>
+<ul>
+<li><code>spacy_parse()</code> is spaCy’s main function to tokenize and tag texts. It creates a data.frame with one word on each row, and the columns containing the original word (token), it’s lemma, it’s part-of-speech tag, and it’s dependency relationship. The final column identifies named entities, i.e. persons, organizations, and locations.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(spacyr)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_initialize</span>() <span class="co"># start spacy with &quot;en_core_web_sm&quot; model</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>text <span class="ot">&lt;-</span> <span class="st">&quot;Matthias Haber is giving a course at the Hertie School.&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>text_pos <span class="ot">&lt;-</span> <span class="fu">spacy_parse</span>(text, <span class="at">dependency =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>text_pos</span></code></pre></div>
+<pre><code>##    doc_id sentence_id token_id    token    lemma   pos head_token_id  dep_rel
+## 1   text1           1        1 Matthias Matthias PROPN             2 compound
+## 2   text1           1        2    Haber    Haber PROPN             4    nsubj
+## 3   text1           1        3       is       be   AUX             4      aux
+## 4   text1           1        4   giving     give  VERB             4     ROOT
+## 5   text1           1        5        a        a   DET             6      det
+## 6   text1           1        6   course   course  NOUN             4     dobj
+## 7   text1           1        7       at       at   ADP             4     prep
+## 8   text1           1        8      the      the   DET            10      det
+## 9   text1           1        9   Hertie   Hertie PROPN            10 compound
+## 10  text1           1       10   School   School PROPN             7     pobj
+## 11  text1           1       11        .        . PUNCT             4    punct
+##      entity
+## 1  PERSON_B
+## 2  PERSON_I
+## 3          
+## 4          
+## 5          
+## 6          
+## 7          
+## 8     ORG_B
+## 9     ORG_I
+## 10    ORG_I
+## 11</code></pre>
+</section>
+<section id="lemmatization" class="slide level2">
+<h2>Lemmatization</h2>
+<ul>
+<li>Lemmatization is similar to stemming but uses a dictionary to replace terms with their lemma instead of cutting off their ends. This results in much more accutre normalization of verb forms.</li>
+</ul>
+</section>
+<section id="part-of-speech-tagging" class="slide level2">
+<h2>Part-of-speech tagging</h2>
+<ul>
+<li>POS tags are morpho-syntactic categories for words, such as nouns, verbs, articles and adjectives. In the example above we saw four proper nouns (PROPN), an auxiliary (AUX), one verb (VERB), two determiner (DET), one noun (NOUN), one adposition (ADP), and punctuation (PUNCT). This information can be used to focus an analysis on certain types of grammar categories.</li>
+</ul>
+</section>
+<section id="named-entity-recognition" class="slide level2">
+<h2>Named entity recognition</h2>
+<ul>
+<li>Named entity recognition is a technique for identifying whether a word or sequence of words represents an entity such as a person or organization. “Matthias Haber”, for example, is recognized as a Person and Hertie School as an Organization. Named entity recognition if often combined with co-reference, a technique for grouping different references to the same entity, such as anaphora (e.g., he, she, the president).</li>
+</ul>
+</section>
+<section id="dependency-parsing" class="slide level2">
+<h2>Dependency parsing</h2>
+<ul>
+<li>Dependency parsing provides the syntactic relations between tokens. In the <code>spacyr</code> output this information is given in the <code>head_token_id</code> and <code>dep_rel</code> columns, where the former indicates to what token a token is related to and the latter indicates the type of the relation. In our example, “Matthias” is related to “Haber” as a compound and forms a single entity. “Haber” is also the nominal subject (nsubj) of the verb “giving” and “course” is the direct object, thus indicating that “Haber” is the one that “gave” something.</li>
+</ul>
+</section>
+<section id="entity-extraction" class="slide level2">
+<h2>Entity extraction</h2>
+<ul>
+<li>With the <code>entity_extract()</code> function we can extract entities from the output of <code>spacy_parse()</code>. This ‘merges’ words that form a name together such as “Matthias Haber”</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">entity_extract</span>(text_pos)</span></code></pre></div>
+<pre><code>##   doc_id sentence_id            entity entity_type
+## 1  text1           1    Matthias_Haber      PERSON
+## 2  text1           1 the_Hertie_School         ORG</code></pre>
+</section>
+<section id="consolidating-entities" class="slide level2">
+<h2>Consolidating entities</h2>
+<ul>
+<li>We can use the <code>entity_consolidate()</code> function to compound multi-word entities into single “tokens” and replace the original tokens.</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">entity_consolidate</span>(text_pos)</span></code></pre></div>
+<pre><code>##   doc_id sentence_id token_id             token             lemma    pos
+## 1  text1           1        1    Matthias_Haber    Matthias_Haber ENTITY
+## 2  text1           1        2                is                be    AUX
+## 3  text1           1        3            giving              give   VERB
+## 4  text1           1        4                 a                 a    DET
+## 5  text1           1        5            course            course   NOUN
+## 6  text1           1        6                at                at    ADP
+## 7  text1           1        7 the_Hertie_School the_Hertie_School ENTITY
+## 8  text1           1        8                 .                 .  PUNCT
+##   entity_type
+## 1      PERSON
+## 2            
+## 3            
+## 4            
+## 5            
+## 6            
+## 7         ORG
+## 8</code></pre>
+</section>
+<section id="consolidating-noun-phrases" class="slide level2">
+<h2>Consolidating noun phrases</h2>
+<ul>
+<li><code>spacyr</code> can also extract or concatenate noun phrases using <code>nounphrase_extract()</code> and <code>nounphrase_consolidate()</code> respectively.</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>text <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_parse</span>(<span class="at">nounphrase =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">nounphrase_extract</span>()</span></code></pre></div>
+<pre><code>##   doc_id sentence_id        nounphrase
+## 1  text1           1    Matthias_Haber
+## 2  text1           1          a_course
+## 3  text1           1 the_Hertie_School</code></pre>
+</section>
+<section id="spacyr-and-quanteda" class="slide level2">
+<h2><code>spacyr</code> and <code>quanteda</code></h2>
+<ul>
+<li><code>spacyr</code> and <code>quanteda</code> work very well together (both were developed by the same people). In fact, the data frame returned by spacyr can be directly used in most quanteda functions.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ndoc</span>(text_pos)</span></code></pre></div>
+<pre><code>## [1] 1</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ntoken</span>(text_pos)</span></code></pre></div>
+<pre><code>## text1 
+##    11</code></pre>
+</section>
+<section id="spacyr-and-quanteda-1" class="slide level2">
+<h2><code>spacyr</code> and <code>quanteda</code></h2>
+<ul>
+<li>The <code>dfm()</code> function itself does not accept a tokens data frame, but there is an as.tokens function that does:</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.tokens</span>(text_pos, <span class="at">include_pos =</span> <span class="st">&quot;pos&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dfm</span>()</span></code></pre></div>
+<pre><code>## Document-feature matrix of: 1 document, 11 features (0.00% sparse) and 0 docvars.
+##        features
+## docs    matthias/propn haber/propn is/aux giving/verb a/det course/noun at/adp
+##   text1              1           1      1           1     1           1      1
+##        features
+## docs    the/det hertie/propn school/propn
+##   text1       1            1            1
+## [ reached max_nfeat ... 1 more feature ]</code></pre>
+</section>
+<section id="spacyr-and-quanteda-2" class="slide level2">
+<h2><code>spacyr</code> and <code>quanteda</code></h2>
+<ul>
+<li>You can use the <code>tokens_select()</code> function from <code>quanteda</code> to select certain pos-based patterns using regular expressions:</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.tokens</span>(text_pos, <span class="at">include_pos =</span> <span class="st">&quot;pos&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tokens_select</span>(<span class="at">pattern =</span> <span class="st">&quot;*PROPN&quot;</span>)</span></code></pre></div>
+<pre><code>## Tokens consisting of 1 document.
+## text1 :
+## [1] &quot;Matthias/PROPN&quot; &quot;Haber/PROPN&quot;    &quot;Hertie/PROPN&quot;   &quot;School/PROPN&quot;</code></pre>
+</section>
+<section id="quit-spacy" class="slide level2">
+<h2>Quit spacy</h2>
+<ul>
+<li><p>While running <code>spacyr</code> a Python process is always running in the background and causing R to take up a lot of memory (typically over 1.5GB).</p></li>
+<li><p>When you are finished with your analysis, run <code>spacy_finalize()</code> to terminate the Python process and free up the memory.</p></li>
+</ul>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_finalize</span>()</span></code></pre></div>
+</section>
+<section id="using-other-language-models" class="slide level2">
+<h2>Using other language models</h2>
+<ul>
+<li>By default, <code>spacyr</code> loads an English language model. You also can load other language models by specifying the model option when calling <code>spacy_initialize()</code>. Note that the additional language models must first be installed in <code>spaCy</code></li>
+</ul>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_finalize</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_initialize</span>(<span class="at">model =</span> <span class="st">&quot;de_core_news_sm&quot;</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_parse</span>(<span class="st">&quot;Matthias Haber gibt einen Kurs an der Hertie School&quot;</span>)</span></code></pre></div>
+<pre><code>##   doc_id sentence_id token_id    token    lemma   pos entity
+## 1  text1           1        1 Matthias Matthias PROPN  PER_B
+## 2  text1           1        2    Haber    Haber PROPN  PER_I
+## 3  text1           1        3     gibt    geben  VERB       
+## 4  text1           1        4    einen      ein   DET       
+## 5  text1           1        5     Kurs     Kurs  NOUN       
+## 6  text1           1        6       an       an   ADP       
+## 7  text1           1        7      der      der   DET       
+## 8  text1           1        8   Hertie   Hertie PROPN  ORG_B
+## 9  text1           1        9   School   School PROPN  ORG_I</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_finalize</span>()</span></code></pre></div>
+</section></section>
+<section>
+<section id="spacyr-group-exercise" class="title-slide slide level1">
+<h1><code>spacyr</code> group exercise</h1>
+
+</section>
+<section id="annotate-the-inaugural-speeches" class="slide level2">
+<h2>Annotate the inaugural speeches</h2>
+<ul>
+<li>Now let’s use <code>spacyr</code> to analyze the presidential inaugural addresses. This should take about 20-30 seconds given that we need to tag 155,000 tokens</li>
+</ul>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(quanteda)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">spacy_initialize</span>()</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>inaug_pos <span class="ot">&lt;-</span> <span class="fu">spacy_parse</span>(data_corpus_inaugural) </span></code></pre></div>
+</section>
+<section id="syntactic-complexity" class="slide level2">
+<h2>syntactic complexity</h2>
+<ul>
+<li><p>Having annotated our documents, we can now use the POS tags for more advanced analysis. For example, let’s say we are interested in comparing the complexity of the language used across the speeches by measuring their <em>syntactic complexity</em>. We approximate <em>syntatic complexity</em> using the simple formular:</p></li>
+<li><p><span class="math inline">\(S = \frac{\text{Number of Verbs}}{\text{Number of Sentences}} x \frac{\text{Number of Words}}{\text{Number of Sentences}}\)</span></p></li>
+</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>syn_com <span class="ot">&lt;-</span> inaug_pos <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(doc_id) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">verbs =</span> <span class="fu">sum</span>(pos<span class="sc">==</span><span class="st">&quot;VERB&quot;</span>),</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">sents=</span> <span class="fu">max</span>(sentence_id),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">words =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">F_C =</span> (verbs<span class="sc">/</span>sents)<span class="sc">*</span>(words<span class="sc">/</span>sents)) <span class="sc">%&gt;%</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  ungroup</span></code></pre></div>
+</section>
+<section id="syntactic-complexity-1" class="slide level2">
+<h2>syntactic complexity</h2>
+<ul>
+<li>Let’s plot the results:</li>
+</ul>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>syn_com <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> doc_id, <span class="at">y =</span> F_C, <span class="at">fill =</span> doc_id)) <span class="sc">+</span> </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">y =</span> <span class="st">&quot;Syntactic Complexty&quot;</span>, <span class="at">x =</span> <span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+</section>
+<section id="syntactic-complexity-2" class="slide level2">
+<h2>syntactic complexity</h2>
+<p><img src="Week_11_Slides_files/figure-revealjs/unnamed-chunk-14-1.png" width="768" /></p>
+</section></section>
+<section>
+<section id="spacyr-individual-exercise" class="title-slide slide level1">
+<h1><code>spacyr</code> individual exercise</h1>
+
+</section>
+<section id="spacyr-individual-exercise-1" class="slide level2">
+<h2><code>spacyr</code> individual exercise</h2>
+<ul>
+<li><p>Load the <code>data_corpus_moviereviews</code> corpus from the <code>quanteda.textmodels</code> package and use <code>spacyr</code> to parse the texts and provide the top 20 adjectives for positive and negative reviews respectively. Adjectives can be any words whose extended pos tags start with “JJ”. When computing the word frequencies, please use the lemmas instead of the word forms.</p></li>
+<li><p>Time: Take about 15 minutes to complete the task</p></li>
+</ul>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="questions" class="slide level2">
+<h2>Questions?</h2>
+</section>
+<section id="outlook-for-our-next-session" class="slide level2">
+<h2>Outlook for our next session</h2>
+<ul>
+<li>Next week we will have our final session and will take a look at some more advanced NLP topics and wrap up the course.</li>
+</ul>
+</section>
+<section id="thats-it-for-today" class="slide level2">
+<h2>That’s it for today</h2>
+<p>Thanks for your attention!</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_11_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_11_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_11_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_11_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_11_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
