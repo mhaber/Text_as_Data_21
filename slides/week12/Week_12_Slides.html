@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Matthias Haber" />
+  <meta name="dcterms.date" content="2021-12-01" />
+  <title>Text as Data: Week 12</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="Week_12_Slides_files/reveal.js-3.3.0.1/css/reveal.css"/>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="Week_12_Slides_files/reveal.js-3.3.0.1/css/theme/moon.css" id="theme">
+
+<style type="text/css">
+.reveal section img {
+  background: rgba(255, 255, 255, 0.85);
+}
+</style>
+
+  <!-- some tweaks to reveal css -->
+  <style type="text/css">
+    .reveal h1 { font-size: 2.0em; }
+    .reveal h2 { font-size: 1.5em;  }
+    .reveal h3 { font-size: 1.25em;	}
+    .reveal h4 { font-size: 1em;	}
+
+    .reveal .slides>section,
+    .reveal .slides>section>section {
+      padding: 0px 0px;
+    }
+
+
+
+    .reveal table {
+      border-width: 1px;
+      border-spacing: 2px;
+      border-style: dotted;
+      border-color: gray;
+      border-collapse: collapse;
+      font-size: 0.7em;
+    }
+
+    .reveal table th {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      font-weight: bold;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+    .reveal table td {
+      border-width: 1px;
+      padding-left: 10px;
+      padding-right: 25px;
+      border-style: dotted;
+      border-color: gray;
+    }
+
+
+  </style>
+
+    <style type="text/css">code{white-space: pre;}</style>
+
+
+<!-- Printing and PDF exports -->
+<script id="paper-css" type="application/dynamic-css">
+
+/* Default Print Stylesheet Template
+   by Rob Glazebrook of CSSnewbie.com
+   Last Updated: June 4, 2008
+
+   Feel free (nay, compelled) to edit, append, and
+   manipulate this file as you see fit. */
+
+
+@media print {
+
+	/* SECTION 1: Set default width, margin, float, and
+	   background. This prevents elements from extending
+	   beyond the edge of the printed page, and prevents
+	   unnecessary background images from printing */
+	html {
+		background: #fff;
+		width: auto;
+		height: auto;
+		overflow: visible;
+	}
+	body {
+		background: #fff;
+		font-size: 20pt;
+		width: auto;
+		height: auto;
+		border: 0;
+		margin: 0 5%;
+		padding: 0;
+		overflow: visible;
+		float: none !important;
+	}
+
+	/* SECTION 2: Remove any elements not needed in print.
+	   This would include navigation, ads, sidebars, etc. */
+	.nestedarrow,
+	.controls,
+	.fork-reveal,
+	.share-reveal,
+	.state-background,
+	.reveal .progress,
+	.reveal .backgrounds {
+		display: none !important;
+	}
+
+	/* SECTION 3: Set body font face, size, and color.
+	   Consider using a serif font for readability. */
+	body, p, td, li, div {
+		font-size: 20pt!important;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		color: #000;
+	}
+
+	/* SECTION 4: Set heading font face, sizes, and color.
+	   Differentiate your headings from your body text.
+	   Perhaps use a large sans-serif for distinction. */
+	h1,h2,h3,h4,h5,h6 {
+		color: #000!important;
+		height: auto;
+		line-height: normal;
+		font-family: Georgia, "Times New Roman", Times, serif !important;
+		text-shadow: 0 0 0 #000 !important;
+		text-align: left;
+		letter-spacing: normal;
+	}
+	/* Need to reduce the size of the fonts for printing */
+	h1 { font-size: 28pt !important;  }
+	h2 { font-size: 24pt !important; }
+	h3 { font-size: 22pt !important; }
+	h4 { font-size: 22pt !important; font-variant: small-caps; }
+	h5 { font-size: 21pt !important; }
+	h6 { font-size: 20pt !important; font-style: italic; }
+
+	/* SECTION 5: Make hyperlinks more usable.
+	   Ensure links are underlined, and consider appending
+	   the URL to the end of the link for usability. */
+	a:link,
+	a:visited {
+		color: #000 !important;
+		font-weight: bold;
+		text-decoration: underline;
+	}
+	/*
+	.reveal a:link:after,
+	.reveal a:visited:after {
+		content: " (" attr(href) ") ";
+		color: #222 !important;
+		font-size: 90%;
+	}
+	*/
+
+
+	/* SECTION 6: more reveal.js specific additions by @skypanther */
+	ul, ol, div, p {
+		visibility: visible;
+		position: static;
+		width: auto;
+		height: auto;
+		display: block;
+		overflow: visible;
+		margin: 0;
+		text-align: left !important;
+	}
+	.reveal pre,
+	.reveal table {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	.reveal pre code {
+		padding: 20px;
+		border: 1px solid #ddd;
+	}
+	.reveal blockquote {
+		margin: 20px 0;
+	}
+	.reveal .slides {
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 0 !important;
+		zoom: 1 !important;
+
+		overflow: visible !important;
+		display: block !important;
+
+		text-align: left !important;
+		-webkit-perspective: none;
+		   -moz-perspective: none;
+		    -ms-perspective: none;
+		        perspective: none;
+
+		-webkit-perspective-origin: 50% 50%;
+		   -moz-perspective-origin: 50% 50%;
+		    -ms-perspective-origin: 50% 50%;
+		        perspective-origin: 50% 50%;
+	}
+	.reveal .slides section {
+		visibility: visible !important;
+		position: static !important;
+		width: auto !important;
+		height: auto !important;
+		display: block !important;
+		overflow: visible !important;
+
+		left: 0 !important;
+		top: 0 !important;
+		margin-left: 0 !important;
+		margin-top: 0 !important;
+		padding: 60px 20px !important;
+		z-index: auto !important;
+
+		opacity: 1 !important;
+
+		page-break-after: always !important;
+
+		-webkit-transform-style: flat !important;
+		   -moz-transform-style: flat !important;
+		    -ms-transform-style: flat !important;
+		        transform-style: flat !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+
+		-webkit-transition: none !important;
+		   -moz-transition: none !important;
+		    -ms-transition: none !important;
+		        transition: none !important;
+	}
+	.reveal .slides section.stack {
+		padding: 0 !important;
+	}
+	.reveal section:last-of-type {
+		page-break-after: avoid !important;
+	}
+	.reveal section .fragment {
+		opacity: 1 !important;
+		visibility: visible !important;
+
+		-webkit-transform: none !important;
+		   -moz-transform: none !important;
+		    -ms-transform: none !important;
+		        transform: none !important;
+	}
+	.reveal section img {
+		display: block;
+		margin: 15px 0px;
+		background: rgba(255,255,255,1);
+		border: 1px solid #666;
+		box-shadow: none;
+	}
+
+	.reveal section small {
+		font-size: 0.8em;
+	}
+
+}  
+</script>
+
+
+<script id="pdf-css" type="application/dynamic-css">
+    
+/**
+ * This stylesheet is used to print reveal.js
+ * presentations to PDF.
+ *
+ * https://github.com/hakimel/reveal.js#pdf-export
+ */
+
+* {
+	-webkit-print-color-adjust: exact;
+}
+
+body {
+	margin: 0 auto !important;
+	border: 0;
+	padding: 0;
+	float: none !important;
+	overflow: visible;
+}
+
+html {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Remove any elements not needed in print. */
+.nestedarrow,
+.reveal .controls,
+.reveal .progress,
+.reveal .playback,
+.reveal.overview,
+.fork-reveal,
+.share-reveal,
+.state-background {
+	display: none !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-shadow: 0 0 0 #000 !important;
+}
+
+.reveal pre code {
+	overflow: hidden !important;
+	font-family: Courier, 'Courier New', monospace !important;
+}
+
+ul, ol, div, p {
+	visibility: visible;
+	position: static;
+	width: auto;
+	height: auto;
+	display: block;
+	overflow: visible;
+	margin: auto;
+}
+.reveal {
+	width: auto !important;
+	height: auto !important;
+	overflow: hidden !important;
+}
+.reveal .slides {
+	position: static;
+	width: 100%;
+	height: auto;
+
+	left: auto;
+	top: auto;
+	margin: 0 !important;
+	padding: 0 !important;
+
+	overflow: visible;
+	display: block;
+
+	-webkit-perspective: none;
+	   -moz-perspective: none;
+	    -ms-perspective: none;
+	        perspective: none;
+
+	-webkit-perspective-origin: 50% 50%; /* there isn't a none/auto value but 50-50 is the default */
+	   -moz-perspective-origin: 50% 50%;
+	    -ms-perspective-origin: 50% 50%;
+	        perspective-origin: 50% 50%;
+}
+
+.reveal .slides section {
+	page-break-after: always !important;
+
+	visibility: visible !important;
+	position: relative !important;
+	display: block !important;
+	position: relative !important;
+
+	margin: 0 !important;
+	padding: 0 !important;
+	box-sizing: border-box !important;
+	min-height: 1px;
+
+	opacity: 1 !important;
+
+	-webkit-transform-style: flat !important;
+	   -moz-transform-style: flat !important;
+	    -ms-transform-style: flat !important;
+	        transform-style: flat !important;
+
+	-webkit-transform: none !important;
+	   -moz-transform: none !important;
+	    -ms-transform: none !important;
+	        transform: none !important;
+}
+
+.reveal section.stack {
+	margin: 0 !important;
+	padding: 0 !important;
+	page-break-after: avoid !important;
+	height: auto !important;
+	min-height: auto !important;
+}
+
+.reveal img {
+	box-shadow: none;
+}
+
+.reveal .roll {
+	overflow: visible;
+	line-height: 1em;
+}
+
+/* Slide backgrounds are placed inside of their slide when exporting to PDF */
+.reveal section .slide-background {
+	display: block !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: -1;
+}
+
+/* All elements should be above the slide-background */
+.reveal section>* {
+	position: relative;
+	z-index: 1;
+}
+
+/* Display slide speaker notes when 'showNotes' is enabled */
+.reveal .speaker-notes-pdf {
+	display: block;
+	width: 100%;
+	max-height: none;
+	left: auto;
+	top: auto;
+	z-index: 100;
+}
+
+/* Display slide numbers when 'slideNumber' is enabled */
+.reveal .slide-number-pdf {
+	display: block;
+	position: absolute;
+	font-size: 14px;
+}
+
+</script>
+
+
+<script>
+var style = document.createElement( 'style' );
+style.type = 'text/css';
+var style_script_id = window.location.search.match( /print-pdf/gi ) ? 'pdf-css' : 'paper-css';
+var style_script = document.getElementById(style_script_id).text;
+style.innerHTML = style_script;
+document.getElementsByTagName('head')[0].appendChild(style);
+</script>
+
+    <script src="Week_12_Slides_files/header-attrs-2.10/header-attrs.js"></script>
+    <link href="Week_12_Slides_files/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+    <link href="Week_12_Slides_files/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section>
+    <h1 class="title">Text as Data: Week 12</h1>
+    <h2 class="author">Matthias Haber</h2>
+    <h3 class="date">1 December 2021</h3>
+</section>
+
+<section>
+<section id="goals-for-today" class="title-slide slide level1">
+<h1>Goals for Today</h1>
+
+</section>
+<section id="goals" class="slide level2">
+<h2>Goals</h2>
+<ul>
+<li>Evaluation</li>
+<li>Final Project</li>
+<li>Transformer Architecture</li>
+<li>Wrap Up</li>
+</ul>
+</section></section>
+<section>
+<section id="evaluation" class="title-slide slide level1">
+<h1>Evaluation</h1>
+
+</section>
+<section id="course-evaluation" class="slide level2">
+<h2>Course Evaluation</h2>
+<ul>
+<li>Please take up to 15 minutes to fill out the course evaluation survey. You can access the evaluations by going to <a href="https://staff.hertie-school.org/maportal/hcmLogon">MyStudies</a> and clicking on the <em>Evaluations</em> tab.</li>
+</ul>
+</section></section>
+<section>
+<section id="final-project" class="title-slide slide level1">
+<h1>Final Project</h1>
+
+</section>
+<section id="final-project-example-1---dictionaries-and-scaling" class="slide level2">
+<h2>Final Project: Example 1 - Dictionaries and Scaling</h2>
+<ul>
+<li><p><a href="https://journals.sagepub.com/doi/full/10.1177/1075547020950735">Hart, PS, Sedona Chinn, and Stuart Soroka. 2020. “Politicization and Polarization in COVID-19 News Coverage”. <em>Science Communication 42(5):679-697</em></a></p></li>
+<li><p>How politicized and polarized are COVID-19 news in U.S. newspapers and televised network news?</p></li>
+</ul>
+</section>
+<section id="final-project-example-1---dictionaries-and-scaling-1" class="slide level2">
+<h2>Final Project: Example 1 - Dictionaries and Scaling</h2>
+<ul>
+<li><p>Research Design:</p>
+<ol type="1">
+<li>Using Lexis-Nexis, collected news broadcasts from ABC, CBS, and NBC and front-section stories from six regional and national newspapers from Jan - May 2020.</li>
+<li>Used a dictionary to identify articles and broadcasts about COVID-19</li>
+<li>Contructed two dictionaries: one with mentions of political actors to measure politicization and one with mentions of scientists to measure scientific coverage</li>
+<li>Extracted 200-word “windows” from COVID-19 articles that mention Republicans or Democrats (but not both) and then used <em>wordfish</em> to measure polarization</li>
+</ol></li>
+</ul>
+</section>
+<section id="final-project-example-1---dictionaries-and-scaling-2" class="slide level2">
+<h2>Final Project: Example 1 - Dictionaries and Scaling</h2>
+<p><img src="img/dictionary.png" width="500px" /></p>
+</section>
+<section id="final-project-example-2---topic-model" class="slide level2">
+<h2>Final Project: Example 2 - Topic Model</h2>
+<ul>
+<li><p><a href="https://www.annualreviews.org/doi/10.1146/annurev-polisci-052615-025542">Wilkerson, John &amp; Andreu Casas. 2017. “Large-Scale Computerized Text Analysis in Political Science: Opportunities and Challenges”. <em>Annual Review of Political Science</em></a></p></li>
+<li><p>What topics are covered and which are the most common in US House of Representative floor speeches? Do Republicans and Democrats tend to talk about the same issues or emphasize different ones?</p></li>
+</ul>
+</section>
+<section id="final-project-example-2---topic-model-1" class="slide level2">
+<h2>Final Project: Example 2 - Topic Model</h2>
+<ul>
+<li><p>Research Design:</p>
+<ol type="1">
+<li>Downloaded all member statements from the 113th US Congress using the <a href="https://sunlightlabs.github.io/Capitol-Words/">Sunlight Foundation’s Capitol Words API</a></li>
+<li>Removed statements that did not begin with the opening phrase of a one-minute speech: “Mr. Speaker, I rise today.…”</li>
+<li>Preprocessing</li>
+<li>Ran 17 different versions of an LDA topic model, ranging from 10 to 90 topics and clustered all 850 into 50 topics metatopics</li>
+<li>Assign a topic to each speech and plot the issue emphasis between D &amp; R</li>
+</ol></li>
+</ul>
+</section>
+<section id="final-project-example-2---topic-model-2" class="slide level2">
+<h2>Final Project: Example 2 - Topic Model</h2>
+<p><img src="img/lda.jpeg" width="700px" /></p>
+</section>
+<section id="final-project-example-3---linguistic-complexity" class="slide level2">
+<h2>Final Project: Example 3 - Linguistic Complexity</h2>
+<ul>
+<li><p><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0208450">Schoonvelde, Martijn, Anna Brosius, Gijs Schumacher, &amp; Bert N Bakker. 2019. “Liberals lecture, conservatives communicate: Analyzing complexity and ideology in 381,609 political speeches”. <em>PLoS ONE 14(2)</em></a></p></li>
+<li><p>Do liberal politicians use more complex language than conservative politicians?</p></li>
+</ul>
+</section>
+<section id="final-project-example-3---linguistic-complexity-1" class="slide level2">
+<h2>Final Project: Example 3 - Linguistic Complexity</h2>
+<ul>
+<li><p>Research Design:</p>
+<ol type="1">
+<li>Created a corpus of three speech datasets: ParlSpeech, EUSpeech, and a dataset of party congress speeches collected from <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/S4IZ8K">Harvard’s Dataverse</a></li>
+<li>Created a measure of linguistic complexity, measured as an index of the average number of words per sentence and the average word length</li>
+<li>Measured complexity of each speech and investigated distributions and trends over time</li>
+<li>Regressed speech complexity ideology (taken from the Manifesto Project DB), on OLS regression for each corpora</li>
+</ol></li>
+</ul>
+</section>
+<section id="final-project-example-3---linguistic-complexity-2" class="slide level2">
+<h2>Final Project: Example 3 - Linguistic Complexity</h2>
+<p><img src="img/complexity.png" width="700px" /></p>
+</section>
+<section id="final-project-submission" class="slide level2">
+<h2>Final Project Submission</h2>
+<ul>
+<li><p>You have two options:</p>
+<ol type="1">
+<li>Do a replication of either the Hart et al. study (Dictionary/Scaling), the Wilkerson &amp; Casas paper (Topic Model), or the Schoonvelde et.al article (Linguistic Complexity). If you choose the first paper, you can also focus on different news outlets depending on what you can get from Lexis-Nexis.</li>
+<li>Do your own project.</li>
+</ol></li>
+<li><p>Deadline: December 17, 2021.</p></li>
+<li><p>Form: RMarkdown file and audio or video file of your recording.</p></li>
+</ul>
+</section></section>
+<section>
+<section id="transformer-architecture" class="title-slide slide level1">
+<h1>Transformer Architecture</h1>
+
+</section>
+<section id="a-new-generation-of-nlp" class="slide level2">
+<h2>A new generation of NLP</h2>
+<ul>
+<li><p>Our understanding of how best to represent words and sentences in a way that best captures underlying meanings and relationships is rapidly evolving.</p></li>
+<li><p>One of the latest milestones in this development is the release of BERT in 2018, an event described as marking the beginning of a new era in NLP.</p></li>
+</ul>
+<p><img src="img/bert.png" width="400px" /></p>
+</section>
+<section id="bert-transformer-architecture" class="slide level2">
+<h2>BERT: Transformer Architecture</h2>
+<ul>
+<li><p>BERT is a Transformer language model with variable number of encoder layers and self-attention heads that help the encoder look at other words in the input sentence as it encodes a specific word.</p></li>
+<li><p>BERT takes a sequence of words as input which keep flowing up the stack. Each layer applies self-attention, and passes its results through a feed-forward network, and then hands it off to the next encoder.</p></li>
+<li><p>BERT can take as input either one or two sentences, and uses the special token [SEP] to differentiate them. The [CLS] token always appears at the start of the text, and is specific to classification tasks.</p></li>
+</ul>
+</section>
+<section id="bert-transformer-architecture-1" class="slide level2">
+<h2>BERT: Transformer Architecture</h2>
+<p><img src="img/bert-output-vector.png" width="700px" /></p>
+</section>
+<section id="bert-two-step-development" class="slide level2">
+<h2>BERT: Two-Step Development</h2>
+<ul>
+<li><p>BERT was pretrained on two tasks: language modelling (15% of tokens were masked and BERT was trained to predict them from context) and next sentence prediction using data from Wikipedia and Brown Corpus containing text samples of American English</p></li>
+<li><p>The pre-trained model can fine-tuned to a specific task with a labelled dataset</p></li>
+<li><p>The output from the BERT model, so called context-dependent embeddings can be used for other downstream tasks</p></li>
+</ul>
+</section>
+<section id="bert-transfer-learning" class="slide level2">
+<h2>BERT: Transfer Learning</h2>
+<p><img src="img/bert-transfer-learning.png" width="700px" /></p>
+</section>
+<section id="bert-sentence-classification" class="slide level2">
+<h2>BERT: Sentence Classification</h2>
+<ul>
+<li>You can use BERT to classify a single piece of text, such as an email. All you have to do is to train the classifier on your specific task, which is also called fine-tuning.</li>
+</ul>
+<p><img src="img/BERT-classification-spam.png" width="700px" /></p>
+</section>
+<section id="bert-other-downstream-tasks" class="slide level2">
+<h2>BERT: Other Downstream Tasks</h2>
+<ul>
+<li><p>BERT can be used for various classification tasks like sentiment analysis, summarization, named entity recognition, question answering, measuring topic similarity, and doing topic modelling.</p></li>
+<li><p>In fact, Google now uses BERT on almost every Query done on Google Search</p></li>
+</ul>
+</section>
+<section id="bert-in-r" class="slide level2">
+<h2>BERT in R</h2>
+<ul>
+<li>BERT was developed for Python. If you want to use it in R, then you can install <code>RBERT</code> from Github</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;jonathanbratt/RBERT&quot;</span>)</span></code></pre></div>
+<ul>
+<li><code>RBERT</code> requires Tensorflow package to be installed on your machine. You can install it using the <code>tensorflow</code> package.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>tensorflow<span class="sc">::</span><span class="fu">install_tensorflow</span>(<span class="at">version =</span> <span class="st">&quot;1.13.1&quot;</span>)</span></code></pre></div>
+</section>
+<section id="rbert" class="slide level2">
+<h2>RBERT</h2>
+<ul>
+<li><p>RBERT is in active development and can currently be used to:</p>
+<ol type="1">
+<li>Using the output of a pre-trained BERT model as features for downstream model</li>
+<li>Fine-tuning on top of a pre-trained BERT model (speed may be an issue)</li>
+</ol></li>
+<li><p>You currently cannot train a BERT model from scratch</p></li>
+<li><p>We won’t be able to go over how to use BERT in R, but please check out the <a href="https://github.com/jonathanbratt/RBERT/blob/master/vignettes/RBERT_intro.Rmd">vignette</a> if you are interested.</p></li>
+</ul>
+</section>
+<section id="gpt-3" class="slide level2">
+<h2>GPT-3</h2>
+<ul>
+<li>Open AI developed a language model called GPT-3 that based on a similar transformer architecture as BERT but is extremely powerful at completion and text generation tasks.</li>
+</ul>
+<p><img src="img/05-gpt3-generate-output-context-window.gif" width="700px" /></p>
+</section>
+<section id="gpt-3-1" class="slide level2">
+<h2>GPT-3</h2>
+<ul>
+<li><p>You can sign up for a free developer account <a href="https://beta.openai.com/">here</a> and test it out yourself.</p></li>
+<li><p>Let’s jump right into the <a href="https://beta.openai.com/playground">playground</a></p></li>
+</ul>
+</section></section>
+<section>
+<section id="wrapping-up" class="title-slide slide level1">
+<h1>Wrapping up</h1>
+
+</section>
+<section id="text-as-data-wrap-up" class="slide level2">
+<h2>Text-as-Data Wrap up</h2>
+<ul>
+<li>Text is one more the most important data sources in political science as it conveys important information about political preferences and behaviors</li>
+<li>There are a lot of different ways to turn text into data</li>
+<li>Regardless of the type of text analysis, you usually follow certain preprocessing steps</li>
+<li><code>quanteda</code> is the de facto standard for working with text in R</li>
+<li>For more advanced natural language processing you eventually need to learn some python</li>
+<li>There are very powerful language models like BERT or GPT-3 that much more accurate results for various downstream tasks like sentiment analysis or topic modelling</li>
+</ul>
+</section>
+<section id="this-concludes-the-class" class="slide level2">
+<h2>This concludes the class</h2>
+<p>Thanks you so much for choosing to enroll in this class and for your great participation and feedback.</p>
+</section></section>
+    </div>
+  </div>
+
+  <script src="Week_12_Slides_files/reveal.js-3.3.0.1/lib/js/head.min.js"></script>
+  <script src="Week_12_Slides_files/reveal.js-3.3.0.1/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display a presentation progress bar
+        progress: true,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Opens links in an iframe preview overlay
+        previewLinks: true,
+        // Transition style
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'default', // none/fade/slide/convex/concave/zoom
+
+
+
+        chalkboard: {
+        },
+
+        keyboard: {
+          67: function() { RevealChalkboard.toggleNotesCanvas() },    // toggle notes canvas when 'c' is pressed
+          66: function() { RevealChalkboard.toggleChalkboard() }, // toggle chalkboard when 'b' is pressed
+          46: function() { RevealChalkboard.clear() },    // clear chalkboard when 'DEL' is pressed
+           8: function() { RevealChalkboard.reset() },    // reset chalkboard data on current slide when 'BACKSPACE' is pressed
+          68: function() { RevealChalkboard.download() }, // downlad recorded chalkboard drawing when 'd' is pressed
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'Week_12_Slides_files/reveal.js-3.3.0.1/plugin/notes/notes.js', async: true },
+          { src: 'Week_12_Slides_files/reveal.js-3.3.0.1/plugin/zoom-js/zoom.js', async: true },
+          { src: 'Week_12_Slides_files/reveal.js-3.3.0.1/plugin/chalkboard/chalkboard.js', async: true },
+        ]
+      });
+    </script>
+  <!-- dynamically load mathjax for compatibility with self-contained -->
+  <script>
+    (function () {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+      document.getElementsByTagName("head")[0].appendChild(script);
+    })();
+  </script>
+
+<script>
+  (function() {
+    if (window.jQuery) {
+      Reveal.addEventListener( 'slidechanged', function(event) {  
+        window.jQuery(event.previousSlide).trigger('hidden');
+        window.jQuery(event.currentSlide).trigger('shown');
+      });
+    }
+  })();
+</script>
+
+
+  </body>
+</html>
